@@ -1,0 +1,23 @@
+:root {
+    --size2XS: 4px;
+    --sizeS: 12px;
+    --sizeXS: 8px;
+}
+
+.RadioGroupButton {
+    border: 1px solid #CDD0D2; /* Первичный цвет границы кнопки */
+    color: #21201F; /* Цвет текста кнопки */
+}
+
+/* Стили для кнопок при наведении */
+.RadioGroupButton:hover {
+    border: 1px solid #4D4E65 !important; /* Цвет границы кнопки при наведении */
+    color: #21201F;
+}
+
+/* Стили для кнопок при выборе */
+.RadioGroupButton.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
+    background-color: #4D4E65 !important;/* Цвет фона кнопки при выборе */
+    border-color: #4D4E65 !important; /* Цвет границы кнопки при выборе */
+    color: white !important; /* Цвет текста кнопки при выборе */
+}

@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
 .page {
     background-color: #AFBBC3;
     display: flex;
@@ -30,8 +32,10 @@
     margin-bottom: 60px;
 }
 
+
+
 .loginInput{
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Roboto', sans-serif;
     display: inline-flex;
     justify-content: space-between;
     align-items: center;
@@ -39,7 +43,7 @@
 }
 
 .inputLabel {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-size: 16px;
     font-weight: 500;
     line-height: 24px;
@@ -48,8 +52,15 @@
     width: 144px
 }
 
-.inputWidth {
+.input {
     width: 316px;
+
+}
+.input:hover {
+    border-color: #AFBBC3;
+}
+.input::shadow{
+    box-shadow: #4D4E6540;
 }
 
 .logo {
@@ -61,7 +72,7 @@
 }
 
 .label {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-size: 36px;
     font-weight: 400;
     line-height: 44px;
@@ -71,7 +82,7 @@
 .ButtonLogIn {
     width: 479px;
     height: 32px;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-size: 14px;
     font-weight: 700;
     line-height: 20px;
@@ -79,6 +90,10 @@
     text-align: center;
     background-color: #4D4E65;
     color: white;
+    transition: background-color 0.3s ease;
+}
+.ButtonLogIn:hover {
+    background-color: #58596F !important;
 }
 
 .thirdLine {
@@ -89,7 +104,7 @@
 }
 
 .h3 {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-size: 16px;
     font-weight: 400;
     line-height: 24px;

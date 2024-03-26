@@ -29,6 +29,8 @@ const LoginPage: React.FC = () =>{
             navigate('/users'); // Перенаправляем на страницу /tab после успешной авторизации
         }
     };
+
+
 return (
     <div className='page'>
         <div className='cart'>
@@ -51,17 +53,21 @@ return (
                     <Form.Item
                         label={<span className="inputLabel">Логин</span>}
                         name="username"
-                        rules={[{required: true, message: 'введите логин.'}]}
+                        rules={[
+                            { required: true, message: 'Введите логин' },
+                        ]}
+                        required={false}
                     >
-                        <Input.Password className="inputWidth"/>
+                        <Input className="input" />
                     </Form.Item>
 
                     <Form.Item
                         label={<span className="inputLabel">Пароль</span>}
                         name="password"
-                        rules={[{required: true, message: 'введите пароль.'}]}
+                        rules={[{required: true, message: 'Введите пароль.'}]}
+                        required={false}
                     >
-                        <Input.Password className="inputWidth"/>
+                        <Input.Password className="input"/>
                     </Form.Item>
 
 
