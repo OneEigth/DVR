@@ -1,24 +1,21 @@
-import React, {useState} from 'react';
-import type {ConfigProviderProps} from 'antd';
-import {Radio} from 'antd';
-import '../buttonLang/styles/style.css'
+import React, { useState } from 'react';
 
 
-type SizeType = ConfigProviderProps['componentSize'];
+import { Radio } from 'antd';
+import '../buttonLang/styles/style.css';
 
 const ButtonLang: React.FC = () => {
-    const [size, setSize] = useState<SizeType>('large'); // default is 'middle'
+    const [selectedLang, setSelectedLang] = useState<string>('RU'); // Установка начального значения "RU"
+
     return (
-        <>
-            <Radio.Group value={size} onChange={(e) => setSize(e.target.value)} className="RadioGroup">
-                <Radio.Button value="RU" className="RadioGroupButton">
-                    RU
-                </Radio.Button>
-                <Radio.Button value="KZ" className="RadioGroupButton">
-                    KZ
-                </Radio.Button>
-            </Radio.Group>
-        </>
+        <Radio.Group value={selectedLang} onChange={(e) => setSelectedLang(e.target.value)}>
+            <Radio.Button value="RU" className="RadioGroupButton">
+                RU
+            </Radio.Button>
+            <Radio.Button value="KZ" className="RadioGroupButton">
+                KZ
+            </Radio.Button>
+        </Radio.Group>
     );
 };
 

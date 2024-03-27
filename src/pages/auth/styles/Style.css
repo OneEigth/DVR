@@ -32,8 +32,6 @@
     margin-bottom: 60px;
 }
 
-
-
 .loginInput{
     font-family: 'Roboto', sans-serif;
     display: inline-flex;
@@ -59,9 +57,16 @@
 .input:hover {
     border-color: #AFBBC3;
 }
+
 .input::shadow{
     box-shadow: #4D4E6540;
 }
+
+.input:focus, .input:focus-within {
+    border-color: #4D4E65; /* Цвет границы при фокусировке и при наличии фокуса внутри .input */
+}
+
+
 
 .logo {
     display: flex;
@@ -92,6 +97,7 @@
     color: white;
     transition: background-color 0.3s ease;
 }
+
 .ButtonLogIn:hover {
     background-color: #58596F !important;
 }
