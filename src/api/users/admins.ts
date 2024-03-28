@@ -1,4 +1,4 @@
-import axios, { AxiosError } from 'axios';
+import axios, {AxiosError } from 'axios';
 
 export const getAdmins = async () => {
     try {

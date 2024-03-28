@@ -13,6 +13,7 @@ function App() {
               <Routes>
                   <Route path="/" element={<LoginPage/>}/>
                   <Route path="/users" element={<Users/>}/>
+                  <Route path="/video" element={<Users/>}/>
                   <Route path="*" element={<Navigate to="/" replace/>}/>
               </Routes>
           </BrowserRouter>
