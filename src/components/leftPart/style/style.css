@@ -1,0 +1,35 @@
+.LeftMenu {
+    font-family: Roboto, sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 20px;
+    letter-spacing: 0.25px;
+    text-align: left;
+    color: #3E405F !important;
+    height: 100vh;
+    background-color: #F1F1F1;
+}
+
+.upLeftPart{
+    background-color: #F1F1F1;
+    margin-top:  1px;
+}
+
+.LeftMenu .ant-menu-item {
+    font-family: Roboto, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    letter-spacing: 0.25px;
+    text-align: left;
+    color: #4D4E65; /* Цвет текста */
+}
+
+.LeftMenu .ant-menu-item:hover, .LeftMenu .ant-menu-item-active, .LeftMenu .ant-menu-item-selected {
+    background-color: #F1F1F1; /* Цвет фона при наведении и выборе */
+    color: #3E405F; /* Цвет текста при наведении и выборе */
+}
+
+
+
+

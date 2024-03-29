@@ -1,0 +1,80 @@
+.toolBar {
+    margin-top: 25px !important;
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Выравнивание элементов по вертикали */
+
+    height: 48px;
+    border-bottom: 1px solid #CDD0D2;
+    opacity: 1;
+    margin-left: 20px;
+    margin-right: 0;
+}
+
+.leftSide, .centr, .rightSide {
+    display: flex;
+    align-items: center;
+}
+
+.rightSide{
+    margin-bottom: 16px;
+}
+
+.leftSide h1 {
+    margin: 2px;
+}
+
+.centr,
+.rightSide {
+    margin-left: 8px;
+}
+
+h1 {
+    width: 199px;
+    height: 48px;
+    /*margin-left: 8px;*/
+    opacity: 1;
+    font-family: 'Roboto', sans-serif;
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 32px;
+    text-align: left;
+}
+
+.tablePlace {
+    margin-top: 16px !important;
+    margin-left: 20px;
+}
+
+.table{
+    margin-left: 0;
+}
+
+.modal {
+    /* Ваши стили для модального окна */
+    background-color: #ffffff; /* Цвет фона */
+    border-radius: 8px; /* Радиус скругления углов */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Тень */
+    padding: 24px; /* Внутренний отступ */
+    width: 100% ; /* Ширина */
+}
+
+.modal-title {
+    /* Стили для заголовка модального окна */
+    font-size: 20px; /* Размер шрифта */
+    color: #333333; /* Цвет текста */
+}
+
+.modal-content {
+    width: 100%; /* Ширина изображения внутри модального окна */
+    height: auto; /* Автоматическая высота для сохранения пропорций */
+}
+
+.modal-footer {
+    /* Стили для подвала модального окна */
+}
+
+.img{
+    width: 100%;
+}
+

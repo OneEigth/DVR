@@ -26,7 +26,7 @@ const LoginPage: React.FC = () =>{
     const onFinish = async (values: { username: string; password: string }) => {
         await login(values.username, values.password);
         if (useAuthStore.getState().isAuthenticated) {
-            navigate('/users'); // Перенаправляем на страницу /tab после успешной авторизации
+            navigate('/main'); // Перенаправляем на страницу /tab после успешной авторизации
         }
     };
 

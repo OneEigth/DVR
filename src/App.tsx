@@ -5,6 +5,8 @@ import TableUsers from "./components/tables/tableUsers/TableUsers";
 import TableAdmins from "./components/tables/tableAdmins/TableAdmins";
 import TableOperators from "./components/tables/tableOperators/TableOperators";
 import Users from "./pages/users/users";
+import Main from "./pages/main/main";
+
 
 function App() {
   return (
@@ -12,8 +14,7 @@ function App() {
           <BrowserRouter>
               <Routes>
                   <Route path="/" element={<LoginPage/>}/>
-                  <Route path="/users" element={<Users/>}/>
-                  <Route path="/video" element={<Users/>}/>
+                  <Route path="/main" element={<Main/>}/>
                   <Route path="*" element={<Navigate to="/" replace/>}/>
               </Routes>
           </BrowserRouter>

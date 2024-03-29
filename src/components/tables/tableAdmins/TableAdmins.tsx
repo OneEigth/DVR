@@ -4,13 +4,14 @@ import React, { useEffect } from 'react';
 import { Table, Space } from 'antd';
 import { useAdmins } from '../../../store/users/Admins';
 import { User } from '../../../types/User';
+import './style/style.css'
 
 const TableAdmins: React.FC = () => {
     const { users, fetchUsers } = useAdmins();
 
     useEffect(() => {
         fetchUsers();
-    }, []); // Вызываем fetchUsers при монтировании компонента
+    }, []);
 
     const columns = [
         {
@@ -57,7 +58,7 @@ const TableAdmins: React.FC = () => {
         },
     ];
 
-    return <Table columns={columns} dataSource={users} />;
+    return <Table className="table" columns={columns} dataSource={users} />;
 };
 
 export default TableAdmins;
