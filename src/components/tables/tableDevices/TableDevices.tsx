@@ -6,13 +6,21 @@ import Pagin from "../../pagination/pagin";
 import SearchInput from "../../searchInput/SearchInput";
 import Buttonsfilter from "../../buttons/buttonFilter/Buttonsfilter";
 import ButtonPlay from "../../buttons/buttonPlay/ButtonPlay";
+import ButtonMap from "../../buttons/buttonMap/ButtonMap";
+import LocationMap from "../../locationMap/LocationMap";
+import 'leaflet/dist/leaflet.css';
+
 
 const TableDevices: React.FC = () => {
     const {devices, fetchDevices} = useDevicesStore(); // Получаем список устройств и метод для загрузки
     const [currentPage, setCurrentPage] = useState<number>(1); // Состояние текущей страницы
     const [pageSize, setPageSize] = useState<number>(10); // Состояние размера страницы
     const [selectedUID, setSelectedUID] = useState<string | null>(null); // Состояние для отслеживания выбранного UID
-    const [modalVisible, setModalVisible] = useState<boolean>(false); // Состояние для отображения модального окна
+    const [selectedLatitude, setSelectedLatitude] = useState<number | null>(null); // Состояние для отслеживания выбранного Latitude
+    const [selectedLongitude, setSelectedLongitude] = useState<number | null>(null); // Состояние для отслеживания выбранного Longitude
+    const [playModalVisible, setPlayModalVisible] = useState<boolean>(false); // Состояние для отображения модального окна с видео
+    const [mapModalVisible, setMapModalVisible] = useState<boolean>(false); // Состояние для отображения модального окна с картой
+
 
 
 
@@ -73,7 +81,8 @@ const TableDevices: React.FC = () => {
             key: 'action',
             render: (_: any, record: any) => (
                 <Space size="middle">
-                    <ButtonPlay onClick={() => handlePlayClick(record.UID, record.online)} />
+                    <ButtonPlay onClick={() => handleOpenPlayModal(record.UID, record.online)} />
+                    <ButtonMap onClick={() => handleOpenMapModal(record.latitude, record.longitude,  record.online)} />
                 </Space>
             ),
         },
@@ -85,10 +94,10 @@ const TableDevices: React.FC = () => {
     // Отображаем только устройства на текущей странице
     const devicesOnPage = devices.slice(startIndex, startIndex + pageSize);
 
-    const handlePlayClick = (uid: string, online: boolean) => {
+    const handleOpenPlayModal = (uid: string, online: boolean) => {
         if (online) {
             setSelectedUID(uid); // Устанавливаем выбранный UID
-            setModalVisible(true); // Показываем модальное окно
+            setPlayModalVisible(true); // Показываем модальное окно с видео
         } else {
             // Если устройство офлайн, не открываем модальное окно
             console.log('This device is offline');
@@ -96,10 +105,27 @@ const TableDevices: React.FC = () => {
         }
     };
 
-    const handleModalCancel = () => {
-        setSelectedUID(null); // Сбрасываем выбранный UID
-        setModalVisible(false); // Скрываем модальное окно
+    const handleOpenMapModal = (latitude: number, longitude:number, online: boolean) => {
+        if (online) {
+            setSelectedLatitude(latitude);
+            setSelectedLongitude(longitude);
+            setMapModalVisible(true); // Показываем модальное окно с картой
+        } else {
+            // Если устройство офлайн, не открываем модальное окно
+            console.log('This device is offline');
+            message.warning('Устройство не онлайн');
+        }
     };
+
+    const handleCloseModals = () => {
+        setSelectedUID(null); // Сбрасываем выбранный UID
+        setSelectedLatitude(null); // Сбрасываем выбранную широту
+        setSelectedLongitude(null); // Сбрасываем выбранную долготу
+        setPlayModalVisible(false); // Скрываем модальное окно с видео
+        setMapModalVisible(false); // Скрываем модальное окно с картой
+    };
+
+
 
     return (
         <div className="tableContainer">
@@ -128,15 +154,28 @@ const TableDevices: React.FC = () => {
                 <Table className="table" columns={columns} dataSource={devicesOnPage} pagination={false}/>
             </div>
 
+            {/* Модальное окно с видео */}
             <Modal
                 className="modal"
                 title="Play Video"
-                visible={modalVisible}
-                onCancel={handleModalCancel}
+                visible={playModalVisible}
+                onCancel={handleCloseModals}
                 footer={null}
             >
                 {selectedUID && <img className="img" src={`http://178.91.130.237:7687/play/online/${selectedUID}`} alt="img" />}
             </Modal>
+
+            {/* Модальное окно с картой */}
+            <Modal
+                className="modalMap"
+                title="Location"
+                visible={mapModalVisible}
+                onCancel={handleCloseModals}
+                footer={null}
+            >
+                {selectedLongitude && selectedLatitude && <LocationMap latitude={selectedLatitude} longitude={selectedLongitude}/>}
+            </Modal>
+
         </div>
     )
 };

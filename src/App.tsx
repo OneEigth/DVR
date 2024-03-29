@@ -6,6 +6,7 @@ import TableAdmins from "./components/tables/tableAdmins/TableAdmins";
 import TableOperators from "./components/tables/tableOperators/TableOperators";
 import Users from "./pages/users/users";
 import Main from "./pages/main/main";
+import LocationMap from "./components/locationMap/LocationMap";
 
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
               <Routes>
                   <Route path="/" element={<LoginPage/>}/>
                   <Route path="/main" element={<Main/>}/>
+                  <Route path="/map" element={<LocationMap latitude={51.175194} longitude={71.4124}/>}/>
                   <Route path="*" element={<Navigate to="/" replace/>}/>
               </Routes>
           </BrowserRouter>
