@@ -1,29 +1,38 @@
 import React from 'react';
-import {MapContainer, Marker, Popup, TileLayer} from 'react-leaflet';
-import './style/style.css'
-interface LocationMapProps {
+import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import './style/Map.css';
+import L from 'leaflet';
+
+interface Device {
     latitude: number;
     longitude: number;
 }
 
-const LocationMap: React.FC<LocationMapProps> = ({ latitude, longitude }) => {
+interface LocationMapProps {
+    devices: Device[];
+}
+
+L.Icon.Default.imagePath = "https://unpkg.com/leaflet@1.5.0/dist/images/";
+
+const LocationMap: React.FC<LocationMapProps> = ({ devices }) => {
     return (
-        <div style={{width: '100%', height: '400px'}}> {/* Установите желаемые размеры */}
-            <MapContainer center={[latitude, longitude]} zoom={30} style={{height: '100%', width: '100%'}}
-                          scrollWheelZoom={false}>
+        <div style={{ width: '100px', height: '100px' }}>
+            <MapContainer center={[51.154697, 71.431324]} zoom={12} style={{ height: '100vh', width: '100vh' }} scrollWheelZoom={true}>
                 <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
-                <Marker position={[latitude, longitude]}>
-                    <Popup>
-                        A pretty CSS3 popup. <br/> Easily customizable.
-                    </Popup>
-                </Marker>
+
+                {devices.map((device, index) => (
+                    <Marker key={index} position={[device.latitude, device.longitude]}>
+                        <Popup>
+                            Latitude: {device.latitude}, Longitude: {device.longitude}
+                        </Popup>
+                    </Marker>
+                ))}
             </MapContainer>
         </div>
-    )
-
+    );
 };
 
 export default LocationMap;

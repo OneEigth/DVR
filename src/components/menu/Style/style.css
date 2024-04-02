@@ -8,7 +8,7 @@
     height: 64px;
     gap: 0;
     border: 0 0 1px 0;
-    opacity: 1; /* Предполагаю, что вы хотите установить непрозрачность на 1, если да, иначе, установите нужное значение */
+    opacity: 1;
     background: #4D4E65;
     margin-left: auto;
 }
@@ -37,16 +37,14 @@
     height: 64px;
     opacity: 1;
     padding: 12px !important;
-
 }
+
 
 .menu-item:hover,
 .menu-item:active {
-    background-color: #FCE49C !important; /* Изменение цвета фона при наведении и выборе */
+    background-color: #FCE49C !important;
     color: #4D4E65 !important;
-
     display: none;
-
 }
 
 .ant-menu-overflow-item .ant-menu-item.menu-item {
@@ -54,16 +52,20 @@
 }
 
 .menu-item .icon-main-menu {
-    fill: #FFFFFF; /* Белый цвет иконки в обычном состоянии */
+    fill: #FFFFFF;
     margin-right: 8px;
 }
 
 .menu-item:hover .icon-main-menu,
 .menu-item:active .icon-main-menu {
-    fill: #4D4E65; /* Цвет иконки при наведении и активном состоянии */
+    fill: #4D4E65;
 }
 
 .menu-item.ant-menu-item-selected {
-    background-color: #FCE49C !important; /* Цвет фона для активного элемента */
-    color: #4D4E65 !important; /* Цвет текста для активного элемента */
+    background-color: #FCE49C !important;
+    color: #4D4E65 !important;
+
+}
+.menu-item.ant-menu-item-selected .icon-main-menu {
+    fill: #4D4E65;
 }

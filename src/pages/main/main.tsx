@@ -1,28 +1,35 @@
-import React from 'react';
+import React, { useState } from 'react';
 import MainMenu from "../../components/menu/Menu";
 import LeftPart from "../../components/leftPart/leftPart";
 import './style/style.css'
 import TableDevices from "../../components/tables/tableDevices/TableDevices";
 
 const Main: React.FC = () => {
+    const [currentMenuItem, setCurrentMenuItem] = useState('main');
+
+    const handleMenuClick = (key: string) => {
+        setCurrentMenuItem(key);
+    };
+
     return (
         <div className="main-container">
-
             <div className="menu">
-                <div>
-                    <MainMenu/>
-                </div>
+                <MainMenu onClick={handleMenuClick} currentMenuItem={currentMenuItem} />
             </div>
 
             <div className="container">
-                <div className="leftPart">
-                    <LeftPart/>
-                </div>
-                <div className="table">
-                    <TableDevices/>
-                </div>
+                {currentMenuItem === 'allCams' && (
+                    <>
+                        <div className="leftPart">
+                            <LeftPart />
+                        </div>
+                        <div className="table">
+                            <TableDevices />
+                        </div>
+                    </>
+                )}
+                {/* Добавьте другие условия, если нужно отображать другие компоненты для других пунктов меню */}
             </div>
-
         </div>
     );
 };

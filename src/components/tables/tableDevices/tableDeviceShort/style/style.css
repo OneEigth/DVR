@@ -1,0 +1,23 @@
+/* style.css */
+.tableContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 540px;
+    height: 700px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.video {
+    width: 540px;
+    height: 360px;
+    overflow: hidden;
+}
+
+.tablePlace {
+    width: 540px;
+    height: 340px;
+    overflow: auto;
+}

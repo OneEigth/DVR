@@ -1,5 +1,6 @@
 import React from 'react';
-import { Pagination } from "antd";
+import {ConfigProvider, Pagination} from "antd";
+import './style/style.css'
 
 interface PaginProps {
     devices: any[];
@@ -11,16 +12,28 @@ interface PaginProps {
 
 const Pagin: React.FC<PaginProps> = ({ devices, currentPage, pageSize, setCurrentPage, setPageSize }) => (
     <>
-        <Pagination
-            style={{ marginBottom: 16 }}
-            total={devices.length} // Total number of items
-            current={currentPage} // Current page
-            pageSize={pageSize} // Page size
-            onChange={(page, pageSize) => {
-                setCurrentPage(page); // Update current page
-                setPageSize(pageSize); // Update page size
+        <ConfigProvider
+            theme={{
+                token: {
+                    colorPrimary:"#21201F",
+                },
             }}
-        />
+        >
+            <Pagination
+                className="pagination"
+                style={{ marginBottom: 16}}
+                total={devices.length}
+                current={currentPage}
+                pageSize={pageSize}
+                onChange={(page, pageSize) => {
+                    setCurrentPage(page);
+                    setPageSize(pageSize);
+                }}
+                showSizeChanger
+                showTotal={(total, range) => `${range[0]}-${range[1]} из ${total}`}
+                pageSizeOptions={['15', '30', '50', '100']}
+            />
+        </ConfigProvider>
     </>
 );
 

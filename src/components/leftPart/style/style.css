@@ -8,11 +8,42 @@
     color: #3E405F !important;
     height: 100vh;
     background-color: #F1F1F1;
+
+
 }
 
 .upLeftPart{
     background-color: #F1F1F1;
     margin-top:  1px;
+
+}
+
+.Search{
+    width: 216px;
+    margin-left: 28px;
+}
+
+
+.input-animation {
+    transition: width 0.2s ease-in-out; /* Скорость анимации */
+    position: relative; /* Позиционирование относительно родителя */
+}
+
+.input-collapse {
+    width: 32px; /* Ширина при свернутом состоянии */
+}
+
+.input-animation .ant-input-suffix {
+    position: absolute; /* Абсолютное позиционирование */
+    right: 20px; /* Правое смещение от родительского контейнера */
+    top: 50%; /* Положение по вертикали */
+    transform: translateY(-50%); /* Смещение на половину высоты иконки вверх */
+}
+
+.button{
+    margin-left: 28px;
+    margin-top: 10px;
+    box-shadow: none;
 }
 
 .LeftMenu .ant-menu-item {
@@ -22,13 +53,15 @@
     line-height: 20px;
     letter-spacing: 0.25px;
     text-align: left;
-    color: #4D4E65; /* Цвет текста */
+    color: #4D4E65;
 }
 
 .LeftMenu .ant-menu-item:hover, .LeftMenu .ant-menu-item-active, .LeftMenu .ant-menu-item-selected {
-    background-color: #F1F1F1; /* Цвет фона при наведении и выборе */
-    color: #3E405F; /* Цвет текста при наведении и выборе */
+    background-color: #F1F1F1;
+    color: #3E405F;
 }
+
+
 
 
 

@@ -1,0 +1,19 @@
+.pagination {
+  /* Цвет текста */
+}
+
+.pagination .ant-pagination-item {
+
+    border-color: #FFFFFF;
+}
+
+.pagination .ant-pagination-item:hover {
+    border-color: #4D4E65; /* Изменение цвета границы при выборе страницы */
+
+}
+
+.pagination .ant-pagination-item:focus{
+    border-color:  #4D4E65; /* Изменение цвета границы при выборе страницы */
+
+}
+

@@ -1,11 +1,22 @@
-
-import React, { useState } from 'react';
-import { Menu} from 'antd';
+import React from 'react';
+import { ConfigProvider, Menu } from 'antd';
 import IconMainMenu from "../icons/iconMainMenu/iconMainMenu";
-import './Style/style.css'; // Импорт файла со стилями
-import logo from './Logo.png'
+import './Style/style.css';
+import logo from './Logo.png';
 
-const items = [
+interface MenuItem {
+    label: string;
+    key: string;
+    icon: JSX.Element;
+    className: string;
+}
+
+interface MainMenuProps {
+    onClick: (key: string) => void;
+    currentMenuItem: string;
+}
+
+const items: MenuItem[] = [
     {
         label: 'Главное',
         key: 'main',
@@ -32,11 +43,9 @@ const items = [
     }
 ];
 
-const MainMenu: React.FC = () => {
-    const [current, setCurrent] = useState('main');
-
-    const onClick = ({ key }: { key: string }) => {
-        setCurrent(key);
+const MainMenu: React.FC<MainMenuProps> = ({ onClick, currentMenuItem }) => {
+    const handleClick = ({ key }: { key: string }) => {
+        onClick(key);
     };
 
     return (
@@ -44,7 +53,17 @@ const MainMenu: React.FC = () => {
             <div className="logo">
                 <img className="img" src={logo} alt="Logo"/>
             </div>
-            <Menu className="menu" onClick={onClick} selectedKeys={[current]} mode="horizontal" items={items}/>
+            <ConfigProvider
+                theme={{
+                    components: {
+                        Menu: {
+                            horizontalItemSelectedColor: 'none',
+                        },
+                    },
+                }}
+            >
+                <Menu className="menu" onClick={handleClick} selectedKeys={[currentMenuItem]} mode="horizontal" items={items}/>
+            </ConfigProvider>
         </div>
     );
 };
