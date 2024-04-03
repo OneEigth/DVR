@@ -21,7 +21,7 @@ const LocationMap: React.FC<LocationMapProps> = ({ devices, center, selectedCoor
 
     useEffect(() => {
         if (mapRef.current && selectedCoordinates) {
-            mapRef.current.setView(selectedCoordinates, 12);
+            mapRef.current.setView(selectedCoordinates, 23);
         }
     }, [selectedCoordinates]);
 

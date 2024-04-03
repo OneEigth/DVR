@@ -6,8 +6,9 @@ import '../style/style.css';
 import 'leaflet/dist/leaflet.css';
 import ButtonMap from "../../../buttons/buttonLocation/ButtonLocation";
 import LocationMap from "../../../locationMap/LocationMap";
+import SwitchOnline from "../../../switch/switchOnline";
 
-const TableDevices: React.FC = () => {
+const TableDevicesShort: React.FC = () => {
     const { devices, fetchDevices } = useDevicesStore();
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [pageSize, setPageSize] = useState<number>(10);
@@ -15,7 +16,7 @@ const TableDevices: React.FC = () => {
     const [selectedLatitude, setSelectedLatitude] = useState<number | null>(null);
     const [selectedLongitude, setSelectedLongitude] = useState<number | null>(null);
     const [center, setCenter] = useState<[number, number]>([51.154697, 71.431324]);
-
+    const [showOnlineOnly, setShowOnlineOnly] = useState<boolean>(false);
 
     useEffect(() => {
         fetchDevices();
@@ -29,8 +30,6 @@ const TableDevices: React.FC = () => {
         setSelectedLatitude(latitude);
         setSelectedLongitude(longitude);
         setCenter([latitude, longitude]);
-
-
     }
 
     const columns = [
@@ -68,8 +67,9 @@ const TableDevices: React.FC = () => {
         },
     ];
 
+    const filteredDevices = showOnlineOnly ? devices.filter(device => device.online) : devices;
     const startIndex = (currentPage - 1) * pageSize;
-    const devicesOnPage = devices.slice(startIndex, startIndex + pageSize);
+    const devicesOnPage = filteredDevices.slice(startIndex, startIndex + pageSize);
 
     return (
         <Card
@@ -79,40 +79,44 @@ const TableDevices: React.FC = () => {
                 <Space direction='horizontal'>
                     <div className="Map">
                         <LocationMap devices={devices} center={center} selectedCoordinates={center} />
-
                     </div>
                     <Space direction='vertical'>
                         {selectedUID && (
                             <Card
-                                style={{width: '900px', height:'500px'}}
+                                style={{width: '900px', height: '400px'}}
                                 className="cardVideo"
                             >
                                 <img
                                     className="video"
                                     src={`http://178.91.130.237:7687/play/online/${selectedUID}`}
                                     alt="img"
-                                    style={{width: '850px', height: '450px' }}
+                                    style={{width: '850px', height: '350px'}}
                                 />
                             </Card>
                         )}
                         {!selectedUID && (
                             <Card
-                                style={{width: '900px', height:'500px'}}
+                                style={{width: '900px', height: '400px'}}
                                 className="PlaceHolderVideo">
                                 <Empty
                                     style={{display:'flex', justifyContent:'center', alignContent:'center', paddingTop:'100px'}}
                                     className="Empty"/>
                             </Card>
                         )}
+                        <Card>
+                            <Space className="tools">
+                                <h1>Online</h1>
+                                <SwitchOnline
+
+                                    onChange={setShowOnlineOnly}/>
+
+                            </Space>
+                        </Card>
                         <Card
-                            style={{width: '900px', height:'365px'}}
+                            style={{width: '900px', height: '265px'}}
                             className="PlaceHolderTable"
                         >
-
-                            <Table className="table"
-                                   columns={columns}
-                                   dataSource={devicesOnPage}
-                                   pagination={false}/>
+                            <Table className="table" columns={columns} dataSource={devicesOnPage} pagination={false}/>
                         </Card>
                     </Space>
                 </Space>
@@ -121,4 +125,4 @@ const TableDevices: React.FC = () => {
     );
 };
 
-export default TableDevices;
+export default TableDevicesShort;

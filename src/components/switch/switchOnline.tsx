@@ -1,4 +1,4 @@
-// SwitchMap.tsx
+
 import React, { useState } from 'react';
 import {ConfigProvider, Switch} from 'antd';
 
@@ -6,7 +6,7 @@ interface SwitchMapProps {
     onChange: (checked: boolean) => void;
 }
 
-const SwitchMap: React.FC<SwitchMapProps> = ({ onChange }) => {
+const SwitchOnline: React.FC<SwitchMapProps> = ({ onChange }) => {
     const [checked, setChecked] = useState<boolean>(false);
 
     const handleChange = (isChecked: boolean) => {
@@ -25,7 +25,7 @@ const SwitchMap: React.FC<SwitchMapProps> = ({ onChange }) => {
             <Switch className="SwitchOnline" checked={checked} onChange={handleChange} />
         </ConfigProvider>
 
-    )
+)
 };
 
-export default SwitchMap;
+export default SwitchOnline;

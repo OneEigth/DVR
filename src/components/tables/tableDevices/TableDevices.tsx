@@ -86,9 +86,7 @@ const TableDevices: React.FC = () => {
                 <div className="toolBar">
                     <div className="leftSide">
                         <h1>Карта</h1>
-                        <div className="buttonMap">
-                            <SwitchMap onChange={handleSwitchChange}/>
-                        </div>
+                        <SwitchMap onChange={handleSwitchChange}/>
                     </div>
 
                     <div className="centr">
