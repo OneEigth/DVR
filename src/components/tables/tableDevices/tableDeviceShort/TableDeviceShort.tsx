@@ -1,15 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import { Space, Table } from 'antd';
-import { useDevicesStore } from '../../../../store/devices/allDevices';
+import React, {useEffect, useState} from 'react';
+import {Card, Empty, Space, Table} from 'antd';
+import {useDevicesStore} from '../../../../store/devices/allDevices';
 import ButtonPlay from '../../../buttons/buttonPlay/ButtonPlay';
 import '../style/style.css';
 import 'leaflet/dist/leaflet.css';
+import ButtonMap from "../../../buttons/buttonLocation/ButtonLocation";
+import LocationMap from "../../../locationMap/LocationMap";
 
 const TableDevices: React.FC = () => {
     const { devices, fetchDevices } = useDevicesStore();
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [pageSize, setPageSize] = useState<number>(10);
-    const [selectedUID, setSelectedUID] = useState<string | null>('41774cd9-476c-3d7e-a4f2-99b9a1cb9361');
+    const [selectedUID, setSelectedUID] = useState<string | null>(null);
+    const [selectedLatitude, setSelectedLatitude] = useState<number | null>(null);
+    const [selectedLongitude, setSelectedLongitude] = useState<number | null>(null);
+    const [center, setCenter] = useState<[number, number]>([51.154697, 71.431324]);
+
 
     useEffect(() => {
         fetchDevices();
@@ -18,6 +24,14 @@ const TableDevices: React.FC = () => {
     const handlePlay = (uid: string) => {
         setSelectedUID(uid);
     };
+
+    const handleLocate = (latitude: number, longitude: number) => {
+        setSelectedLatitude(latitude);
+        setSelectedLongitude(longitude);
+        setCenter([latitude, longitude]);
+
+
+    }
 
     const columns = [
         {
@@ -48,6 +62,7 @@ const TableDevices: React.FC = () => {
             render: (_: any, record: any) => (
                 <Space size="middle">
                     <ButtonPlay onClick={() => handlePlay(record.UID)} />
+                    <ButtonMap onClick={() => handleLocate(record.latitude, record.longitude)}/>
                 </Space>
             ),
         },
@@ -57,15 +72,51 @@ const TableDevices: React.FC = () => {
     const devicesOnPage = devices.slice(startIndex, startIndex + pageSize);
 
     return (
-        <div className="tableContainer">
-            <div className="video">
-                {/* Здесь вы можете добавить логику для отображения видео по выбранному UID */}
-                <img className="img" src={`http://178.91.130.237:7687/play/online/${selectedUID}`} alt="img" />
+        <Card
+            style={{margin:'5px'}}
+        >
+            <div className="container">
+                <Space direction='horizontal'>
+                    <div className="Map">
+                        <LocationMap devices={devices} center={center} />
+                    </div>
+                    <Space direction='vertical'>
+                        {selectedUID && (
+                            <Card
+                                style={{width: '900px', height:'500px'}}
+                                className="cardVideo"
+                            >
+                                <img
+                                    className="video"
+                                    src={`http://178.91.130.237:7687/play/online/${selectedUID}`}
+                                    alt="img"
+                                    style={{width: '850px', height: '450px' }}
+                                />
+                            </Card>
+                        )}
+                        {!selectedUID && (
+                            <Card
+                                style={{width: '900px', height:'500px'}}
+                                className="PlaceHolderVideo">
+                                <Empty
+                                    style={{display:'flex', justifyContent:'center', alignContent:'center', paddingTop:'100px'}}
+                                    className="Empty"/>
+                            </Card>
+                        )}
+                        <Card
+                            style={{width: '900px', height:'365px'}}
+                            className="PlaceHolderTable"
+                        >
+
+                            <Table className="table"
+                                   columns={columns}
+                                   dataSource={devicesOnPage}
+                                   pagination={false}/>
+                        </Card>
+                    </Space>
+                </Space>
             </div>
-            <div className="tablePlace">
-                <Table className="table" columns={columns} dataSource={devicesOnPage} pagination={false} />
-            </div>
-        </div>
+        </Card>
     );
 };
 

@@ -7,8 +7,7 @@
     margin-top: 25px !important;
     display: flex;
     justify-content: space-between;
-    align-items: center; /* Выравнивание элементов по вертикали */
-
+    align-items: center;
     height: 48px;
     border-bottom: 1px solid #CDD0D2;
     opacity: 1;
@@ -60,67 +59,6 @@ h1 {
     margin-left: 0;
 }
 
-.modal {
-    /* Ваши стили для модального окна */
-    background-color: #ffffff; /* Цвет фона */
-    border-radius: 8px; /* Радиус скругления углов */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Тень */
-    padding: 24px; /* Внутренний отступ */
-    width: 100% ; /* Ширина */
-}
-
-.modal-title {
-    /* Стили для заголовка модального окна */
-    font-size: 20px; /* Размер шрифта */
-    color: #333333; /* Цвет текста */
-}
-
-.modal-content {
-    width: 100%; /* Ширина изображения внутри модального окна */
-    height: auto; /* Автоматическая высота для сохранения пропорций */
-}
-
-.modal-footer {
-    /* Стили для подвала модального окна */
-}
-
-.img{
-    width: 100%;
-}
-
-.modalMap {
-    width: 70%; /* Установите ширину по вашему усмотрению */
-    max-width: 800px; /* Максимальная ширина модального окна */
-    height: 70%; /* Установите высоту по вашему усмотрению */
-    max-height: 500px; /* Максимальная высота модального окна */
-    overflow: hidden; /* Скрыть возможность прокрутки внутри модального окна */
-}
-
-.locationMap{
-    width: 100vh;
-    height: 100vh;
-}
-
 .toolBar .leftSide .buttonMap{
     color: #21201F;
-
-}
-
-.MapPlace {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 10px;
-    }
-
-.Map {
-    grid-column: 1; /* Поместить элемент в первую колонку */
-    width: 60%;
-    height: 100vh;
-}
-
-.Table {
-    grid-column: 2;
-    width: 40%;/* Поместить элемент во вторую колонку */
-    height: 100vh;
 }

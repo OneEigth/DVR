@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Table} from 'antd';
+import {Card, Table} from 'antd';
 import {useDevicesStore} from '../../../store/devices/allDevices';
 import './style/style.css'
 import Pagin from "../../pagination/pagin";
@@ -106,20 +106,12 @@ const TableDevices: React.FC = () => {
                     </div>
                 </div>
 
-
             {showLocationMap ? (
                 <div className="MapPlace">
-                    <div className="Map">
-                        <LocationMap devices={devices}/>
-                    </div>
-                    <div className="Table">
                         <TableDeviceShort/>
-                    </div>
-
                 </div>
             ) : (
                 <div className="tablePlace">
-
                     <Table className="table" columns={columns} dataSource={devicesOnPage} pagination={false}/>
                 </div>
             )}
