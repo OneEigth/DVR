@@ -78,7 +78,8 @@ const TableDevices: React.FC = () => {
             <div className="container">
                 <Space direction='horizontal'>
                     <div className="Map">
-                        <LocationMap devices={devices} center={center} />
+                        <LocationMap devices={devices} center={center} selectedCoordinates={center} />
+
                     </div>
                     <Space direction='vertical'>
                         {selectedUID && (
