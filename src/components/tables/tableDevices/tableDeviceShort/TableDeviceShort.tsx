@@ -7,6 +7,7 @@ import 'leaflet/dist/leaflet.css';
 import ButtonMap from "../../../buttons/buttonLocation/ButtonLocation";
 import LocationMap from "../../../locationMap/LocationMap";
 import SwitchOnline from "../../../switch/switchOnline";
+import { ONLINE_PLAY_URL } from '../../../../const/const';
 
 const TableDevicesShort: React.FC = () => {
     const { devices, fetchDevices } = useDevicesStore();
@@ -88,7 +89,7 @@ const TableDevicesShort: React.FC = () => {
                             >
                                 <img
                                     className="video"
-                                    src={`http://178.91.130.237:7687/play/online/${selectedUID}`}
+                                    src={ONLINE_PLAY_URL(selectedUID)}
                                     alt="img"
                                     style={{width: '850px', height: '350px'}}
                                 />

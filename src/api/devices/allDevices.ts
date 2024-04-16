@@ -1,18 +1,11 @@
 
 
 import axios, {AxiosError} from 'axios';
+import { API_URL, HEADERS } from '../../const/const';
 
 export const getAllDevices = async () => {
     try {
-        const response = await axios.get(
-            'http://178.91.130.237:7687/device/get_device/all',
-            {
-                headers: {
-                    RSLogin: 'admin',
-                    RSToken: 'test_token',
-                },
-            }
-        );
+        const response = await axios.get(API_URL, { headers: HEADERS });
         return response.data;
     } catch (error) {
         const err = error as AxiosError;

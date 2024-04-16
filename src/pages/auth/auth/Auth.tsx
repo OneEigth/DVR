@@ -6,14 +6,9 @@ import flag from '../img/Logo.png'
 import {useAuthStore} from "../../../store/auth/auth";
 import { useNavigate } from 'react-router-dom';
 
-
 type FieldType = {
     username?: string;
     password?: string;
-};
-
-const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
-    console.log('Success:', values);
 };
 
 const onFinishFailed: FormProps<FieldType>["onFinishFailed"] = (errorInfo) => {
@@ -23,10 +18,12 @@ const onFinishFailed: FormProps<FieldType>["onFinishFailed"] = (errorInfo) => {
 const LoginPage: React.FC = () =>{
     const navigate = useNavigate();
     const { login } = useAuthStore();
+
+
     const onFinish = async (values: { username: string; password: string }) => {
         await login(values.username, values.password);
         if (useAuthStore.getState().isAuthenticated) {
-            navigate('/main'); // Перенаправляем на страницу /tab после успешной авторизации
+            navigate('/main');
         }
     };
 

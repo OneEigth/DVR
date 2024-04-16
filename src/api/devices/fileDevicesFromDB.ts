@@ -1,21 +1,18 @@
-// api/devices/fileDevicesFromDB.ts
 
 import axios from 'axios';
+import { FILE_API_URL, FILE_HEADERS } from '../../const/const';
 
 export const getFileDevicesFromDB = async (deviceUID: string, startDateTime: string, endDateTime: string) => {
     try {
         const response = await axios.post(
-            'http://178.91.130.237:7687/device/get_files',
+            FILE_API_URL,
             {
                 deviceUID,
                 startDateTime,
                 endDateTime,
             },
             {
-                headers: {
-                    RSLogin: 'admin',
-                    RSToken: '1b2bb30b-d9f1-11ee-889a-005056010812',
-                },
+                headers: FILE_HEADERS,
             }
         );
         return response.data;

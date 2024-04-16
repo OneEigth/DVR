@@ -3,6 +3,7 @@ import { ConfigProvider, Menu } from 'antd';
 import IconMainMenu from "../icons/iconMainMenu/iconMainMenu";
 import './Style/style.css';
 import logo from './Logo.png';
+import ButtonLogOut from "../buttons/buttonLogOut/ButtonLogOut";
 
 interface MenuItem {
     label: string;
@@ -48,6 +49,11 @@ const MainMenu: React.FC<MainMenuProps> = ({ onClick, currentMenuItem }) => {
         onClick(key);
     };
 
+    const handleLogout = () => {
+        localStorage.removeItem('authToken');
+        window.location.href = '/';
+    };
+
     return (
         <div className="menu-container">
             <div className="logo">
@@ -64,6 +70,9 @@ const MainMenu: React.FC<MainMenuProps> = ({ onClick, currentMenuItem }) => {
             >
                 <Menu className="menu" onClick={handleClick} selectedKeys={[currentMenuItem]} mode="horizontal" items={items}/>
             </ConfigProvider>
+            <div>
+                <ButtonLogOut onClick={handleLogout} />
+            </div>
         </div>
     );
 };

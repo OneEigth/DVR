@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Spin, Button } from 'antd';
 import ReactPlayer from 'react-player';
-
+import { FILE_PLAY_URL } from '../../const/const';
 
 interface VideoModalProps {
     uid: string;
@@ -37,7 +37,7 @@ const VideoModal: React.FC<VideoModalProps> = ({ uid, visible, onClose }) => {
                 <Spin size="large" />
             ) : (
                 <ReactPlayer
-                    url={`http://178.91.130.237:7687/play/file/${uid}`}
+                    url={FILE_PLAY_URL(uid)}
                     controls={true}
                     playing={isPlaying} // Передача состояния воспроизведения в компонент ReactPlayer
                     width="100%"
