@@ -1,0 +1,30 @@
+.toolBarDeviceOne{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    border-bottom: 1px solid #CDD0D2;
+    padding-bottom: 16px;
+}
+
+.leftSideToolBar{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.leftSideToolBar .buttonLeft {
+    font-family: Roboto;
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 32px;
+    text-align: left;
+    margin-top: 0;
+    padding: 0;
+}
+
+.rightSideToolBar{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}

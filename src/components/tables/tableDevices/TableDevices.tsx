@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Table} from 'antd';
+
 import {useDevicesStore} from '../../../store/devices/allDevices';
 import './style/style.css'
 import Pagin from "../../pagination/pagin";
@@ -7,8 +7,9 @@ import SearchInput from "../../searchInput/SearchInput";
 import Buttonsfilter from "../../buttons/buttonFilter/Buttonsfilter";
 import 'leaflet/dist/leaflet.css';
 import SwitchMap from "../../switch/switchMap";
+import AllDevices from "./tableDevices/allDevices";
 import TableDeviceShort from "./tableDeviceShort/TableDeviceShort";
-import TableDevices1 from "./tableDevices/tableDevices1";
+
 
 const TableDevices: React.FC = () => {
     const {devices, fetchDevices} = useDevicesStore(); // Получаем список устройств и метод для загрузки
@@ -110,7 +111,7 @@ const TableDevices: React.FC = () => {
                 </div>
             ) : (
                 <div className="tablePlace">
-                    <TableDevices1/>
+                    <AllDevices/>
                 </div>
             )}
 

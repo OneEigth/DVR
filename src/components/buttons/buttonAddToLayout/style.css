@@ -1,0 +1,14 @@
+.button {
+    width: 184px;
+    height: 32px;
+    padding: 0 15px 0 15px;
+    border: 1px solid #4D4E65;
+    margin-right: 12px;
+    margin-top: 0;
+    font-family: Roboto;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 20px;
+    letter-spacing: 0.25px;
+    text-align: left;
+}

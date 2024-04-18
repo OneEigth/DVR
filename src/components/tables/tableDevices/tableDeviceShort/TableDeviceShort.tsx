@@ -1,3 +1,6 @@
+// Данный компонент не применяется
+
+
 import React, {useEffect, useState} from 'react';
 import {Card, Empty, Space, Table} from 'antd';
 import {useDevicesStore} from '../../../../store/devices/allDevices';

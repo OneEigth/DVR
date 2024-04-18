@@ -1,32 +1,20 @@
 import React, {useEffect, useState} from 'react';
-import {useDevicesStore} from '../../../../store/devices/allDevices'
 import './style/style.css';
 import 'leaflet/dist/leaflet.css';
 import CardComponent from '../../../cards/CardComponent';
 import {Card, Col, Row} from "antd";
-import devicesData from './allDevices.json';
+import {useDevicesStore} from "../../../../store/devices/allDevices";
 
 
-const TableDevices1: React.FC = () => {
-/*
+const AllDevices: React.FC = () => {
     const {devices, fetchDevices} = useDevicesStore(); // Получаем список устройств и метод для загрузки
-*/
     const [currentPage, setCurrentPage] = useState<number>(1); // Состояние текущей страницы
     const [pageSize, setPageSize] = useState<number>(10); // Состояние размера страницы
     const [showLocationMap, setShowLocationMap] = useState<boolean>(false);
 
-    const [devices, setDevices] = useState<any[]>([]); // Состояние для хранения данных устройств
-
-
-
-    /* useEffect(() => {
+     useEffect(() => {
          fetchDevices();
-     }, []);*/
-
-    useEffect(() => {
-        // Инициализация данных устройств из файла
-        setDevices(devicesData.data);
-    }, []);
+     }, []);
 
     const handleViewVideo = (uid: string) => {
         // Реализуйте логику открытия видео по UID
@@ -64,4 +52,4 @@ const TableDevices1: React.FC = () => {
     );
 };
 
-export default TableDevices1;
+export default AllDevices;

@@ -4,6 +4,7 @@ import LeftPart from "../../components/leftPart/leftPart";
 import './style/style.css'
 import TableDevices from "../../components/tables/tableDevices/TableDevices";
 import Layout from "../../components/layouts/layout/Layout";
+import DeviceOne from "../../components/deviceOne/DeviceOne";
 
 const Main: React.FC = () => {
     const [currentMenuItem, setCurrentMenuItem] = useState('main');
@@ -32,11 +33,11 @@ const Main: React.FC = () => {
 
                 {currentMenuItem === 'layouts' && (
                     <>
-                        <div className="leftPart">
+                        {/*<div className="leftPart">
                             <LeftPart />
-                        </div>
+                        </div>*/}
                         <div className="table">
-                            <Layout />
+                            <DeviceOne />
                         </div>
                     </>
                 )}

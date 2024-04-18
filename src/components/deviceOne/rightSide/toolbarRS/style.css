@@ -1,0 +1,15 @@
+.ToolBarRS{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    border-bottom: 1px solid #CDD0D2;
+    margin-bottom: 16px;
+}
+
+.rightSideRS{
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+}
+

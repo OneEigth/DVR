@@ -6,6 +6,7 @@ const SearchInput: React.FC = () => (
     <Input
         placeholder="поиск"
         suffix={<SearchOutlined />}
+        style={{width:'240px', height:'32px'}}
     />
 );
 

@@ -1,0 +1,42 @@
+.MenuRS{
+    width: 100%;
+    margin-top: 0;
+}
+
+.menuLine{
+    width: 100%;
+    padding-bottom: 16px;
+    border-bottom: #FFFFFF;
+}
+
+.menuLine .ant-menu-item {
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    margin-right: 6px;
+}
+
+.menuLine .ant-menu-item {
+    font-family: Roboto;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    letter-spacing: 0.25px;
+    text-align: left;
+    color: #3E405F;
+}
+
+.menuLine .ant-menu-item:hover,
+.menuLine .ant-menu-item:active{
+    color: #3E405F !important;
+}
+.menu-item:hover,
+.menu-item:active {
+    color: #3E405F !important;
+}
+
+.menuLine .ant-menu-item-selected {
+    color: #3E405F !important;
+    font-weight: 700;
+}
