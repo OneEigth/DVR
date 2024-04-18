@@ -1,9 +1,10 @@
 import React from 'react';
-import { ConfigProvider, Menu } from 'antd';
+import {ConfigProvider, Menu} from 'antd';
 import IconMainMenu from "../icons/iconMainMenu/iconMainMenu";
 import './Style/style.css';
 import logo from './Logo.png';
 import ButtonLogOut from "../buttons/buttonLogOut/ButtonLogOut";
+import {useNavigate} from 'react-router-dom';
 
 interface MenuItem {
     label: string;
@@ -45,8 +46,16 @@ const items: MenuItem[] = [
 ];
 
 const MainMenu: React.FC<MainMenuProps> = ({ onClick, currentMenuItem }) => {
+    const navigate = useNavigate();
     const handleClick = ({ key }: { key: string }) => {
         onClick(key);
+        if (key === 'main') {
+            navigate('/main'); // Навигация на страницу /main при клике на "Главное"
+        } else if (key === 'allCams') {
+            navigate('/allcams'); // Навигация на страницу /allcams при клике на "Все камеры"
+        } else if (key === 'settings') {
+            navigate('/settings'); // Навигация на страницу /settings при клике на "Настройки"
+        }
     };
 
     const handleLogout = () => {

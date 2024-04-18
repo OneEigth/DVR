@@ -5,6 +5,10 @@ import Main from './pages/main/main';
 import 'leaflet/dist/leaflet.css';
 import { useAuthStore } from './store/auth/auth';
 
+import Device from "./pages/device/Device";
+import AllCams from "./pages/allCams/AllCams";
+import Settings from "./pages/settings/Settings";
+
 
 function App() {
 
@@ -18,6 +22,9 @@ function App() {
                     {isAuthenticated ? (
                         <>
                             <Route path="/main" element={<Main/>} />
+                            <Route path="/device/:id" element={<Device/>} />
+                            <Route path="/allcams" element={<AllCams/>} />
+                            <Route path="/settings" element={<Settings/>} />
                         </>
                     ) : (
                         <Route path="*" element={<Navigate to="/" replace />} />

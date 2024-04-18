@@ -3,7 +3,7 @@ import MainMenu from "../../components/menu/Menu";
 import './style/style.css'
 
 
-const Main: React.FC = () => {
+const Settings: React.FC = () => {
     const [currentMenuItem, setCurrentMenuItem] = useState('main');
 
     const handleMenuClick = (key: string) => {
@@ -21,4 +21,4 @@ const Main: React.FC = () => {
     );
 };
 
-export default Main;
+export default Settings;

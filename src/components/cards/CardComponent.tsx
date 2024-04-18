@@ -1,7 +1,9 @@
 import React from "react";
 import { Card } from 'antd';
+import { useNavigate} from 'react-router-dom';
 import './style/style.css';
 import {ONLINE_PLAY_URL} from "../../const/const";
+
 
 interface CardComponentProps {
     file: {
@@ -15,17 +17,23 @@ interface CardComponentProps {
     handleViewVideo: (uid: string) => void;
 }
 
+
 const CardComponent: React.FC<CardComponentProps> = ({ file, handleViewVideo }) => {
+    const navigate = useNavigate();
+    const handleDeviceClick = (deviceId: string) => {
+        navigate(`/device/${deviceId}`);
+    };
 
     return (
-        <div className="containerCard">
+        <div
+            className="containerCard">
             <div className="cover">
                 <Card
                     className="coverCard"
                     key={file.id}
                     hoverable
                     cover={<img alt={''} src={ONLINE_PLAY_URL(file.UID)} />}
-                    onClick={() => handleViewVideo(file.UID)}
+                    onClick={() => handleDeviceClick(file.id)}
                 />
             </div>
             <div className="properties">

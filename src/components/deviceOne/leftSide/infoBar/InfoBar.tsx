@@ -2,7 +2,7 @@ import React from "react";
 import "./style.css"
 import IconSignalLow from "../../../icons/iconSignalLow/IconSignalLow";
 import {ConfigProvider, Progress} from "antd";
-import type { CountdownProps } from 'antd';
+
 
 const InfoBar: React.FC = () => {
 
