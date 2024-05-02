@@ -7,7 +7,7 @@ interface ButtonAddToLayoutProps {
 }
 
 const ButtonAddToLayout: React.FC<ButtonAddToLayoutProps> = ({ onClick }) => (
-    <Button className="button" onClick={onClick}>Добавить в раскладку</Button>
+    <Button className="buttonAddToLayout" onClick={onClick}>Добавить в раскладку</Button>
 );
 
 export default ButtonAddToLayout;

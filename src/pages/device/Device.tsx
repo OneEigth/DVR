@@ -11,13 +11,12 @@ const Device: React.FC = () => {
 
     return (
         <div className="device-container">
+
             <div className="menu">
                 <MainMenu onClick={handleMenuClick} currentMenuItem={currentMenuItem}/>
             </div>
             <div className="deviceOne">
-                <div className="table">
                     <DeviceOne/>
-                </div>
             </div>
 
         </div>

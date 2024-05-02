@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Row, Col, Card, Pagination, Button } from 'antd';
 import { useDevicesStore } from '../../../store/devices/fileDevicesFromDB';
-import VideoModal from '../../../components/videos/videoModal';
 import './style.css';
-import CardComponent from "../../cards/CardComponent";
 import {FILE_PLAY_URL} from "../../../const/const";
 
 const TableFileDeviceDB: React.FC = () => {

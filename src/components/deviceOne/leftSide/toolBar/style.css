@@ -28,3 +28,6 @@
     flex-direction: row;
     justify-content: center;
 }
+.buttonAddToLayout{
+    margin-top: 0;
+}
