@@ -17,7 +17,7 @@ const toolBarDeviceOne: React.FC = () => {
             </div>
             <div className="rightSideToolBar">
                 <ButtonAddToLayout onClick={handleAddToLayout}/>
-                <ButtonOnlineArchive/>
+               {/* <ButtonOnlineArchive/>*/}
             </div>
         </div>
     );

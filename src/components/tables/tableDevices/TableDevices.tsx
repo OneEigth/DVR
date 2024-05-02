@@ -7,8 +7,9 @@ import SearchInput from "../../searchInput/SearchInput";
 import Buttonsfilter from "../../buttons/buttonFilter/Buttonsfilter";
 import 'leaflet/dist/leaflet.css';
 import SwitchMap from "../../switch/switchMap";
-import AllDevices from "./tableDevices/allDevices";
-import TableDeviceShort from "./tableDeviceShort/TableDeviceShort";
+
+import AllDevicesMedium from "./tableDevices/medium/AllDevicesMedium";
+import AllDevicesBig from "./tableDevices/big/AllDeviceBig";
 
 
 const TableDevices: React.FC = () => {
@@ -84,36 +85,31 @@ const TableDevices: React.FC = () => {
     return (
         <div className="tableContainer">
 
-                <div className="toolBar">
-                    <div className="leftSide">
-                        <h1>Карта</h1>
-                        <SwitchMap onChange={handleSwitchChange}/>
-                    </div>
-
-                    <div className="centr">
-                        <Pagin
-                            devices={devices}
-                            currentPage={currentPage}
-                            pageSize={pageSize}
-                            setCurrentPage={setCurrentPage}
-                            setPageSize={setPageSize}
-                        />
-                    </div>
-                    <div className="rightSide">
-                        <div><SearchInput/></div>
-                        <div><Buttonsfilter/></div>
-                    </div>
+            <div className="toolBar">
+                <div className="leftSide">
+                    <h1>Карта</h1>
+                    <SwitchMap onChange={handleSwitchChange}/>
                 </div>
 
-            {showLocationMap ? (
-                <div className="MapPlace">
-                        <TableDeviceShort/>
+                <div className="centr">
+                    <Pagin
+                        devices={devices}
+                        currentPage={currentPage}
+                        pageSize={pageSize}
+                        setCurrentPage={setCurrentPage}
+                        setPageSize={setPageSize}
+                    />
                 </div>
-            ) : (
-                <div className="tablePlace">
-                    <AllDevices/>
+                <div className="rightSide">
+                    <div><SearchInput/></div>
+                    <div><Buttonsfilter/></div>
                 </div>
-            )}
+            </div>
+
+            <div className="tablePlace">
+                <AllDevicesBig/>
+            </div>
+
 
         </div>
     )

@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import './style/style.css';
 import 'leaflet/dist/leaflet.css';
-import CardComponent from '../../../cards/CardComponent';
+import CardComponent from '../../../../cards/cardComponentMedium/CardComponent';
 import {Card, Col, Row} from "antd";
-import {useDevicesStore} from "../../../../store/devices/allDevices";
+import {useDevicesStore} from "../../../../../store/devices/allDevices";
 
 
-const AllDevices: React.FC = () => {
+const AllDevicesMedium: React.FC = () => {
     const {devices, fetchDevices} = useDevicesStore(); // Получаем список устройств и метод для загрузки
     const [currentPage, setCurrentPage] = useState<number>(1); // Состояние текущей страницы
     const [pageSize, setPageSize] = useState<number>(10); // Состояние размера страницы
@@ -35,7 +35,8 @@ const AllDevices: React.FC = () => {
     const devicesSecondColumn = devicesOnPage.slice(halfLength);
 
     return (
-        <Card className="allDevice">
+        //средние значки
+        <div className="allDevice">
             <Row gutter={[16, 16]}>
                 <Col span={12}>
                     {devicesFirstColumn.map((device: any) => (
@@ -48,8 +49,8 @@ const AllDevices: React.FC = () => {
                     ))}
                 </Col>
             </Row>
-        </Card>
+        </div>
     );
 };
 
-export default AllDevices;
+export default AllDevicesMedium;
