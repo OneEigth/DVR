@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Flex } from 'antd';
 import IconFilterControlButton from "../../icons/iconFilterButton/iconFilterControlButton";
-import IconFilterButton from "../../icons/iconFilterButton/iconFilterButton";
+import IconFilterButton from "../../icons/iconFilterButton/iconFilterButtonSmall";
 import "./style/style.css"
 const Buttonsfilter: React.FC = () => {
     return (

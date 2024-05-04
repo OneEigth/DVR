@@ -3,7 +3,10 @@ import MainMenu from "../../components/menu/Menu";
 import './style/style.css'
 import DeviceOne from "../../components/deviceOne/DeviceOne";
 
-const Device: React.FC = () => {
+interface DeviceProps {
+    selectedUID?: string;
+}
+const Device: React.FC<DeviceProps> = ({selectedUID}) => {
     const [currentMenuItem, setCurrentMenuItem] = useState('allCams');
     const handleMenuClick = (key: string) => {
         setCurrentMenuItem(key);
@@ -16,7 +19,7 @@ const Device: React.FC = () => {
                 <MainMenu onClick={handleMenuClick} currentMenuItem={currentMenuItem}/>
             </div>
             <div className="deviceOne">
-                    <DeviceOne/>
+                <DeviceOne selectedOnlineUID={selectedUID ?? ''}/>
             </div>
 
         </div>

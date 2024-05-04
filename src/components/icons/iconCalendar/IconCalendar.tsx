@@ -1,0 +1,14 @@
+import React from 'react';
+
+
+const IconCalendar: React.FC = () => (
+    <svg width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd" clip-rule="evenodd"
+              d="M4.83398 0.333008H3.50065V1.66634H2.16732H0.833984V2.99967V12.333V13.6663H2.16732H12.834H14.1673V12.333V2.99967V1.66634H12.834H11.5007V0.333008H10.1673V1.66634H4.83398V0.333008ZM10.1673 2.99967H11.5007H12.834V4.99967L2.16732 4.99967V2.99967H3.50065H4.83398H10.1673ZM2.16732 6.33301L2.16732 12.333H12.834V6.33301L2.16732 6.33301ZM9.50065 8.99967H11.5007V10.9997H9.50065V8.99967Z"
+              fill="white"/>
+    </svg>
+
+
+);
+
+export default IconCalendar;

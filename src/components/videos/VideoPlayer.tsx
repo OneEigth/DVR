@@ -538,7 +538,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, autoPlay = true }) => {
           onChangePlaybackRate={changePlaybackRateHandler}
         />
         <div className="vp-controls__header">
-         {/* <Time time={currentTimeUI} />*/}
+          <Time time={currentTimeUI} />
           <Progress
             bufferProgress={bufferProgress}
             currentProgress={currentProgress}
@@ -549,7 +549,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, autoPlay = true }) => {
             onHover={seekMouseMoveHandler}
             onSeek={seekInputHandler}
           />
-          {/*<Time time={remainedTimeUI} />*/}
+          <Time time={remainedTimeUI} />
         </div>
         <div className="vp-controls__body">
           <div className="vp-controls__body_left">

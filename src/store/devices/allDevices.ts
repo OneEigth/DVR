@@ -11,6 +11,10 @@ interface Device {
     battery_percent: string;
     ownerUID: string;
     online: boolean;
+    name:string;
+    description:string;
+    model:string;
+    groupUID:string;
 }
 
 interface DevicesStore {

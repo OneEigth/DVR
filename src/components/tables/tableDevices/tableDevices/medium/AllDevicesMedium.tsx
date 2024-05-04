@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import './style/style.css';
 import 'leaflet/dist/leaflet.css';
 import CardComponent from '../../../../cards/cardComponentMedium/CardComponent';
-import {Card, Col, Row} from "antd";
+import {Col, Row} from "antd";
 import {useDevicesStore} from "../../../../../store/devices/allDevices";
 
 

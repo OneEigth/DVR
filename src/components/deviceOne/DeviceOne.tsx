@@ -8,12 +8,16 @@ import MenuRS from "./rightSide/menu/MenuRS";
 import ToolBarRS from "./rightSide/toolbarRS/ToolBarRS";
 import InfoBar from "./leftSide/infoBar/InfoBar";
 
-const DeviceOne: React.FC = () => { //нужно принимать UID устройства
+interface DeviceOneProps {
+    selectedOnlineUID: string;
+    selectedFileUID?:string
+}
+const DeviceOne: React.FC<DeviceOneProps> = ({ selectedOnlineUID, selectedFileUID }) => {
     return (
         <div className="containerDeviceOne">
             <div className="leftSideDeviceOne">
                 <ToolBarDeviceOne/>
-                <PlayerPlace/>
+                <PlayerPlace selectedOnlineUID={selectedOnlineUID} selectedFileUID={"a7aa3e19-08ac-11ef-b8a5-0001693eb0e4"}/>
                 <InfoBar/>
                 <Description/>
             </div>

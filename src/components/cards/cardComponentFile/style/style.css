@@ -1,0 +1,81 @@
+.containerCardFile{
+    display:flex;
+    justify-content: start;
+    flex-direction: row;
+    width: 480px;
+    height: 116px;
+    margin: 10px;
+    border: #666666 2px;
+}
+
+.coverFile{
+    display:flex;
+    justify-content: flex-start;
+    width: 206px;
+    height: 116px;
+}
+
+.coverCardFile{
+    width: 206px;
+    height: 100%;
+    border-radius: 0;
+}
+
+.propertyGroupFile{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.propertyFile{
+    margin-bottom: 8px;
+
+    font-family: Roboto;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    letter-spacing: 0.25px;
+    text-align: left;
+
+    color: #21201F;
+    cursor: default;
+    margin-top: 0;
+}
+
+.propertiesFile{
+    display:flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    align-items: flex-start;
+    align-content: flex-start;
+    width:274px;
+    height: 100%;
+    margin-left: 0;
+    padding-left: 17px;
+    background-color: #F1F1F1;
+}
+
+.nameFile{
+    width: 100%;
+    margin-top: 8px;
+    margin-left: 0;
+    margin-right: 15px;
+    margin-bottom: 16px;
+    color: #21201F;
+
+    font-family: Roboto;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    letter-spacing: 0.15000000596046448px;
+    text-align: left;
+
+    display: flex;
+    justify-content: flex-start;
+    align-content: center;
+    align-items: center;
+}
+
+
+
+
