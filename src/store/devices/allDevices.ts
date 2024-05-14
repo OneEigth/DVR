@@ -1,21 +1,7 @@
 import create from "zustand";
 import { getAllDevices } from "../../api/devices/allDevices";
+import {Device} from "../../types/Device";
 
-interface Device {
-    ID: number;
-    UID: string;
-    DID: string;
-    pulse_time: string;
-    latitude: number;
-    longitude: number;
-    battery_percent: string;
-    ownerUID: string;
-    online: boolean;
-    name:string;
-    description:string;
-    model:string;
-    groupUID:string;
-}
 
 interface DevicesStore {
     devices: Device[];

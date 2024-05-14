@@ -2,15 +2,18 @@ import React from "react";
 import "./style.css"
 import IconSignalLow from "../../../icons/iconSignalLow/IconSignalLow";
 import {ConfigProvider, Progress} from "antd";
+import device from "../../../../pages/device/Device";
 
-
-const InfoBar: React.FC = () => {
-
+interface DeviceProps{
+    device:any
+}
+const InfoBar: React.FC<DeviceProps> = ({device}) => {
+    console.log("info bat", device.UID)
     return (
         <div className="infoBarDevice">
             <div className="battery">
                 <h1 className="h1bat">Уровень заряда</h1>
-                <span className="span"><IconSignalLow/>15%</span>
+                <span className="span"><IconSignalLow/>{device.battery_percent}%</span>
             </div>
             <div className="hdd">
                 <h1 className="h1hdd">Занятость жёсткого диска</h1>

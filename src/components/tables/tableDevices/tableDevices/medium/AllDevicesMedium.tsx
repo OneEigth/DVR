@@ -6,18 +6,25 @@ import {Col, Row} from "antd";
 import {useDevicesStore} from "../../../../../store/devices/allDevices";
 
 
-const AllDevicesMedium: React.FC = () => {
+
+interface AllDevicesMediumProps {
+    onSelectDevice: (selectedUID: string) => void;
+}
+
+const AllDevicesMedium: React.FC<AllDevicesMediumProps> = ({onSelectDevice}) => {
     const {devices, fetchDevices} = useDevicesStore(); // Получаем список устройств и метод для загрузки
     const [currentPage, setCurrentPage] = useState<number>(1); // Состояние текущей страницы
     const [pageSize, setPageSize] = useState<number>(10); // Состояние размера страницы
     const [showLocationMap, setShowLocationMap] = useState<boolean>(false);
+
+
+
 
      useEffect(() => {
          fetchDevices();
      }, []);
 
     const handleViewVideo = (uid: string) => {
-        // Реализуйте логику открытия видео по UID
         console.log('View video for UID:', uid);
     };
 

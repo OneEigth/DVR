@@ -4,6 +4,7 @@ import {useNavigate} from 'react-router-dom';
 import './style/style.css'
 
 import {VIDEO_PREVIEW_URL} from "../../../const/const";
+import {useFileStore} from "../../../store/devices/fileStore";
 
 
 interface CardComponentProps {
@@ -29,12 +30,16 @@ interface CardComponentProps {
         attached: string
     };
     handleViewVideo: (uid: string) => void;
+
 }
 
 const CardComponentFile: React.FC<CardComponentProps> = ({file, handleViewVideo}) => {
-    const navigate = useNavigate();
-    const handleDeviceClick = (deviceId: string) => {
-       /* navigate(`/device/${deviceId}`);*/
+    const { setSelectedFileUID } = useFileStore();
+
+
+    const handleDeviceClick = (FileUid: string) => {
+        setSelectedFileUID(FileUid);
+        console.log('CardComponentFile FileUid '+ FileUid)
     };
 
     return (

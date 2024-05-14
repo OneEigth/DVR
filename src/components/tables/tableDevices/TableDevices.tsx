@@ -64,8 +64,8 @@ const TableDevices: React.FC = () => {
             </div>
             <div className="tablePlace">
                 {activeDeviceSize === 'small' && <AllDevicesSmall onSelectDevice={handleSelectDevice} />}
-                {activeDeviceSize === 'medium' && <AllDevicesMedium />}
-                {activeDeviceSize === 'big' && <AllDevicesBig />}
+                {activeDeviceSize === 'medium' && <AllDevicesMedium onSelectDevice={handleSelectDevice} />}
+                {activeDeviceSize === 'big' && <AllDevicesBig onSelectDevice={handleSelectDevice} />}
             </div>
         </div>
     )

@@ -3,23 +3,12 @@ import { useDevicesStore } from '../../../../../store/devices/allDevices';
 import {Button, ConfigProvider, Table, TableColumnsType} from 'antd';
 import type { Key } from 'antd/lib/table/interface';
 import {useNavigate} from "react-router-dom";
-
-
-interface DeviceData {
-    key: Key;
-    name: string;
-    description: string;
-    model: string;
-    groupUID: string;
-    DID: string;
-    UID:string
-}
-
+import {useSelectedDevice} from "../../../../../store/devices/SelectedDevice";
+import {Device} from "../../../../../types/Device";
 
 interface AllDevicesSmallProps {
     onSelectDevice: (selectedUID: string) => void;
 }
-
 
 const AllDevicesSmall: React.FC<AllDevicesSmallProps> = ({onSelectDevice} ) => {
     const { devices, fetchDevices } = useDevicesStore();
@@ -27,11 +16,13 @@ const AllDevicesSmall: React.FC<AllDevicesSmallProps> = ({onSelectDevice} ) => {
     const [pageSize, setPageSize] = useState<number>(10);
     const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
     const [selectionType, setSelectionType] = useState<'checkbox'>('checkbox');
-    const [deviceData, setDeviceData] = useState<DeviceData[]>([]); // State to store DeviceData
+    const [deviceData, setDeviceData] = useState<Device[]>([]); // State to store DeviceData
     const navigate = useNavigate();
+    const {setSelectedDevice} = useSelectedDevice();
 
-    const handleDeviceClick = (deviceId: string) => {
-        navigate(`/device/${deviceId}`);
+    const handleDeviceClick = (device: Device) => {
+        navigate(`/device/${device.UID}`);
+        setSelectedDevice(device);
     };
 
     useEffect(() => {
@@ -39,39 +30,46 @@ const AllDevicesSmall: React.FC<AllDevicesSmallProps> = ({onSelectDevice} ) => {
     }, []);
 
     useEffect(() => {
-        // Convert devices to DeviceData format
-        const formattedDevices = devices.map(device => ({
-            key: device.ID, // Assuming device has an id property
+        // Преобразуем устройства в формат Device
+        const formattedDevices: Device[] = devices.map(device => ({
+            ID: device.ID,
+            UID: device.UID,
+            DID: device.DID,
+            groupUID: device.groupUID,
             name: device.name,
             description: device.description,
             model: device.model,
-            groupUID: device.groupUID,
-            DID: device.DID,
-            UID: device.UID,
+            pulse_time: device.pulse_time,
+            latitude: device.latitude,
+            longitude: device.longitude,
+            battery_percent: device.battery_percent,
+            ownerUID: device.ownerUID,
+            online: device.online,
+            connectState:device.connectState,
         }));
         setDeviceData(formattedDevices);
-    }, [devices]); // Update when devices change
+    }, [devices]);
 
 
     // rowSelection object indicates the need for row selection
     const rowSelection = {
-        onChange: (selectedRowKeys: React.Key[], selectedRows: DeviceData[]) => {
+        onChange: (selectedRowKeys: React.Key[], selectedRows: Device[]) => {
             console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
         },
-        getCheckboxProps: (record: DeviceData) => ({
+        getCheckboxProps: (record: Device) => ({
             disabled: record.name === 'Disabled User', // Column configuration not to be checked
             name: record.name,
         }),
     };
 
 
-    const columns:TableColumnsType<DeviceData> = [
+    const columns:TableColumnsType<Device> = [
         {
             title: 'Название',
             dataIndex: 'name',
             key: 'name',
-            render: (text: string, record: DeviceData) => (
-                <Button type="link" onClick={() => handleDeviceClick(record.UID)}>
+            render: (text: string, record: Device) => (
+                <Button type="link" onClick={() => handleDeviceClick(record)}>
                     {text}
                 </Button>),
         },

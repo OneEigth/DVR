@@ -7,18 +7,22 @@ import './style.css'
 import MenuRS from "./rightSide/menu/MenuRS";
 import ToolBarRS from "./rightSide/toolbarRS/ToolBarRS";
 import InfoBar from "./leftSide/infoBar/InfoBar";
+import {useSelectedDevice} from "../../store/devices/SelectedDevice"
 
 interface DeviceOneProps {
     selectedOnlineUID: string;
     selectedFileUID?:string
 }
 const DeviceOne: React.FC<DeviceOneProps> = ({ selectedOnlineUID, selectedFileUID }) => {
+    const {selectedDevice}=useSelectedDevice();
+
+
     return (
         <div className="containerDeviceOne">
             <div className="leftSideDeviceOne">
                 <ToolBarDeviceOne/>
-                <PlayerPlace selectedOnlineUID={selectedOnlineUID} selectedFileUID={"a7aa3e19-08ac-11ef-b8a5-0001693eb0e4"}/>
-                <InfoBar/>
+                <PlayerPlace selectedOnlineUID={selectedOnlineUID} device={selectedDevice}/>
+                <InfoBar device={selectedDevice}/>
                 <Description/>
             </div>
             <div className="rightSideDeviceOne">

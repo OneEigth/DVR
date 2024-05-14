@@ -5,12 +5,23 @@ import CardComponent from '../../../../cards/cardComponentMedium/CardComponent';
 import { Col, Row } from 'antd';
 import { useDevicesStore } from '../../../../../store/devices/allDevices';
 import CardComponentBig from "../../../../cards/cardComponentBig/CardComponentBig";
+import {useNavigate} from "react-router-dom";
 
-const AllDevicesBig: React.FC = () => {
+
+interface AllDevicesBigProps {
+    onSelectDevice: (selectedUID: string) => void;
+}
+
+const AllDevicesBig: React.FC<AllDevicesBigProps> = ({onSelectDevice}) => {
     const { devices, fetchDevices } = useDevicesStore();
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [pageSize, setPageSize] = useState<number>(10);
     const [showLocationMap, setShowLocationMap] = useState<boolean>(false);
+    const navigate = useNavigate();
+
+
+
+
 
     useEffect(() => {
         fetchDevices();

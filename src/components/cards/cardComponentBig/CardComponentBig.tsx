@@ -5,26 +5,21 @@ import './style/style.css';
 import {ONLINE_PLAY_URL, VIDEO_PREVIEW_URL} from "../../../const/const";
 import IconOnline from "../../icons/iconOnline/IconOnline";
 import IconOffline from "../../icons/iconOffline/IconOffline";
+import {useSelectedDevice} from "../../../store/devices/SelectedDevice";
+import {Device} from "../../../types/Device";
 
 interface CardComponentProps {
-    file: {
-        id: string;
-        UID: string;
-        DID: string;
-        battery_percent: number;
-        ownerUID: string;
-        online: boolean;
-        groupUID:string;
-        model:string;
-        name:string;
-    };
+    file: Device;
     handleViewVideo: (uid: string) => void;
 }
 
 const CardComponent: React.FC<CardComponentProps> = ({file, handleViewVideo}) => {
     const navigate = useNavigate();
+    const {setSelectedDevice} = useSelectedDevice();
     const handleDeviceClick = (deviceId: string) => {
         navigate(`/device/${deviceId}`);
+        setSelectedDevice(file);
+
     };
 
     return (
@@ -32,10 +27,10 @@ const CardComponent: React.FC<CardComponentProps> = ({file, handleViewVideo}) =>
             <div className="coverBig">
                 <Card
                     className="coverCardBig"
-                    key={file.id}
+                    key={file.ID}
                     hoverable
                     cover={<img alt={''} src={VIDEO_PREVIEW_URL(file.UID)}/>}
-                    onClick={() => handleDeviceClick(file.id)}
+                onClick={() => handleDeviceClick(file.UID)}
                 />
             </div>
             <div className="propertiesBig">

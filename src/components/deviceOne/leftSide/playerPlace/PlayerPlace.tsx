@@ -1,19 +1,22 @@
 import React, {useState} from "react";
 import "./style.css"
 import VideoPlayer from "../../../videos/VideoPlayer";
-import {FILE_PLAY_URL, ONLINE_PLAY_URL, VIDEO_PREVIEW_URL} from "../../../../const/const";
-import {Progress} from "antd";
+import {FILE_PLAY_URL} from "../../../../const/const";
+
 import NavigationTimeLine from "../../../navigationTimeLine/NavigationTimeLine";
 import ButtonCalendar from "../../../buttons/buttonCalendar/ButtonCalendar";
 import CalendarModal from "../../../modals/CalendareModal";
+import {useFileStore} from "../../../../store/devices/fileStore";
+
 
 interface PlayerPlaceProps {
     selectedOnlineUID: string,
-    selectedFileUID:string,
+    device:any
 }
-const PlayerPlace: React.FC<PlayerPlaceProps> = ({ selectedOnlineUID,selectedFileUID }) => {
+const PlayerPlace: React.FC<PlayerPlaceProps> = ({selectedOnlineUID,device}) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedDate, setSelectedDate] = useState<Date | null>(new Date()); // State to store selected date
+    const { selectedFileUID } = useFileStore();
 
     const handleOpenModal = () => {
         setIsModalOpen(true);
@@ -27,13 +30,13 @@ const PlayerPlace: React.FC<PlayerPlaceProps> = ({ selectedOnlineUID,selectedFil
         setSelectedDate(date);
         setIsModalOpen(false); // Close the modal after selecting a date
     };
+
     return(
         <div className="PlayerPlace">
             <div className="Player">
-            {/*<img alt="" src={ONLINE_PLAY_URL(selectedOnlineUID)}/>*/}
             <VideoPlayer src={FILE_PLAY_URL(selectedFileUID)} />
             <div className="navigateTimeLine">
-               <NavigationTimeLine />
+               <NavigationTimeLine selectedDate={selectedDate} deviceUID={device.UID}/>
                 <div className="nav_buttons">
                     <ButtonCalendar onClick={handleOpenModal} selectedDate={selectedDate}/>
                 </div>

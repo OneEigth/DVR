@@ -57,6 +57,7 @@
     display: flex;
     align-items: center;
     background-color: #E8CB72;
+    height: 90%;
 }
 
 .Nav-progress__range--seek {
@@ -128,5 +129,11 @@
 
 
 
-
+.file-on-timeline {
+    position: absolute;
+    height: 100%;
+    top: 0;
+    background-color: blue; /* Измените цвет на нужный */
+    opacity: 0.7; /* Настройте прозрачность по вашему усмотрению */
+}
 

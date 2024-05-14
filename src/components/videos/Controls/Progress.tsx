@@ -1,5 +1,5 @@
 import React, {memo} from 'react';
-import TimeMarkers from "./TimeMarkers";
+
 
 interface ProgressProps {
     videoDuration: number;
@@ -27,7 +27,7 @@ const Progress: React.FC<ProgressProps> = ({
         <div className="vp-progress">
 
             <div className="vp-progress__range">
-               {/* <TimeMarkers videoDuration={videoDuration} />*/}
+
                 <div className="vp-progress__range--background"/>
                 <div
                     className="vp-progress__range--buffer"

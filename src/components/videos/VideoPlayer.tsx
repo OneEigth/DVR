@@ -18,8 +18,9 @@ import { useLocalStorage } from '../../../src/hooks/storage-hook';
 import { formatTime } from '../../../src/utils/format';
 import './VideoPlayer.css';
 
+
 interface VideoPlayerProps {
-  src: string;
+  src: any;
   autoPlay?: boolean;
 }
 
@@ -138,14 +139,11 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, autoPlay = true }) => {
    * VOLUME
    */
 
-  const volumeInputHandler = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
+  const volumeInputHandler = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
       const video = videoRef.current!;
 
       video.volume = +event.target.value;
-    },
-    []
-  );
+    }, []  );
 
   const volumeChangeHandler = useCallback(() => {
     const video = videoRef.current!;
@@ -476,11 +474,11 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, autoPlay = true }) => {
    * ERROR HANDLER
    */
 
-  const errorHandler = useCallback(() => {
+  /*const errorHandler = useCallback(() => {
     const video = videoRef.current!;
 
     video.error && setVideoError(video.error);
-  }, []);
+  }, []);*/
 
   /**
    * INITIATE PLAYER
@@ -496,6 +494,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, autoPlay = true }) => {
   /**
    * RENDER
    */
+
+
 
   return (
     <div
@@ -520,7 +520,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, autoPlay = true }) => {
         onSeeked={hideLoaderHandler}
         onWaiting={showLoaderHandler}
         onCanPlay={hideLoaderHandler}
-        onError={errorHandler}
+       /* onError={errorHandler}*/
       />
       <Loader on={displayLoader} />
       <KeyAction
