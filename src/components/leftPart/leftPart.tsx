@@ -1,7 +1,18 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {MenuOutlined, SearchOutlined, VideoCameraOutlined} from '@ant-design/icons';
 import {Button, ConfigProvider, Input, Menu, MenuProps} from 'antd';
 import './style/style.css'
+import {useGroupsStore} from '../../store/groups/Groups'
+import {useDevicesStore} from '../../store/devices/allDevices'
+import {useSelectedDevice} from "../../store/devices/SelectedDevice";
+import {useNavigate} from "react-router-dom";
+import {Device} from "../../types/Device";
+import SubMenu from "antd/es/menu/SubMenu";
+import IconLeftMenuDevice from "../icons/iconLeftMenu/IconLeftMenuDevice";
+import IconLeftMenu from "../icons/iconLeftMenu/IconLeftMenu";
+import {Simulate} from "react-dom/test-utils";
+import click = Simulate.click;
+
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -21,62 +32,61 @@ function getItem(
     } as MenuItem;
 }
 
-const items: MenuItem[] = [
-    getItem('Группа камер 1', '1', <VideoCameraOutlined/>, [
-        getItem('Камера', '11'),
-        getItem('Камера', '12'),
-
-    ]),
-   /*getItem('Navigation Two', '2', <AppstoreOutlined />, [
-        getItem('Option 1', '21'),
-        getItem('Option 2', '22'),
-        getItem('Submenu', '23', null, [
-            getItem('Option 1', '231'),
-            getItem('Option 2', '232'),
-            getItem('Option 3', '233'),
-        ]),
-        getItem('Submenu 2', '24', null, [
-            getItem('Option 1', '241'),
-            getItem('Option 2', '242'),
-            getItem('Option 3', '243'),
-        ]),
-    ]),
-    */
-
-    getItem('Группа камер 2', '3', <VideoCameraOutlined/>, [
-        getItem('Камера', '31'),
-        getItem('Камера', '32'),
-        getItem('Камера', '33'),
-
-    ]),
-];
-
-interface LevelKeysProps {
-    key?: string;
-    children?: LevelKeysProps[];
-}
-
-const getLevelKeys = (items1: LevelKeysProps[]) => {
-
-    const key: Record<string, number> = {};
-    const func = (items2: LevelKeysProps[], level = 1) => {
-        items2.forEach((item) => {
-            if (item.key) {
-                key[item.key] = level;
-            }
-            if (item.children) {
-                return func(item.children, level + 1);
-            }
-        });
-    };
-    func(items1);
-    return key;
-};
-const levelKeys = getLevelKeys(items as LevelKeysProps[]);
-
-const App: React.FC = () => {
+const LeftPart: React.FC = () => {
     const [stateOpenKeys, setStateOpenKeys] = useState(['2', '23']);
-    const [collapsed, setCollapsed] = useState(false);
+    const [collapsed, setCollapsed] = useState(true);
+    const { groups, fetchGroups } = useGroupsStore();
+    const {devices, fetchDevices} = useDevicesStore();
+    const navigate = useNavigate();
+    const { setSelectedDevice } = useSelectedDevice();
+
+    const handleDeviceClick = (device: Device) => {
+        navigate(`/device/${device.UID}`);
+        setSelectedDevice(device);
+    };
+
+    useEffect(() => {
+        fetchGroups();
+        fetchDevices();
+    }, []);
+
+
+
+    const items: MenuItem[] = groups.map((group) => {
+        const groupDevices = devices.filter((device) => device.groupUID === group.uid);
+        const childrenItems: MenuItem[] = groupDevices.map((device) => getItem(device.name, device.UID, <VideoCameraOutlined />));
+
+        return getItem(
+            group.name,
+            group.uid,
+            <MenuOutlined />,
+            childrenItems,
+            'group'
+        );
+    });
+
+    interface LevelKeysProps {
+        key?: string;
+        children?: LevelKeysProps[];
+    }
+
+    const getLevelKeys = (items1: LevelKeysProps[]) => {
+
+        const key: Record<string, number> = {};
+        const func = (items2: LevelKeysProps[], level = 1) => {
+            items2.forEach((item) => {
+                if (item.key) {
+                    key[item.key] = level;
+                }
+                if (item.children) {
+                    return func(item.children, level + 1);
+                }
+            });
+        };
+        func(items1);
+        return key;
+    };
+    const levelKeys = getLevelKeys(items as LevelKeysProps[]);
 
 
     const onOpenChange: MenuProps['onOpenChange'] = (openKeys) => {
@@ -105,12 +115,12 @@ const App: React.FC = () => {
     };
 
     return (
-            <div className="upLeftPart" style={{ width: collapsed ? '80px' : '264px' }} >
+            <div className="upLeftPart" style={{ width: collapsed ? '84px' : '264px' }} >
                 <div className="buttonMenu">
                     <Button className="button"
                             onClick={toggleCollapsed}
                             style={{marginBottom: 12, border: 'none', backgroundColor: '#F1F1F1'}}
-                            icon={<MenuOutlined/>}/>
+                            icon={<IconLeftMenu />}/>
                 </div>
                 <div className="Search">
                     <Input
@@ -128,25 +138,49 @@ const App: React.FC = () => {
                                 Menu: {
                                     lineType: 'none',
                                     motionDurationSlow: '0.2',
+                                    iconMarginInlineEnd: 15
 
                                 },
                             },
                         }}
                     >
-                    <Menu
-                        className="LeftMenu"
-                        mode="inline"
 
-                        openKeys={stateOpenKeys}
-                        onOpenChange={onOpenChange}
-                        inlineCollapsed={collapsed}
-                        items={items}
-                        style={{ width: collapsed ? '80px' : '264px' }}
-                    />
+                        <Menu
+                            className="LeftMenu"
+                            triggerSubMenuAction="click"
+                            mode={collapsed ? 'inline' : 'inline'}
+                            openKeys={stateOpenKeys}
+                            onOpenChange={(keys) => setStateOpenKeys(keys as string[])} // Приведение типа, если необходимо
+                            inlineCollapsed={collapsed}
+                            style={{ width: collapsed ? '84px' : '264px' }}
+                        >
+                            {groups.map((group) => (
+                                <SubMenu key={group.uid} title={group.name} >
+                                    {devices
+                                        .filter((device) => device.groupUID === group.uid)
+                                        .map((device) => (
+
+
+                                                <Menu.Item
+                                                    key={device.UID}
+                                                    onClick={() => handleDeviceClick(device)}
+                                                    icon={<IconLeftMenuDevice/>}
+                                                >
+                                                    {device.name}
+                                                </Menu.Item>
+
+
+
+                                        ))}
+                                </SubMenu>
+                            ))}
+                        </Menu>
+
+
                     </ConfigProvider>
                 </div>
             </div>
     );
 };
 
-export default App;
+export default LeftPart;

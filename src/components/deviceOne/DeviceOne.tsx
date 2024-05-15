@@ -8,6 +8,7 @@ import MenuRS from "./rightSide/menu/MenuRS";
 import ToolBarRS from "./rightSide/toolbarRS/ToolBarRS";
 import InfoBar from "./leftSide/infoBar/InfoBar";
 import {useSelectedDevice} from "../../store/devices/SelectedDevice"
+import LeftPart from "../leftPart/leftPart";
 
 interface DeviceOneProps {
     selectedOnlineUID: string;
@@ -18,18 +19,25 @@ const DeviceOne: React.FC<DeviceOneProps> = ({ selectedOnlineUID, selectedFileUI
 
 
     return (
+
         <div className="containerDeviceOne">
-            <div className="leftSideDeviceOne">
-                <ToolBarDeviceOne/>
-                <PlayerPlace selectedOnlineUID={selectedOnlineUID} device={selectedDevice}/>
-                <InfoBar device={selectedDevice}/>
-                <Description/>
+            <div className="SideBar">
+                <LeftPart />
             </div>
-            <div className="rightSideDeviceOne">
-                <MenuRS/>
-                <ToolBarRS/>
-                <FileTable/>
+            <div className="DeviceOne">
+                <div className="leftSideDeviceOne">
+                    <ToolBarDeviceOne/>
+                    <PlayerPlace selectedOnlineUID={selectedOnlineUID} device={selectedDevice}/>
+                    <InfoBar device={selectedDevice}/>
+                    <Description device={selectedDevice}/>
+                </div>
+                <div className="rightSideDeviceOne">
+                    <MenuRS/>
+                    <ToolBarRS/>
+                    <FileTable/>
+                </div>
             </div>
+
         </div>
     );
 }

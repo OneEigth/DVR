@@ -5,7 +5,6 @@ import CardComponent from '../../../../cards/cardComponentMedium/CardComponent';
 import { Col, Row } from 'antd';
 import { useDevicesStore } from '../../../../../store/devices/allDevices';
 import CardComponentBig from "../../../../cards/cardComponentBig/CardComponentBig";
-import {useNavigate} from "react-router-dom";
 
 
 interface AllDevicesBigProps {
@@ -17,10 +16,6 @@ const AllDevicesBig: React.FC<AllDevicesBigProps> = ({onSelectDevice}) => {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [pageSize, setPageSize] = useState<number>(10);
     const [showLocationMap, setShowLocationMap] = useState<boolean>(false);
-    const navigate = useNavigate();
-
-
-
 
 
     useEffect(() => {
