@@ -16,13 +16,12 @@ const onFinishFailed: FormProps<FieldType>["onFinishFailed"] = (errorInfo) => {
 };
 
 const LoginPage: React.FC = () =>{
+    const {login, isAuthenticated } = useAuthStore();
     const navigate = useNavigate();
-    const { login } = useAuthStore();
-
 
     const onFinish = async (values: { username: string; password: string }) => {
         await login(values.username, values.password);
-        if (useAuthStore.getState().isAuthenticated) {
+        if (isAuthenticated) {
             navigate('/main');
         }
     };

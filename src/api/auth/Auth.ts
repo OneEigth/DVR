@@ -37,6 +37,9 @@ export const loginRequest = async (username: string, password: string): Promise<
         console.error('Error during login request:', error);
         throw error;
     }
+
+    console.log('loginRequest'+ Promise<LoginResponse>)
+
 };
 
 

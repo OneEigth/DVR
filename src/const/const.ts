@@ -1,26 +1,9 @@
-//Получение устройств
-import axios, {AxiosError} from "axios";
-import { useAuthStore } from '../store/auth/auth';
-
-const getAuthToken = () => {
-    const { SmartDVRToken } = useAuthStore.getState();
-    return SmartDVRToken;
-};
-
-// GET_PLAY_FILE
-export const FILE_PLAY_URL = `http://45.141.76.30:8172/play/file/`;
-
-
 
 export const API_URL = 'http://45.141.76.30:8172/device/get_by/all';
-export const HEADERS = {
-    SmartDVRLogin: 'admin',
-    SmartDVRToken: 'ac425fec-0856-11ef-8012-0001693eb0e4',
-};
 
 //Получение списка файлов устройств раннее загруженных в базу
 export const FILE_API_URL = 'http://45.141.76.30:8172/media_file/filter/1/5';
-export const FILE_HEADERS = {
+export const HEADERS = {
     SmartDVRLogin: 'admin',
     SmartDVRToken: 'ac425fec-0856-11ef-8012-0001693eb0e4',
 };

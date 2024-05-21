@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Row, Col, Card, Pagination, Button } from 'antd';
-import { useDevicesStore } from '../../../store/devices/fileDevicesFromDB';
+import { useFilesStore } from '../../../store/devices/fileDevicesFromDB';
 import './style.css';
 
 
 const TableFileDeviceDB: React.FC = () => {
-    const { files, fetchFiles } = useDevicesStore();
+    const { files, fetchFiles } = useFilesStore();
     const [selectedVideoUID, setSelectedVideoUID] = useState<string>('');
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [currentPage, setCurrentPage] = useState<number>(1);

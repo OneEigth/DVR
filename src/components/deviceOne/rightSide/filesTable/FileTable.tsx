@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import CardComponentFile from "../../../cards/cardComponentFile/CardComponentFile";
 import { useSelectedFilesStore } from "../../../../store/devices/SelectedFilesState"
-import {useDevicesStore} from "../../../../store/devices/fileDevicesFromDB";
+import {useFilesStore} from "../../../../store/devices/fileDevicesFromDB";
 import {Device} from "../../../../types/Device";
 import {Pagination, PaginationProps} from "antd";
 import {useAuthStore} from "../../../../store/auth/auth";
@@ -13,12 +13,12 @@ interface FileTableProps {
 }
 const FileTable: React.FC<FileTableProps> = ({device}) => {
     const { selectedFiles } = useSelectedFilesStore();
-    const {files,fetchFiles}=useDevicesStore();
+    const {files,fetchFiles}=useFilesStore();
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [pageSize, setPageSize] = useState<number>(7);
 
 
-    console.log("fileTable "+device.UID)
+
     //все медиа файлы выбранного устройства
     useEffect(() => {
         const deviceUID = device.UID;
@@ -28,7 +28,6 @@ const FileTable: React.FC<FileTableProps> = ({device}) => {
     }, [device, fetchFiles]);
 
     console.log("fileTable files"+files)
-
 
     /*//видео файлы выбранные с NavigationTimeLine
     const startIndex = (currentPage - 1) * pageSize;

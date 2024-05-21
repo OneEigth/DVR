@@ -1,6 +1,6 @@
 import React, {memo, useEffect, useRef, useState} from 'react';
 import './style/style.css'
-import {useDevicesStore} from "../../store/devices/fileDevicesFromDB";
+import {useFilesStore} from "../../store/devices/fileDevicesFromDB";
 import {useSelectedFilesStore} from "../../store/devices/SelectedFilesState";
 
 
@@ -15,7 +15,7 @@ const NavigationTimeLine: React.FC<NavigationTimeLineProps> = ({
                                                                    deviceUID
                                                                }) => {
     const { setSelectedFiles } = useSelectedFilesStore();
-    const { files, fetchFiles } = useDevicesStore();
+    const { files, fetchFiles } = useFilesStore();
     const [startDateTime, setStartDateTime] = useState<Date | null>(null);
     const [endDateTime, setEndDateTime] = useState<Date | null>(null);
 

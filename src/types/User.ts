@@ -1,3 +1,5 @@
+import {Group} from "./Group";
+
 export interface User {
     id: number;
     uid: string;
@@ -5,6 +7,7 @@ export interface User {
     login: string;
     password: string;
     name: string;
-    is_admin: boolean;
+    role:string;
+    groups: Group[]
 }
 

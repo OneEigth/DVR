@@ -1,14 +1,12 @@
 import React from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
+import { useAuthStore } from '../../store/auth/auth';
 
-interface ProtectedRouteProps {
-    isAuthenticated: boolean;
-    component: React.ComponentType;
-}
+const ProtectedRoute = ({ element }: { element: JSX.Element }) => {
+    const { isAuthenticated } = useAuthStore();
+    const location = useLocation();
 
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ isAuthenticated, component: Component }) => {
-    console.log('ProtectedRoute: isAuthenticated:', isAuthenticated); // Добавим лог
-    return isAuthenticated ? <Component /> : <Navigate to="/" replace />;
+    return isAuthenticated ? element : <Navigate to="/" state={{ from: location }} replace />;
 };
 
 export default ProtectedRoute;

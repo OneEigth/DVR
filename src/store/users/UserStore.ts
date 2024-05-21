@@ -1,6 +1,7 @@
 import create from 'zustand';
 import { getUsers } from '../../api/users/users';
 import { User } from '../../types/User';
+import {useAuthStore} from "../auth/auth";
 
 interface UserStore {
     users: User[];
@@ -10,7 +11,13 @@ interface UserStore {
 export const useUserStore = create<UserStore>((set) => ({
     users: [],
     fetchUsers: async () => {
-        const users = await getUsers();
+        const { SmartDVRToken, user } = useAuthStore.getState();
+
+        if (!user || !SmartDVRToken) {
+            console.error('User or token information is missing.');
+            return;
+        }
+        const users = await getUsers(SmartDVRToken, user.login);
         set({ users });
     },
 }));
