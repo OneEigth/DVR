@@ -1,6 +1,12 @@
 .FileTable{
     width: 100% !important;
     padding-left: 0;
+    margin-top: 0;
+    padding-top: 0;
+}
+
+.allDevice{
+    width: 100%;
 }
 
 .table{

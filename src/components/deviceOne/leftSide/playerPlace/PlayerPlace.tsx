@@ -1,22 +1,28 @@
 import React, {useState} from "react";
 import "./style.css"
 import VideoPlayer from "../../../videos/VideoPlayer";
-import {FILE_PLAY_URL} from "../../../../const/const";
-
 import NavigationTimeLine from "../../../navigationTimeLine/NavigationTimeLine";
 import ButtonCalendar from "../../../buttons/buttonCalendar/ButtonCalendar";
 import CalendarModal from "../../../modals/CalendareModal";
 import {useFileStore} from "../../../../store/devices/fileStore";
-
+import {Device} from "../../../../types/Device";
+import {useAuthStore} from "../../../../store/auth/auth";
 
 interface PlayerPlaceProps {
     selectedOnlineUID: string,
-    device:any
+    device: Device
 }
 const PlayerPlace: React.FC<PlayerPlaceProps> = ({selectedOnlineUID,device}) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedDate, setSelectedDate] = useState<Date | null>(new Date()); // State to store selected date
     const { selectedFileUID } = useFileStore();
+    const { SmartDVRToken } = useAuthStore.getState();
+
+    console.log("PlayerPlace " + device.UID)
+
+    const getFilePlayUrl = (uid: string,authToken:string) => {
+        return `http://45.141.76.30:8172/play/file/${uid}/${authToken}`;
+    };
 
     const handleOpenModal = () => {
         setIsModalOpen(true);
@@ -30,11 +36,11 @@ const PlayerPlace: React.FC<PlayerPlaceProps> = ({selectedOnlineUID,device}) => 
         setSelectedDate(date);
         setIsModalOpen(false); // Close the modal after selecting a date
     };
-
+    console.log()
     return(
         <div className="PlayerPlace">
             <div className="Player">
-            <VideoPlayer src={FILE_PLAY_URL(selectedFileUID)} />
+            <VideoPlayer src={getFilePlayUrl(selectedFileUID, SmartDVRToken )} />
             <div className="navigateTimeLine">
                <NavigationTimeLine selectedDate={selectedDate} deviceUID={device.UID}/>
                 <div className="nav_buttons">
@@ -47,9 +53,7 @@ const PlayerPlace: React.FC<PlayerPlaceProps> = ({selectedOnlineUID,device}) => 
                     handleDateSelect={handleDateSelect} // Pass the handler to CalendarModal
                 />
             </div>
-
             </div>
-
         </div>
     );
 }

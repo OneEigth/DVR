@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {Form, Input} from "antd";
 import './style.css'
 import {Device} from "../../../../types/Device";
@@ -8,21 +8,38 @@ interface DescriptionsProps{
 }
 const Description: React.FC<DescriptionsProps> = ({device}) => {
 
+    const [formLeft] = Form.useForm();
+    const [formRight] = Form.useForm();
+
+    useEffect(() => {
+        formLeft.setFieldsValue({
+            name: device.name,
+            description: device.description,
+            group: device.groupUID,
+        });
+
+        formRight.setFieldsValue({
+            employee: device.ownerUID,
+            serialNumber: device.DID,
+            model: device.model,
+        });
+
+    }, [device, formLeft, formRight]);
+
     return (
         <div className="descContainer">
             <div className="formGroupLeft"> {/* Группа слева */}
                 <Form
+                    form={formLeft}
                     className="form"
-                    name="basic"
+                    name="basicLeft"
                     labelCol={{span: 8}}
                     wrapperCol={{span: 16}}
                     style={{maxWidth: 600}}
-                    initialValues={{remember: true}}
                 >
                     <Form.Item
                         label={<span className="inputLabel">Название</span>}
                         name="name"
-                        initialValue={device.name}
                     >
                         <Input className="input" disabled/>
                     </Form.Item>
@@ -30,7 +47,6 @@ const Description: React.FC<DescriptionsProps> = ({device}) => {
                     <Form.Item
                         label={<span className="inputLabel">Описание</span>}
                         name="description"
-                        initialValue={device.description}
                     >
                         <Input className="input" disabled/>
                     </Form.Item>
@@ -38,7 +54,6 @@ const Description: React.FC<DescriptionsProps> = ({device}) => {
                     <Form.Item
                         label={<span className="inputLabel">Группа</span>}
                         name="group"
-                        initialValue={device.groupUID}
                     >
                         <Input className="input" disabled/>
                     </Form.Item>
@@ -49,17 +64,16 @@ const Description: React.FC<DescriptionsProps> = ({device}) => {
                 {/* Группа справа */}
 
                 <Form
+                    form={formRight}
                     className="form"
-                    name="basic"
+                    name="basicRight"
                     labelCol={{span: 8}}
                     wrapperCol={{span: 16}}
                     style={{maxWidth: 600}}
-                    initialValues={{remember: true}}
                 >
                     <Form.Item
                         label={<span className="inputLabel">Сотрудник</span>}
                         name="employee"
-                        initialValue={device.ownerUID}
                     >
                         <Input className="input" disabled/>
                     </Form.Item>
@@ -67,7 +81,6 @@ const Description: React.FC<DescriptionsProps> = ({device}) => {
                     <Form.Item
                         label={<span className="inputLabel">Серийный номер</span>}
                         name="serialNumber"
-                        initialValue={device.DID}
                     >
                         <Input className="input" disabled/>
                     </Form.Item>
@@ -75,7 +88,6 @@ const Description: React.FC<DescriptionsProps> = ({device}) => {
                     <Form.Item
                         label={<span className="inputLabel">Модель</span>}
                         name="model"
-                        initialValue={device.model}
                     >
                         <Input className="input" disabled/>
                     </Form.Item>

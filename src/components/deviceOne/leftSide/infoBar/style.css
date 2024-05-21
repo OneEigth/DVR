@@ -19,7 +19,6 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 100%;
 }
 
 .h1bat,
@@ -29,7 +28,7 @@
     justify-content: center;
     align-items: center;
     width: 100%;
-    /* Name Title/Title small */
+
     font-family: Roboto;
     font-weight: 500;
     font-size: 14px;
@@ -61,7 +60,6 @@
     justify-content: center;
     align-items: center;
     width: 100%;
-    /* Name Title/Title small */
     font-family: Roboto;
     font-weight: 500;
     font-size: 14px;

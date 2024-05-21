@@ -1,7 +1,7 @@
 import create from "zustand";
 
 interface SelectedFilesState {
-    selectedFiles: any[]; // Здесь нужно определить тип выбранных файлов
+    selectedFiles: File[]; // Здесь нужно определить тип выбранных файлов
     setSelectedFiles: (selectedFiles: any[]) => void;
 }
 

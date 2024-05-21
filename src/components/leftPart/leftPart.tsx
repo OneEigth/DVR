@@ -4,24 +4,24 @@ import {Button, ConfigProvider, Input, Menu, MenuProps} from 'antd';
 import './style/style.css'
 import {useGroupsStore} from '../../store/groups/Groups'
 import {useDevicesStore} from '../../store/devices/allDevices'
+
 import {useSelectedDevice} from "../../store/devices/SelectedDevice";
 import {useNavigate} from "react-router-dom";
 import {Device} from "../../types/Device";
 import SubMenu from "antd/es/menu/SubMenu";
 import IconLeftMenuDevice from "../icons/iconLeftMenu/IconLeftMenuDevice";
 import IconLeftMenu from "../icons/iconLeftMenu/IconLeftMenu";
-import {Simulate} from "react-dom/test-utils";
-import click = Simulate.click;
-
+import {useLeftPartStateStore} from "../../store/leftPart/LeftPartStore";
 
 type MenuItem = Required<MenuProps>['items'][number];
+type MenuItemType = 'group' | 'subgroup'; // Определение типов для MenuItem
 
 function getItem(
     label: React.ReactNode,
     key: React.Key,
     icon?: React.ReactNode,
     children?: MenuItem[],
-    type?: 'group',
+    type?: MenuItemType,
 ): MenuItem {
     return {
         key,
@@ -39,6 +39,7 @@ const LeftPart: React.FC = () => {
     const {devices, fetchDevices} = useDevicesStore();
     const navigate = useNavigate();
     const { setSelectedDevice } = useSelectedDevice();
+    const {setSelectedStateLeftPart}=useLeftPartStateStore();
 
     const handleDeviceClick = (device: Device) => {
         navigate(`/device/${device.UID}`);
@@ -50,17 +51,33 @@ const LeftPart: React.FC = () => {
         fetchDevices();
     }, []);
 
-
-
+    // Создание структуры меню с подгруппами и устройствами
     const items: MenuItem[] = groups.map((group) => {
         const groupDevices = devices.filter((device) => device.groupUID === group.uid);
-        const childrenItems: MenuItem[] = groupDevices.map((device) => getItem(device.name, device.UID, <VideoCameraOutlined />));
+        const childrenItems: MenuItem[] = groupDevices.map((device) =>
+            getItem(device.name, device.UID, <VideoCameraOutlined />)
+        );
+
+        const subMenus: MenuItem[] = group.sub_groups.map((subgroup) => {
+            const subgroupDevices = devices.filter((device) => device.groupUID === subgroup.uid);
+            const subgroupChildrenItems: MenuItem[] = subgroupDevices.map((device) =>
+                getItem(device.name, device.UID, <VideoCameraOutlined />)
+            );
+
+            return getItem(
+                subgroup.name,
+                subgroup.uid,
+                <MenuOutlined />,
+                subgroupChildrenItems,
+                'subgroup'
+            );
+        });
 
         return getItem(
             group.name,
             group.uid,
             <MenuOutlined />,
-            childrenItems,
+            [...childrenItems, ...subMenus],
             'group'
         );
     });
@@ -88,7 +105,6 @@ const LeftPart: React.FC = () => {
     };
     const levelKeys = getLevelKeys(items as LevelKeysProps[]);
 
-
     const onOpenChange: MenuProps['onOpenChange'] = (openKeys) => {
         const currentOpenKey = openKeys.find((key) => stateOpenKeys.indexOf(key) === -1);
         // open
@@ -112,10 +128,12 @@ const LeftPart: React.FC = () => {
 
     const toggleCollapsed = () => {
         setCollapsed(!collapsed);
+        setSelectedStateLeftPart(collapsed);
+
     };
 
     return (
-            <div className="upLeftPart" style={{ width: collapsed ? '84px' : '264px' }} >
+            <div className="upLeftPart" style={{ width: collapsed ? '84px' : '240px' }} >
                 <div className="buttonMenu">
                     <Button className="button"
                             onClick={toggleCollapsed}
@@ -126,7 +144,7 @@ const LeftPart: React.FC = () => {
                     <Input
                         placeholder="поиск"
                         style={{
-                            width: collapsed ? '32px' : '216px',
+                            width: collapsed ? '32px' : '192px',
                             height: '32px',}}
                         suffix={<SearchOutlined style={{ marginLeft: collapsed ? '0' : '8px'}} />}
                     />
@@ -139,12 +157,10 @@ const LeftPart: React.FC = () => {
                                     lineType: 'none',
                                     motionDurationSlow: '0.2',
                                     iconMarginInlineEnd: 15
-
                                 },
                             },
                         }}
                     >
-
                         <Menu
                             className="LeftMenu"
                             triggerSubMenuAction="click"
@@ -152,31 +168,44 @@ const LeftPart: React.FC = () => {
                             openKeys={stateOpenKeys}
                             onOpenChange={(keys) => setStateOpenKeys(keys as string[])} // Приведение типа, если необходимо
                             inlineCollapsed={collapsed}
-                            style={{ width: collapsed ? '84px' : '264px' }}
+                            style={{ width: collapsed ? '84px' : '234px' }}
                         >
+
                             {groups.map((group) => (
-                                <SubMenu key={group.uid} title={group.name} >
+                                <SubMenu key={group.uid} title={group.name}>
+
+                                    {/* Устройства в текущей группе */}
                                     {devices
                                         .filter((device) => device.groupUID === group.uid)
                                         .map((device) => (
-
-
-                                                <Menu.Item
-                                                    key={device.UID}
-                                                    onClick={() => handleDeviceClick(device)}
-                                                    icon={<IconLeftMenuDevice/>}
-                                                >
-                                                    {device.name}
-                                                </Menu.Item>
-
-
-
+                                            <Menu.Item
+                                                key={device.UID}
+                                                onClick={() => handleDeviceClick(device)}
+                                                icon={<IconLeftMenuDevice/>}
+                                            >
+                                                {device.name}
+                                            </Menu.Item>
                                         ))}
+
+                                    {/* Подгруппы текущей группы */}
+                                    {group.sub_groups.map((subgroup) => (
+                                        <SubMenu key={subgroup.uid} title={subgroup.name}>
+                                            {devices
+                                                .filter((device) => device.groupUID === subgroup.uid)
+                                                .map((device) => (
+                                                    <Menu.Item
+                                                        key={device.UID}
+                                                        onClick={() => handleDeviceClick(device)}
+                                                        icon={<IconLeftMenuDevice/>}
+                                                    >
+                                                        {device.name}
+                                                    </Menu.Item>
+                                                ))}
+                                        </SubMenu>
+                                    ))}
                                 </SubMenu>
                             ))}
                         </Menu>
-
-
                     </ConfigProvider>
                 </div>
             </div>

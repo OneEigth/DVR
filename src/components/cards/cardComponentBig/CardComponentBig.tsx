@@ -7,6 +7,7 @@ import IconOnline from "../../icons/iconOnline/IconOnline";
 import IconOffline from "../../icons/iconOffline/IconOffline";
 import {useSelectedDevice} from "../../../store/devices/SelectedDevice";
 import {Device} from "../../../types/Device";
+import {useAuthStore} from "../../../store/auth/auth";
 
 interface CardComponentProps {
     file: Device;
@@ -16,6 +17,8 @@ interface CardComponentProps {
 const CardComponent: React.FC<CardComponentProps> = ({file, handleViewVideo}) => {
     const navigate = useNavigate();
     const {setSelectedDevice} = useSelectedDevice();
+    const { SmartDVRToken } = useAuthStore.getState();
+
     const handleDeviceClick = (deviceId: string) => {
         navigate(`/device/${deviceId}`);
         setSelectedDevice(file);
@@ -29,7 +32,7 @@ const CardComponent: React.FC<CardComponentProps> = ({file, handleViewVideo}) =>
                     className="coverCardBig"
                     key={file.ID}
                     hoverable
-                    cover={<img alt={''} src={VIDEO_PREVIEW_URL(file.UID)}/>}
+                    cover={<img alt={''} src={VIDEO_PREVIEW_URL(file.UID,SmartDVRToken)}/>}
                 onClick={() => handleDeviceClick(file.UID)}
                 />
             </div>

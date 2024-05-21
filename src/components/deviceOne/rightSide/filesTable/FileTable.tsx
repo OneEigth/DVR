@@ -1,48 +1,66 @@
+
+
 import React, { useEffect, useState } from "react";
-import { useDevicesStore } from "../../../../store/devices/fileDevicesFromDB";
-import CardComponent from "../../../cards/cardComponentMedium/CardComponent";
 import CardComponentFile from "../../../cards/cardComponentFile/CardComponentFile";
 import { useSelectedFilesStore } from "../../../../store/devices/SelectedFilesState"
+import {useDevicesStore} from "../../../../store/devices/fileDevicesFromDB";
+import {Device} from "../../../../types/Device";
+import {Pagination, PaginationProps} from "antd";
+import {useAuthStore} from "../../../../store/auth/auth";
 
 interface FileTableProps {
-    deviceUID:string,
-    startDateTime:string,
-    endDateTime:string,
+    device:Device;
 }
-const FileTable: React.FC = () => {
-   /* const { files, fetchFiles } = useDevicesStore();*/
+const FileTable: React.FC<FileTableProps> = ({device}) => {
     const { selectedFiles } = useSelectedFilesStore();
+    const {files,fetchFiles}=useDevicesStore();
     const [currentPage, setCurrentPage] = useState<number>(1);
-    const [pageSize, setPageSize] = useState<number>(10);
-    const [selectedFileUID, setSelectedFileUID] = useState<string>("");
+    const [pageSize, setPageSize] = useState<number>(7);
 
-    /*useEffect(() => {
-        const deviceUID = "e7727a41-d03d-3f36-b7a2-9ccf8c95dac5";
+
+    console.log("fileTable "+device.UID)
+    //все медиа файлы выбранного устройства
+    useEffect(() => {
+        const deviceUID = device.UID;
         const startDateTime = "2024-02-27T20:22:49+05:00";
         const endDateTime = "2024-12-14T23:59:59+05:00";
         fetchFiles(deviceUID, startDateTime, endDateTime);
-    }, [fetchFiles]);*/
+    }, [device, fetchFiles]);
 
-    const handleViewVideo = (uid: string) => {
-        console.log("View video for UID:", uid);
-    };
+    console.log("fileTable files"+files)
 
-    const handleSelectFileUID = (uid: string) => {
-        setSelectedFileUID(uid);
-        console.log('FileTable uid '+uid)
-        };
 
+    /*//видео файлы выбранные с NavigationTimeLine
     const startIndex = (currentPage - 1) * pageSize;
-    const devicesOnPage = selectedFiles.slice(startIndex, startIndex + pageSize);
+    const devicesOnPage = selectedFiles.slice(startIndex, startIndex + pageSize);*/
+
+    //все медиа файлы выбранного устройства по странично
+    const startIndex = (currentPage - 1) * pageSize;
+    const devicesOnPage = files.slice(startIndex, startIndex + pageSize);
+    const showTotal: PaginationProps['showTotal'] = (total) => `Total ${total} items`;
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page);
+    };
 
     return (
         <div className="FileTable">
             <div className="allDevice">
-                {devicesOnPage.map((selectedFiles: any) => (
+                {/*<Pagination
+                    size="small"
+                    total={files.length}
+                    showTotal={showTotal}
+                    pageSize={pageSize}
+                    pageSizeOptions={[7]}
+                    defaultPageSize={7}
+                    onChange={handlePageChange}
+                    current={currentPage}
+                    showSizeChanger={false}
+                />*/}
+                {devicesOnPage.map((files: any) => (
                     <CardComponentFile
-                        key={selectedFiles.ID}
-                        file={selectedFiles}
-                        handleViewVideo={handleViewVideo}
+                        key={files.ID}
+                        file={files}
+
                     />
                 ))}
             </div>

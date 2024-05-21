@@ -1,7 +1,17 @@
 //Получение устройств
 import axios, {AxiosError} from "axios";
+import { useAuthStore } from '../store/auth/auth';
 
-const Token = 'ac425fec-0856-11ef-8012-0001693eb0e4';
+const getAuthToken = () => {
+    const { SmartDVRToken } = useAuthStore.getState();
+    return SmartDVRToken;
+};
+
+// GET_PLAY_FILE
+export const FILE_PLAY_URL = `http://45.141.76.30:8172/play/file/`;
+
+
+
 export const API_URL = 'http://45.141.76.30:8172/device/get_by/all';
 export const HEADERS = {
     SmartDVRLogin: 'admin',
@@ -9,7 +19,7 @@ export const HEADERS = {
 };
 
 //Получение списка файлов устройств раннее загруженных в базу
-export const FILE_API_URL = 'http://45.141.76.30:8172/device/get_files';
+export const FILE_API_URL = 'http://45.141.76.30:8172/media_file/filter/1/5';
 export const FILE_HEADERS = {
     SmartDVRLogin: 'admin',
     SmartDVRToken: 'ac425fec-0856-11ef-8012-0001693eb0e4',
@@ -40,15 +50,18 @@ export const USERS_HEADERS = {
 };
 
 //GET_PREVIEW_PICTURES
-export const VIDEO_PREVIEW_URL = (fileUID: string) => `http://45.141.76.30:8172/play/file/${fileUID}/preview`;
+export const VIDEO_PREVIEW_URL = (fileUID: string, token:any) => `http://45.141.76.30:8172/play/file/${fileUID}/preview/${token}`;
 
 //GET_PLAY_ONLINE
 export const ONLINE_PLAY_URL = (uid: string) => `http://45.141.76.30:8172/play/online/${uid}`;
 
-//GET_PLAY_FILE
-export const FILE_PLAY_URL = (uid: string) => `http://45.141.76.30:8172/play/file/${uid}/${Token}`;
 
 //GET_GROUPS
 export const GET_GROUPS_URL =  `http://45.141.76.30:8172/group/get_by/all`;
+
+
+
+
+
 
 

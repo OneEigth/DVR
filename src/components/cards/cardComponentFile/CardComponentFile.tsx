@@ -1,45 +1,23 @@
 import React from "react";
 import {Card} from 'antd';
-import {useNavigate} from 'react-router-dom';
 import './style/style.css'
-
 import {VIDEO_PREVIEW_URL} from "../../../const/const";
 import {useFileStore} from "../../../store/devices/fileStore";
+import {File} from "../../../types/File";
+import {useAuthStore} from "../../../store/auth/auth";
 
 
 interface CardComponentProps {
-    file: {
-        UID: string,
-        deviceUID: string,
-        deviceDID: string,
-        groupUID: string,
-        ownerUID: string,
-        rating: string,
-        name: string,
-        size: string,
-        start: string,
-        end: string,
-        duration: string,
-        downloaded: boolean,
-        storagePath: string,
-        previewPath: string,
-        tryDownloadCount: number,
-        fileType: string,
-        caseNumber: number,
-        caseDescription: string,
-        attached: string
-    };
-    handleViewVideo: (uid: string) => void;
-
+    file: File
 }
 
-const CardComponentFile: React.FC<CardComponentProps> = ({file, handleViewVideo}) => {
+const CardComponentFile: React.FC<CardComponentProps> = ({file}) => {
     const { setSelectedFileUID } = useFileStore();
-
+    const { SmartDVRToken } = useAuthStore.getState();
 
     const handleDeviceClick = (FileUid: string) => {
         setSelectedFileUID(FileUid);
-        console.log('CardComponentFile FileUid '+ FileUid)
+
     };
 
     return (
@@ -49,7 +27,7 @@ const CardComponentFile: React.FC<CardComponentProps> = ({file, handleViewVideo}
                     className="coverCardFile"
                     key={file.UID}
                     hoverable
-                    cover={<img alt={''} src={VIDEO_PREVIEW_URL(file.UID)}/>}
+                    cover={<img alt={''} src={VIDEO_PREVIEW_URL(file.UID, SmartDVRToken)}/>}
                     onClick={() => handleDeviceClick(file.UID)}
                 />
             </div>
@@ -59,10 +37,9 @@ const CardComponentFile: React.FC<CardComponentProps> = ({file, handleViewVideo}
                 </h1>
                 <div className="propertyGroupFile">
                     <h3 className="propertyFile">{file.size}мБ</h3>
-
+                    <h3 className="propertyFile">{file.fileType}</h3>
                 </div>
             </div>
-
         </div>
     );
 }

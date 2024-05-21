@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Row, Col, Card, Pagination, Button } from 'antd';
 import { useDevicesStore } from '../../../store/devices/fileDevicesFromDB';
 import './style.css';
-import {FILE_PLAY_URL} from "../../../const/const";
+
 
 const TableFileDeviceDB: React.FC = () => {
     const { files, fetchFiles } = useDevicesStore();
@@ -52,7 +52,7 @@ const TableFileDeviceDB: React.FC = () => {
                         {file && (
                             <Card
                                 hoverable
-                                cover={<img alt={''} src={FILE_PLAY_URL(file.UID)} />}
+                             /*   cover={<img alt={''} src={FILE_PLAY_URL(file.UID)} />}*/
                                 onClick={() => handleViewVideo(file.UID)}
                             >
                                 <Card.Meta title={file.id} />

@@ -21,7 +21,7 @@ const AllDevicesSmall: React.FC<AllDevicesSmallProps> = ({onSelectDevice} ) => {
     const {setSelectedDevice} = useSelectedDevice();
 
     const handleDeviceClick = (device: Device) => {
-        navigate(`/device/${device.UID}`);
+        navigate(`/device/${device.name}`); 
         setSelectedDevice(device);
     };
 

@@ -1,0 +1,131 @@
+Чтобы передавать токен пользователя и другую информацию после удачной авторизации в компоненты, вам нужно сохранить эту
+информацию в zustand store и подключить ее к нужным компонентам.
+
+Измените состояние в zustand: Добавьте в состояние хранилища информацию о пользователе.
+Используйте zustand store в компонентах: В компонентах, которые требуют информацию о пользователе, подключите zustand
+store для получения этих данных.
+Обновленный Store (zustand):
+Добавьте информацию о пользователе (User) в zustand store:
+
+// /store/auth.ts
+import create from 'zustand';
+import { loginRequest } from "../../api/auth/Auth";
+import { User } from "../../types/user";
+
+interface AuthStore {
+    isAuthenticated: boolean;
+    authToken: string;
+    user: User | null;
+    login: (username: string, password: string) => Promise<void>;
+    setAuthenticated: (isAuthenticated: boolean, authToken: string, user: User) => void;
+}
+
+export const useAuthStore = create<AuthStore>((set) => ({
+    isAuthenticated: false,
+    authToken: localStorage.getItem('authToken') || '',
+    user: null,
+    login: async (username, password) => {
+        try {
+            const response = await loginRequest(username, password);
+            if (response.success) {
+                const token = response.data.token;
+                const user: User = response.data.user;
+                localStorage.setItem('authToken', token);
+                set({ isAuthenticated: true, authToken: token, user });
+            } else {
+                console.error('Authentication failed:', response.error);
+            }
+        } catch (error) {
+            console.error('Error during authentication:', error);
+        }
+    },
+    setAuthenticated: (isAuthenticated, authToken, user) => set({ isAuthenticated, authToken, user })
+}));
+
+
+
+Обновленный loginRequest:
+Обновите метод loginRequest для возвращения данных пользователя:
+
+// /api/auth.ts
+import axios from 'axios';
+import { LOGIN_API_URL } from '../../const/const';
+import { User } from '../../types/user';
+
+interface LoginResponse {
+    success: boolean;
+    data: {
+        token: string;
+        user: User;
+    };
+    error?: string;
+}
+
+export const loginRequest = async (username: string, password: string): Promise<LoginResponse> => {
+    try {
+        const response = await axios.post(LOGIN_API_URL, {
+            login: username,
+            password: password
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error during login request:', error);
+        throw error;
+    }
+};
+
+
+Использование user и authToken в компонентах:
+Теперь, когда у вас есть состояние user в вашем zustand store, вы можете использовать его в любом компоненте.
+
+Пример компонента:
+
+import React from 'react';
+import { useAuthStore } from '../store/auth';
+
+const SomeComponent = () => {
+    const user = useAuthStore((state) => state.user);
+    const authToken = useAuthStore((state) => state.authToken);
+
+    return (
+        <div>
+            <h1>Protected Component</h1>
+            <p>User: {user ? user.name : 'No user logged in'}</p>
+            <p>Token: {authToken}</p>
+        </div>
+    );
+};
+
+export default SomeComponent;
+
+
+
+Пример запроса с токеном:
+Если вам нужно выполнить запрос, используя authToken, вы можете сделать это следующим образом:
+
+import axios from 'axios';
+import { useAuthStore } from '../store/auth';
+
+const fetchProtectedData = async () => {
+    const authToken = useAuthStore.getState().authToken;
+
+    try {
+        const response = await axios.get('PROTECTED_API_URL', {
+            headers: {
+                Authorization: `Bearer ${authToken}`,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching protected data:', error);
+        throw error;
+    }
+};
+
+
+Здесь мы используем метод getState zustand store, чтобы получить текущее значение authToken и используем его в заголовке
+ авторизации для выполнения защищенного запроса.
+
+Таким образом, вы можете передавать и использовать информацию о пользователе и токен аутентификации в компонентах вашего
+ приложения после успешной авторизации.
+

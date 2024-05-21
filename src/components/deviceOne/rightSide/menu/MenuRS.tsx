@@ -1,16 +1,17 @@
 import React, {useState} from "react";
 import {ConfigProvider, Menu, MenuProps} from "antd";
 import './style.css'
+import {useMenuRSStateStore} from "../../../../store/rightSideMenuState/menuRSStateStore";
 
 const items: MenuProps['items'] = [
     {
         label: 'Файлы',
         key: 'files'
     },
-    {
+    /*{
         label: 'Сообщения',
         key: 'message',
-    },
+    },*/
     {
         label: 'Карта',
         key: 'map',
@@ -18,11 +19,13 @@ const items: MenuProps['items'] = [
 ];
 
 const MenuRS: React.FC = () => {
-    const [current, setCurrent] = useState('mail');
+    const [current, setCurrent] = useState('files');
+    const {setSelectedStateMenuRS}=useMenuRSStateStore();
 
     const onClick: MenuProps['onClick'] = (e) => {
-        console.log('click ', e);
+        console.log('click ', e.key);
         setCurrent(e.key);
+        setSelectedStateMenuRS(e.key)
     };
 
     return (

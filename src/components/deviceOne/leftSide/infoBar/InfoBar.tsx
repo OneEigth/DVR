@@ -2,13 +2,13 @@ import React from "react";
 import "./style.css"
 import IconSignalLow from "../../../icons/iconSignalLow/IconSignalLow";
 import {ConfigProvider, Progress} from "antd";
-import device from "../../../../pages/device/Device";
+import {Device} from "../../../../types/Device";
 
 interface DeviceProps{
-    device:any
+    device:Device
 }
 const InfoBar: React.FC<DeviceProps> = ({device}) => {
-    console.log("info bat", device.UID)
+
     return (
         <div className="infoBarDevice">
             <div className="battery">
@@ -35,10 +35,8 @@ const InfoBar: React.FC<DeviceProps> = ({device}) => {
             </div>
             <div className="time">
                 <h1 className="h1time">Время онлайн</h1>
-
             </div>
         </div>
     );
 }
-
 export default InfoBar;

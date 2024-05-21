@@ -3,6 +3,7 @@ import { Row, Col, Card, Pagination, Button } from 'antd';
 import { useDevicesStore } from '../../../store/devices/fileDevicesFromDB';
 import './styles/style.css';
 import {VIDEO_PREVIEW_URL} from "../../../const/const";
+import {useAuthStore} from "../../../store/auth/auth";
 
 
 const TableFileDeviceDB: React.FC = () => {
@@ -12,6 +13,7 @@ const TableFileDeviceDB: React.FC = () => {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [gridSize, setGridSize] = useState<number>(6); // Размер сетки, начальное значение 6
     const pageSize = gridSize * gridSize; // Количество элементов на странице
+    const { SmartDVRToken } = useAuthStore.getState();
 
     useEffect(() => {
         const deviceUID = 'e7727a41-d03d-3f36-b7a2-9ccf8c95dac5';
@@ -50,7 +52,7 @@ const TableFileDeviceDB: React.FC = () => {
                         <Card
                             key={file.id}
                             hoverable
-                            cover={<img alt={''} src={VIDEO_PREVIEW_URL(file.UID)} />}
+                            cover={<img alt={''} src={VIDEO_PREVIEW_URL(file.UID,SmartDVRToken)} />}
                             onClick={() => handleViewVideo(file.UID)}
                         >
                             <Card.Meta title={file.id} />

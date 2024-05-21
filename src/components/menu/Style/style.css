@@ -4,8 +4,8 @@
 }
 
 .menu {
-    width: 1920px;
-    height: 64px;
+   /* width: 1920px;
+    height: 64px;*/
     gap: 0;
     border: 0 0 1px 0;
     opacity: 1;
@@ -17,8 +17,8 @@
 .logo {
     margin-right: auto; /* Это поместит логотип слева */
     background: #4D4E65;
-    height: 64px;
-    width: 138.96px;
+   /* height: 64px;
+    width: 138.96px;*/
 }
 
 .menu-item {
