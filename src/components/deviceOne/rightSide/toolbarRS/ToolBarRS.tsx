@@ -96,7 +96,7 @@ const ToolBarRS: React.FC = () => {
 },
                     },
                     token: {
-                        borderRadiusLG: 0,
+                        borderRadiusLG: 8,
                         fontFamily:'Roboto',
 
 

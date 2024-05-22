@@ -20,7 +20,7 @@ const AllCams: React.FC = () => {
             <div className="container">
                     <>
                         <div className="leftPart">
-                            <LeftPart />
+                            <LeftPart leftMenuState={false} />
                         </div>
                         <div className="table">
                             <TableDevices />

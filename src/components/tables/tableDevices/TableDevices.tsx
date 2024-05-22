@@ -10,6 +10,9 @@ import 'leaflet/dist/leaflet.css';
 import AllDevicesMedium from "./tableDevices/medium/AllDevicesMedium";
 import AllDevicesBig from "./tableDevices/big/AllDeviceBig";
 import AllDevicesSmall from "./tableDevices/small/AllDeviceSmall";
+import ButtonAddPlus from "../../buttons/buttonAddPlus/ButtonAddPlus";
+import NewGroupModal from "../../modals/newGroup/NewGroupModal";
+import NewDeviceModal from "../../modals/newDevice/NewDeviceModal";
 
 
 const TableDevices: React.FC = () => {
@@ -19,6 +22,7 @@ const TableDevices: React.FC = () => {
     const [showLocationMap, setShowLocationMap] = useState<boolean>(false);
     const [activeDeviceSize, setActiveDeviceSize] = useState<'small' | 'medium' | 'big'>('small');
     const [selectedUID, setSelectedUID] = useState<string>();
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
 
     useEffect(() => {
@@ -39,13 +43,27 @@ const TableDevices: React.FC = () => {
         setSelectedUID(UID);
     };
 
+
+    const showModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const handleOk = () => {
+        setIsModalOpen(false);
+    };
+
+    const handleCancel = () => {
+        setIsModalOpen(false);
+    };
+
     return (
         <div className="tableContainer">
 
             <div className="toolBar">
                 <div className="leftSide">
-                    {/*<h1>Карта</h1>
-                    <SwitchMap onChange={handleSwitchChange}/>*/}
+                    <h1 className="device_h1">Устройства</h1>
+                    <h1 className="count_h1">({devices.length})</h1>
+                    <ButtonAddPlus onClick={showModal}/>
                 </div>
 
                 <div className="centr">
@@ -67,6 +85,11 @@ const TableDevices: React.FC = () => {
                 {activeDeviceSize === 'medium' && <AllDevicesMedium onSelectDevice={handleSelectDevice} />}
                 {activeDeviceSize === 'big' && <AllDevicesBig onSelectDevice={handleSelectDevice} />}
             </div>
+            <NewDeviceModal
+                visible={isModalOpen}
+                onOk={handleOk}
+                onCancel={handleCancel}
+            />
         </div>
     )
 };

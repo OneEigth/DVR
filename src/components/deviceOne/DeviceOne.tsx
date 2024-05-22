@@ -59,7 +59,7 @@ const DeviceOne: React.FC<DeviceOneProps> = ({ selectedOnlineUID, selectedFileUI
         </Row>*/
         <Row className="containerDeviceOne">
             <Col span={selectedStateLeftPart ? 3 : 1} className="SideBar">
-                <LeftPart />
+                <LeftPart leftMenuState={true} />
             </Col>
             <Col span={selectedStateLeftPart ? 21 : 23}>
                 <Row className="DeviceOne">

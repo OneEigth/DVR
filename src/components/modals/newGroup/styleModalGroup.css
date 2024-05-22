@@ -1,0 +1,74 @@
+.titleModal_Group{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    border-bottom: 1px solid #CDD0D2;
+
+}
+
+.custom-modal-title {
+    color: white !important;
+}
+
+.ant-modal-title {
+    color: black !important;
+    background: #FFFFFF;
+}
+
+.spanGroup{
+    display: flex;
+    justify-content: center;
+    width: 616px;
+
+    font-family: Roboto;
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 32px;
+    text-align: center;
+
+    color: #21201F;
+}
+.closeBut_Group{
+    margin-left: 16px;
+}
+
+.form_Group{
+    margin-top: 24px;
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+}
+
+.inputLabel_Group{
+    text-align: left;
+    width: 144px;
+    margin: 0;
+    font-family: Roboto;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    letter-spacing: 0.15000000596046448px;
+}
+
+.buttonAdd{
+    width: 97px;
+    height: 32px;
+    padding: 0 15px 0 15px;
+    border: 1px solid #4D4E65;
+    margin-right: 12px;
+    font-family: Roboto;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 20px;
+    letter-spacing: 0.25px;
+    text-align: center;
+    background: #4D4E65;
+    color: #FFFFFF;
+}
+
+.input_Group{
+    width: 504px;
+}

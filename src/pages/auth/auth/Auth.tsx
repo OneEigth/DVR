@@ -21,6 +21,7 @@ const LoginPage: React.FC = () =>{
 
     const onFinish = async (values: { username: string; password: string }) => {
         await login(values.username, values.password);
+        const isAuthenticated = useAuthStore.getState().isAuthenticated; // Получаем текущее значение аутентификации из хранилища
         if (isAuthenticated) {
             navigate('/main');
         }

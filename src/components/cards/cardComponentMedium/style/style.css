@@ -11,16 +11,31 @@
 .cover{
     display:flex;
     justify-content: flex-start;
-
     width: 340px;
-    height: 191px;
+    height: 192px;
 }
 
-.coverCard{
-    width: 100%;
-    height: 100%;
-    border-radius: 0;
+
+.ant-card-body{
+    width: 340px;
+    padding: 0;
+    border: black;
+    border-radius: 0 0 0 0;
 }
+
+.img{
+    width: 100%;
+    border-top-left-radius: 0!important;
+    border-top-right-radius: 0!important;
+}
+
+/*.coverCard{
+    width: 340px;
+    height: 192px;
+
+    padding: 0;
+
+}*/
 
 .propertyGroup{
     display: flex;
@@ -76,6 +91,8 @@
     margin-right: 8px; /* Отступ между иконкой и текстом */
     display: flex;
     justify-content:center;
+
 }
+
 
 

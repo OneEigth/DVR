@@ -7,12 +7,11 @@
     text-align: left;
     color: #3E405F !important;
     background-color: #F1F1F1;
-    height: 100%;
+    height: 100vh;
 }
 
 .upLeftPart{
     background-color: #F1F1F1;
-    margin-top:  1px;
     height: 100%;
 }
 
@@ -37,15 +36,51 @@
     transform: translateY(-50%); /* Смещение на половину высоты иконки вверх */
 }
 
-
-
-.button{
-    margin-left: 28px;
-    margin-top: 10px;
-    box-shadow: none;
+.buttonMenu{
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    padding-top: 24px;
+    margin-top: 0;
 }
 
 
+
+.group_h1{
+    width: 82px;
+    height: 32px;
+    font-family: Roboto;
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 32px;
+    text-align: left;
+    color: #21201F;
+    margin-top: 0;
+
+}
+
+.count_h1{
+    display: flex;
+    justify-content: center;
+    width: 43px;
+    height: 32px;
+    font-family: Roboto;
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 32px;
+    text-align: left;
+    color: #999C9E;
+    margin-left: 8px;
+    margin-right: 8px;
+    margin-top: 0;
+}
+
+.button{
+    margin-left: 28px;
+    margin-top: 0;
+    box-shadow: none;
+}
 
 .LeftMenu .ant-menu-item {
     font-family: Roboto, sans-serif;
@@ -61,6 +96,10 @@
     background-color: #F1F1F1;
     color: #3E405F;
 }
+
+
+
+
 
 
 

@@ -9,7 +9,7 @@ interface AuthStore {
     isAuthenticated: boolean;
     SmartDVRToken: string;
     logout: () => void;
-    checkAuth: () => void;
+    /*checkAuth: () => void;*/
     user: User | null;
     login: (username: string, password: string) => Promise<void>;
     setAuthenticated: (isAuthenticated: boolean, authToken: string, user: User) => void;
@@ -43,7 +43,7 @@ export const useAuthStore = create<AuthStore>()(
                 set({ isAuthenticated: false, SmartDVRToken: '', user: null });
             },
 
-            checkAuth: () => {
+            /*checkAuth: () => {
                 const token = localStorage.getItem('SmartDVRToken');
                 const user = JSON.parse(localStorage.getItem('user') || 'null');
                 if (token && user) {
@@ -52,7 +52,7 @@ export const useAuthStore = create<AuthStore>()(
                 } else {
                     set({ isAuthenticated: false, SmartDVRToken: '', user: null });
                 }
-            },
+            },*/
 
             setAuthenticated: (isAuthenticated, SmartDVRToken, user) => set({ isAuthenticated, SmartDVRToken, user })
         }),

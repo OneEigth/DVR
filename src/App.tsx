@@ -39,11 +39,11 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-    const { checkAuth } = useAuthStore();
+    /*const { checkAuth } = useAuthStore();
 
     useEffect(() => {
         checkAuth();
-    }, [checkAuth]);
+    }, [checkAuth]);*/
 
     return <RouterProvider router={router} />;
 }

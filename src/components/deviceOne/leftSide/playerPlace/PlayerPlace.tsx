@@ -3,7 +3,7 @@ import "./style.css"
 import VideoPlayer from "../../../videos/VideoPlayer";
 import NavigationTimeLine from "../../../navigationTimeLine/NavigationTimeLine";
 import ButtonCalendar from "../../../buttons/buttonCalendar/ButtonCalendar";
-import CalendarModal from "../../../modals/CalendareModal";
+import CalendarModal from "../../../modals/calendare/CalendareModal";
 import {useFileStore} from "../../../../store/devices/fileStore";
 import {Device} from "../../../../types/Device";
 import {useAuthStore} from "../../../../store/auth/auth";
@@ -21,7 +21,8 @@ const PlayerPlace: React.FC<PlayerPlaceProps> = ({selectedOnlineUID,device}) => 
     console.log("PlayerPlace " + device.UID)
 
     const getFilePlayUrl = (uid: string,authToken:string) => {
-        return `http://45.141.76.30:8172/play/file/${uid}/${authToken}`;
+        /*return `http://45.141.76.30:8172/play/file/${uid}/${authToken}`;*/
+        return `http://45.141.76.30:8172/play/stream/${uid}/${authToken}`
     };
 
     const handleOpenModal = () => {
@@ -40,7 +41,7 @@ const PlayerPlace: React.FC<PlayerPlaceProps> = ({selectedOnlineUID,device}) => 
     return(
         <div className="PlayerPlace">
             <div className="Player">
-            <VideoPlayer src={getFilePlayUrl(selectedFileUID, SmartDVRToken )} />
+            <VideoPlayer src={getFilePlayUrl(device.UID, SmartDVRToken )} />
             <div className="navigateTimeLine">
                <NavigationTimeLine selectedDate={selectedDate} deviceUID={device.UID}/>
                 <div className="nav_buttons">

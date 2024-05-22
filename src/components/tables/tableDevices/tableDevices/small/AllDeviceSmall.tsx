@@ -5,6 +5,7 @@ import type { Key } from 'antd/lib/table/interface';
 import {useNavigate} from "react-router-dom";
 import {useSelectedDevice} from "../../../../../store/devices/SelectedDevice";
 import {Device} from "../../../../../types/Device";
+import './style/style.css'
 
 interface AllDevicesSmallProps {
     onSelectDevice: (selectedUID: string) => void;
@@ -103,6 +104,7 @@ const AllDevicesSmall: React.FC<AllDevicesSmallProps> = ({onSelectDevice} ) => {
             theme={{
                 token: {
                     borderRadius: 0,
+                    /*colorLink:,*/
                 },
             }}
         >

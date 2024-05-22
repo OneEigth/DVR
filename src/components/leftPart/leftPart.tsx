@@ -12,6 +12,8 @@ import SubMenu from "antd/es/menu/SubMenu";
 import IconLeftMenuDevice from "../icons/iconLeftMenu/IconLeftMenuDevice";
 import IconLeftMenu from "../icons/iconLeftMenu/IconLeftMenu";
 import {useLeftPartStateStore} from "../../store/leftPart/LeftPartStore";
+import ButtonAddPlus from "../buttons/buttonAddPlus/ButtonAddPlus";
+import NewGroupModal from "../modals/newGroup/NewGroupModal";
 
 type MenuItem = Required<MenuProps>['items'][number];
 type MenuItemType = 'group' | 'subgroup'; // Определение типов для MenuItem
@@ -32,14 +34,19 @@ function getItem(
     } as MenuItem;
 }
 
-const LeftPart: React.FC = () => {
+interface LeftPartProps{
+    leftMenuState:boolean;
+}
+
+const LeftPart: React.FC<LeftPartProps> = ({leftMenuState}) => {
     const [stateOpenKeys, setStateOpenKeys] = useState(['2', '23']);
-    const [collapsed, setCollapsed] = useState(true);
+    const [collapsed, setCollapsed] = useState(leftMenuState);
     const { groups, fetchGroups } = useGroupsStore();
     const {devices, fetchDevices} = useDevicesStore();
     const navigate = useNavigate();
     const { setSelectedDevice } = useSelectedDevice();
     const {setSelectedStateLeftPart}=useLeftPartStateStore();
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleDeviceClick = (device: Device) => {
         navigate(`/device/${device.UID}`);
@@ -132,23 +139,52 @@ const LeftPart: React.FC = () => {
 
     };
 
+
+
+    const showModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const handleOk = () => {
+        setIsModalOpen(false);
+    };
+
+    const handleCancel = () => {
+        setIsModalOpen(false);
+    };
+
     return (
             <div className="upLeftPart" style={{ width: collapsed ? '84px' : '240px' }} >
                 <div className="buttonMenu">
                     <Button className="button"
                             onClick={toggleCollapsed}
                             style={{marginBottom: 12, border: 'none', backgroundColor: '#F1F1F1'}}
-                            icon={<IconLeftMenu />}/>
+                            icon={<IconLeftMenu/>}/>
+                    {collapsed ?
+                        null
+                        :
+                        <>
+                        <h1 className="group_h1">Группы</h1>
+                        <h1 className="count_h1">({groups.length})</h1>
+                        <ButtonAddPlus onClick={showModal}/>
+                         </>
+                    }
+
                 </div>
+
                 <div className="Search">
-                    <Input
-                        placeholder="поиск"
+                <Input
+                        placeholder={collapsed ? "": "Поиск"}
                         style={{
-                            width: collapsed ? '32px' : '192px',
+                            display:'flex',
+                            justifyContent:'center',
+                            paddingLeft:11,
+                            width: collapsed ? '36px' : '192px',
                             height: '32px',}}
-                        suffix={<SearchOutlined style={{ marginLeft: collapsed ? '0' : '8px'}} />}
+                        suffix={<SearchOutlined style={{ marginLeft:'0px', padding:0, marginRight:'11px'}} />}
                     />
                 </div>
+
                 <div>
                     <ConfigProvider
                         theme={{
@@ -208,6 +244,11 @@ const LeftPart: React.FC = () => {
                         </Menu>
                     </ConfigProvider>
                 </div>
+                <NewGroupModal
+                    visible={isModalOpen}
+                    onOk={handleOk}
+                    onCancel={handleCancel}
+                />
             </div>
     );
 };

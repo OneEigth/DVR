@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Modal } from 'antd';
-import CalendarNav from '../calendarNav/CalendarNav';
+import CalendarNav from '../../calendarNav/CalendarNav';
 
 interface CalendarModalProps {
     isModalOpen: boolean;

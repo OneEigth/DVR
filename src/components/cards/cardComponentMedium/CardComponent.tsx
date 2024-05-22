@@ -2,11 +2,13 @@ import React from "react";
 import {Card} from 'antd';
 import {useNavigate} from 'react-router-dom';
 import './style/style.css';
-import {ONLINE_PLAY_URL} from "../../../const/const";
+import {ONLINE_PLAY_URL, VIDEO_PREVIEW_URL} from "../../../const/const";
 import IconOnline from "../../icons/iconOnline/IconOnline";
 import IconOffline from "../../icons/iconOffline/IconOffline";
 import {useSelectedDevice} from "../../../store/devices/SelectedDevice";
 import {Device} from "../../../types/Device";
+import img from './Video.png'
+import {useAuthStore} from "../../../store/auth/auth";
 
 
 interface CardComponentProps {
@@ -19,22 +21,28 @@ interface CardComponentProps {
 const CardComponent: React.FC<CardComponentProps> = ({file, handleViewVideo}) => {
     const navigate = useNavigate();
     const {setSelectedDevice} = useSelectedDevice();
+    const { SmartDVRToken } = useAuthStore.getState();
     const handleDeviceClick = (deviceUID: string) => {
         navigate(`/device/${deviceUID}`);
         setSelectedDevice(file);
     };
 
+    const handleError = (e:any) => {
+        e.target.src = img; // Устанавливаем локальную картинку при ошибке загрузки
+    };
+
     return (
         <div className="containerCard">
-            <div className="cover">
+
                 <Card
                     className="coverCard"
                     key={file.ID}
-                    hoverable
-                    cover={<img alt={''} /*src={ONLINE_PLAY_URL(file.UID)}*//>}
+                    /*hoverable*/
+                    cover={<img alt={''} className="img" src={VIDEO_PREVIEW_URL(file.UID,SmartDVRToken)}/>}
+                    onError={handleError}
                     onClick={() => handleDeviceClick(file.UID)}
                 />
-            </div>
+
 
                 <div className="propertiesPart1">
                     <h1 className="name">

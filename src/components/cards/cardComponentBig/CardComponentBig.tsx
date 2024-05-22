@@ -8,6 +8,7 @@ import IconOffline from "../../icons/iconOffline/IconOffline";
 import {useSelectedDevice} from "../../../store/devices/SelectedDevice";
 import {Device} from "../../../types/Device";
 import {useAuthStore} from "../../../store/auth/auth";
+import img from './Video.png'
 
 interface CardComponentProps {
     file: Device;
@@ -25,6 +26,10 @@ const CardComponent: React.FC<CardComponentProps> = ({file, handleViewVideo}) =>
 
     };
 
+    const handleError = (e:any) => {
+        e.target.src = img; // Устанавливаем локальную картинку при ошибке загрузки
+    };
+
     return (
         <div className="containerCardBig">
             <div className="coverBig">
@@ -33,7 +38,8 @@ const CardComponent: React.FC<CardComponentProps> = ({file, handleViewVideo}) =>
                     key={file.ID}
                     hoverable
                     cover={<img alt={''} src={VIDEO_PREVIEW_URL(file.UID,SmartDVRToken)}/>}
-                onClick={() => handleDeviceClick(file.UID)}
+                    onError={handleError}
+                    onClick={() => handleDeviceClick(file.UID)}
                 />
             </div>
             <div className="propertiesBig">
