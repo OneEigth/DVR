@@ -43,7 +43,7 @@ const PlayerPlace: React.FC<PlayerPlaceProps> = ({selectedOnlineUID,device}) => 
             <div className="Player">
             <VideoPlayer src={getFilePlayUrl(device.UID, SmartDVRToken )} />
             <div className="navigateTimeLine">
-               <NavigationTimeLine selectedDate={selectedDate} deviceUID={device.UID}/>
+               {/*<NavigationTimeLine selectedDate={selectedDate} deviceUID={device.UID}/>*/}
                 <div className="nav_buttons">
                     <ButtonCalendar onClick={handleOpenModal} selectedDate={selectedDate}/>
                 </div>

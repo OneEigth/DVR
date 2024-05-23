@@ -24,4 +24,6 @@
     margin-right: 20px;
     margin-left: 20px;
 }
-
+.LeftPart .upLeftPart{
+    height: 100vh;
+}

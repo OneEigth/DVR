@@ -1,7 +1,7 @@
 import React from "react";
 import {Card} from 'antd';
 import {useNavigate} from 'react-router-dom';
-import './style/style.css';
+import '../../tables/tableDevices/tableDevices/medium/style/style.css'
 import {ONLINE_PLAY_URL, VIDEO_PREVIEW_URL} from "../../../const/const";
 import IconOnline from "../../icons/iconOnline/IconOnline";
 import IconOffline from "../../icons/iconOffline/IconOffline";
@@ -32,31 +32,29 @@ const CardComponent: React.FC<CardComponentProps> = ({file, handleViewVideo}) =>
     };
 
     return (
-        <div className="containerCard">
 
-                <Card
-                    className="coverCard"
-                    key={file.ID}
-                    /*hoverable*/
-                    cover={<img alt={''} className="img" src={VIDEO_PREVIEW_URL(file.UID,SmartDVRToken)}/>}
-                    onError={handleError}
-                    onClick={() => handleDeviceClick(file.UID)}
-                />
-
-
-                <div className="propertiesPart1">
-                    <h1 className="name">
-                        <div className="icon">{file.online ? <IconOnline/> : <IconOffline/>}</div>
-                        {file.name}
-                    </h1>
-                    <div className="propertyGroup">
-                        <h3 className="property">Группа {file.groupUID}</h3>
+        <div className="containerCard"
+            style={{borderRadius:0}}>
+            <Card
+                className="coverCard"
+                key={file.ID}
+                cover={<img alt="" className="img" src={VIDEO_PREVIEW_URL(file.UID,SmartDVRToken)} style={{width:340, height:192, borderRadius:0}}/>}
+                onClick={() => handleViewVideo(file.UID)}
+                onError={handleError}
+                style={{borderRadius:0}}
+            />
+            <div className="propertiesPart1">
+                <h1 className="name">
+                    <div className="icon">{file.online ? <IconOnline/> : <IconOffline/>}</div>
+                    {file.name}
+                </h1>
+                <div className="propertyGroup">
+                    <h3 className="property">Группа {file.groupUID}</h3>
                     <h3 className="property">Модель {file.model}</h3>
                     <h3 className="property">Серийный номер {file.DID}</h3>
                     <h3 className="property">Сотрудник {file.ownerUID}</h3>
-                    </div>
                 </div>
-
+            </div>
         </div>
     );
 }

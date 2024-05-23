@@ -6,6 +6,9 @@ import {useNavigate} from "react-router-dom";
 import {useSelectedDevice} from "../../../../../store/devices/SelectedDevice";
 import {Device} from "../../../../../types/Device";
 import './style/style.css'
+import IconLeftMenuFooter from "../../../../icons/iconLeftMenu/IconLeftMenuFooter";
+import ButtonLeftMenuFooterEdit from "../../../../buttons/buttonLeftMenu/ButtonLeftMenuFooterEdit";
+import ButtonLeftMenuFooterDelete from "../../../../buttons/buttonLeftMenu/ButtonLeftMenuFooterDelete";
 
 interface AllDevicesSmallProps {
     onSelectDevice: (selectedUID: string) => void;
@@ -53,7 +56,7 @@ const AllDevicesSmall: React.FC<AllDevicesSmallProps> = ({onSelectDevice} ) => {
 
 
     // rowSelection object indicates the need for row selection
-    const rowSelection = {
+    /*const rowSelection = {
         onChange: (selectedRowKeys: React.Key[], selectedRows: Device[]) => {
             console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
         },
@@ -61,7 +64,7 @@ const AllDevicesSmall: React.FC<AllDevicesSmallProps> = ({onSelectDevice} ) => {
             disabled: record.name === 'Disabled User', // Column configuration not to be checked
             name: record.name,
         }),
-    };
+    };*/
 
 
     const columns:TableColumnsType<Device> = [
@@ -69,10 +72,10 @@ const AllDevicesSmall: React.FC<AllDevicesSmallProps> = ({onSelectDevice} ) => {
             title: 'Название',
             dataIndex: 'name',
             key: 'name',
-            render: (text: string, record: Device) => (
+            /*render: (text: string, record: Device) => (
                 <Button type="link" onClick={() => handleDeviceClick(record)}>
                     {text}
-                </Button>),
+                </Button>),*/
         },
         {
             title: 'Описание',
@@ -99,12 +102,42 @@ const AllDevicesSmall: React.FC<AllDevicesSmallProps> = ({onSelectDevice} ) => {
     const startIndex = (currentPage - 1) * pageSize;
     const devicesOnPage = deviceData.slice(startIndex, startIndex + pageSize);
 
+    const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
+        console.log('selectedRowKeys changed: ', newSelectedRowKeys);
+        setSelectedRowKeys(newSelectedRowKeys);
+    };
+
+    const rowSelection = {
+        selectedRowKeys,
+        onChange: onSelectChange,
+    };
+    const hasSelected = selectedRowKeys.length > 0;
+
+    const handleDeviceDelete = () => {
+
+    };
+
+    const handleDeviceEdit = () => {
+
+    };
+
     return (
+        <div className="smallTAbl">
         <ConfigProvider
             theme={{
                 token: {
                     borderRadius: 0,
-                    /*colorLink:,*/
+                    colorPrimary:'#4D4E65',
+
+
+                },
+                components: {
+                    Table: {
+                        rowHoverBg:'#F4F6F7',
+                        rowSelectedHoverBg:'#F4F6F7',
+                        rowSelectedBg:'#E8EBED'
+
+                    },
                 },
             }}
         >
@@ -113,12 +146,27 @@ const AllDevicesSmall: React.FC<AllDevicesSmallProps> = ({onSelectDevice} ) => {
                 columns={columns}
                 dataSource={devicesOnPage}
                 pagination={false}
-                rowSelection={{
-                    type: selectionType,
-                    ...rowSelection,
-                }}
+                rowKey="UID"
+                rowSelection={rowSelection}
+                onRow={(record) => ({
+                    onClick: () => handleDeviceClick(record),
+                })}
+
             />
+
         </ConfigProvider>
+
+                <div className="tableFooter">
+                    <span className="countDeviceFooter"><IconLeftMenuFooter/><h3 className="h3Footer">Выбрано: {selectedRowKeys.length}</h3></span>
+                    <div>
+
+                            <ButtonLeftMenuFooterEdit onClick={handleDeviceEdit}/>
+
+                        <ButtonLeftMenuFooterDelete onClick={handleDeviceDelete}/>
+                    </div>
+                </div>
+
+        </div>
     );
 };
 

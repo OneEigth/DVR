@@ -25,38 +25,7 @@ const DeviceOne: React.FC<DeviceOneProps> = ({ selectedOnlineUID, selectedFileUI
 
 
     return (
-        /*<Row>
-        <div className="containerDeviceOne">
-            <Col span={3}>
-            <div className="SideBar">
-                <LeftPart />
-            </div>
-            </Col>
-            <Col span={21}>
-            <div className="DeviceOne">
-                <Col span={7}>
-                <div className="leftSideDeviceOne">
-                    <ToolBarDeviceOne/>
-                    <PlayerPlace selectedOnlineUID={selectedOnlineUID} device={selectedDevice}/>
-                    <InfoBar device={selectedDevice}/>
-                    <Description device={selectedDevice}/>
-                </div>
-                </Col>
-                <Col span={14}>
-                <div className="rightSideDeviceOne">
-                    <MenuRS/>
-                    <ToolBarRS/>
-                    {selectedStateMenuRS=='map'  ?
-                     <LocationMap device={selectedDevice}/>
-                        :
-                     <FileTable device={selectedDevice}/>
-                    }
-                </div>
-                </Col>
-            </div>
-            </Col>
-        </div>
-        </Row>*/
+
         <Row className="containerDeviceOne">
             <Col span={selectedStateLeftPart ? 3 : 1} className="SideBar">
                 <LeftPart leftMenuState={true} />

@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {MenuOutlined, SearchOutlined, VideoCameraOutlined} from '@ant-design/icons';
 import {Button, ConfigProvider, Input, Menu, MenuProps} from 'antd';
 import './style/style.css'
+import logo from "./style/Logo.png"
 import {useGroupsStore} from '../../store/groups/Groups'
 import {useDevicesStore} from '../../store/devices/allDevices'
 
@@ -10,10 +11,12 @@ import {useNavigate} from "react-router-dom";
 import {Device} from "../../types/Device";
 import SubMenu from "antd/es/menu/SubMenu";
 import IconLeftMenuDevice from "../icons/iconLeftMenu/IconLeftMenuDevice";
-import IconLeftMenu from "../icons/iconLeftMenu/IconLeftMenu";
+import IconLeftMenuUnsorded from "../icons/iconLeftMenu/IconLeftMenuUnsorded";
 import {useLeftPartStateStore} from "../../store/leftPart/LeftPartStore";
 import ButtonAddPlus from "../buttons/buttonAddPlus/ButtonAddPlus";
 import NewGroupModal from "../modals/newGroup/NewGroupModal";
+import IconLeftMenuAllDevice from "../icons/iconLeftMenu/IconLeftMenuAllDevice";
+import IconLeftMenu from "../icons/iconLeftMenu/IconLeftMenu";
 
 type MenuItem = Required<MenuProps>['items'][number];
 type MenuItemType = 'group' | 'subgroup'; // Определение типов для MenuItem
@@ -140,6 +143,17 @@ const LeftPart: React.FC<LeftPartProps> = ({leftMenuState}) => {
     };
 
 
+    const getGroupIcon = (uid:any) => {
+        switch (uid) {
+            case '00000000-0000-0000-0000-000000000002':
+                return <IconLeftMenuAllDevice/>; // Ваша первая иконка
+            case 'f882fcec-18bd-11ef-9b9b-0001693eb0e4':
+                return <IconLeftMenuUnsorded />; // Ваша вторая иконка
+            default:
+                return <IconLeftMenuDevice />; // Иконка по умолчанию
+        }
+    };
+
 
     const showModal = () => {
         setIsModalOpen(true);
@@ -164,15 +178,18 @@ const LeftPart: React.FC<LeftPartProps> = ({leftMenuState}) => {
                         null
                         :
                         <>
-                        <h1 className="group_h1">Группы</h1>
+                        {/*<h1 className="group_h1">Группы</h1>
                         <h1 className="count_h1">({groups.length})</h1>
-                        <ButtonAddPlus onClick={showModal}/>
+                        <ButtonAddPlus onClick={showModal}/>*/}
+
+                            <img src={logo} alt="" style={{width: 98.96, height: 32, marginBottom:12, marginLeft:0}}/>
+
                          </>
                     }
 
                 </div>
 
-                <div className="Search">
+                {/*<div className="Search">
                 <Input
                         placeholder={collapsed ? "": "Поиск"}
                         style={{
@@ -182,7 +199,11 @@ const LeftPart: React.FC<LeftPartProps> = ({leftMenuState}) => {
                             width: collapsed ? '36px' : '192px',
                             height: '32px',}}
                         suffix={<SearchOutlined style={{ marginLeft:'0px', padding:0, marginRight:'11px'}} />}
-                    />
+                    />*/}
+                {/*</div>*/}
+
+                <div>
+
                 </div>
 
                 <div>
@@ -208,7 +229,7 @@ const LeftPart: React.FC<LeftPartProps> = ({leftMenuState}) => {
                         >
 
                             {groups.map((group) => (
-                                <SubMenu key={group.uid} title={group.name}>
+                                <SubMenu key={group.uid} title={collapsed ? '' : group.name} icon={getGroupIcon(group.uid)}>
 
                                     {/* Устройства в текущей группе */}
                                     {devices
@@ -219,13 +240,13 @@ const LeftPart: React.FC<LeftPartProps> = ({leftMenuState}) => {
                                                 onClick={() => handleDeviceClick(device)}
                                                 icon={<IconLeftMenuDevice/>}
                                             >
-                                                {device.name}
+                                                {collapsed ? '' : device.name}
                                             </Menu.Item>
                                         ))}
 
                                     {/* Подгруппы текущей группы */}
                                     {group.sub_groups.map((subgroup) => (
-                                        <SubMenu key={subgroup.uid} title={subgroup.name}>
+                                        <SubMenu key={subgroup.uid} title={collapsed ? '' : subgroup.name} icon={<IconLeftMenuDevice/>}>
                                             {devices
                                                 .filter((device) => device.groupUID === subgroup.uid)
                                                 .map((device) => (
@@ -234,7 +255,7 @@ const LeftPart: React.FC<LeftPartProps> = ({leftMenuState}) => {
                                                         onClick={() => handleDeviceClick(device)}
                                                         icon={<IconLeftMenuDevice/>}
                                                     >
-                                                        {device.name}
+                                                        {collapsed ? '' : device.name}
                                                     </Menu.Item>
                                                 ))}
                                         </SubMenu>

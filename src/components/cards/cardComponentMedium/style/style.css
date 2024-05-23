@@ -6,15 +6,8 @@
     height: 192px;
     margin: 10px;
     border: #666666 2px;
+    border-radius: 0;
 }
-
-.cover{
-    display:flex;
-    justify-content: flex-start;
-    width: 340px;
-    height: 192px;
-}
-
 
 .ant-card-body{
     width: 340px;
@@ -29,13 +22,12 @@
     border-top-right-radius: 0!important;
 }
 
-/*.coverCard{
+.coverCard{
     width: 340px;
     height: 192px;
-
+    border-radius: 0;
     padding: 0;
-
-}*/
+}
 
 .propertyGroup{
     display: flex;
@@ -88,11 +80,29 @@
 }
 
 .icon {
-    margin-right: 8px; /* Отступ между иконкой и текстом */
+    margin-right: 8px;
     display: flex;
     justify-content:center;
-
 }
 
 
+@media (min-width: 960px) {
+    .containerCard {
+        flex-direction: row;
+    }
 
+    .propertiesPart1 {
+        flex: 1;
+    }
+}
+
+.allDevice {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+@media (max-width: 7680px) {
+    .allDevice {
+        flex-direction: column;
+    }
+}

@@ -15,7 +15,7 @@ const AllDevicesBig: React.FC<AllDevicesBigProps> = ({onSelectDevice}) => {
     const { devices, fetchDevices } = useDevicesStore();
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [pageSize, setPageSize] = useState<number>(10);
-    const [showLocationMap, setShowLocationMap] = useState<boolean>(false);
+
 
 
     useEffect(() => {
@@ -29,33 +29,44 @@ const AllDevicesBig: React.FC<AllDevicesBigProps> = ({onSelectDevice}) => {
     const startIndex = (currentPage - 1) * pageSize;
     const devicesOnPage = devices.slice(startIndex, startIndex + pageSize);
 
-    // Разделение устройств на три колонки
+   /* // Разделение устройств на три колонки
     const thirdLength = Math.ceil(devicesOnPage.length / 3);
     const devicesFirstColumn = devicesOnPage.slice(0, thirdLength);
     const devicesSecondColumn = devicesOnPage.slice(thirdLength, thirdLength * 2);
-    const devicesThirdColumn = devicesOnPage.slice(thirdLength * 2);
+    const devicesThirdColumn = devicesOnPage.slice(thirdLength * 2);*/
 
     return (
-        <div className="allDevice">
+        /*<div className="allDevice">
             <Row gutter={[16, 16]}>
                 <Col span={8}>
                     {devicesFirstColumn.map((device: any) => (
-                        <CardComponentBig key={device.ID} file={device} handleViewVideo={handleViewVideo} />
+                        <CardComponentBig key={device.ID} file={device} handleViewVideo={handleViewVideo}/>
                     ))}
                 </Col>
                 <Col span={8}>
                     {devicesSecondColumn.map((device: any) => (
-                        <CardComponentBig key={device.ID} file={device} handleViewVideo={handleViewVideo} />
+                        <CardComponentBig key={device.ID} file={device} handleViewVideo={handleViewVideo}/>
                     ))}
                 </Col>
                 <Col span={8}>
                     {devicesThirdColumn.map((device: any) => (
-                        <CardComponentBig key={device.ID} file={device} handleViewVideo={handleViewVideo} />
+                        <CardComponentBig key={device.ID} file={device} handleViewVideo={handleViewVideo}/>
                     ))}
                 </Col>
             </Row>
-        </div>
-    );
+        </div>*/
+
+    <div className="allDeviceBig">
+        <Row gutter={[16, 16]}>
+            {devicesOnPage.map((device: any) => (
+                <Col xs={24} sm={12} lg={8} key={device.ID}>
+                    <CardComponentBig file={device} handleViewVideo={handleViewVideo}/>
+                </Col>
+            ))}
+        </Row>
+    </div>
+)
+    ;
 };
 
 export default AllDevicesBig;

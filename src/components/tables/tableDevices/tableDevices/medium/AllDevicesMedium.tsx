@@ -43,7 +43,7 @@ const AllDevicesMedium: React.FC<AllDevicesMediumProps> = ({onSelectDevice}) => 
 
     return (
         //средние значки
-        <div className="allDevice">
+        /*<div className="allDevice">
             <Row gutter={[16, 16]}>
                 <Col span={12}>
                     {devicesFirstColumn.map((device: any) => (
@@ -56,7 +56,18 @@ const AllDevicesMedium: React.FC<AllDevicesMediumProps> = ({onSelectDevice}) => 
                     ))}
                 </Col>
             </Row>
-        </div>
+        </div>*/
+
+    <div className="allDeviceMedium">
+        <Row gutter={[16, 16]}>
+            {devices.map((device: any) => (
+                <Col xs={24} sm={12} lg={6} key={device.ID}>
+                    <CardComponent file={device} handleViewVideo={handleViewVideo} />
+                </Col>
+            ))}
+        </Row>
+    </div>
+
     );
 };
 

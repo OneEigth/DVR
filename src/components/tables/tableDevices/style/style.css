@@ -1,5 +1,6 @@
 .tableContainer{
-    width: auto;
+
+    width: 100%;
     height: auto;
 }
 
@@ -12,8 +13,7 @@
     border-bottom: 1px solid #CDD0D2;
     opacity: 1;
     margin-left: 20px;
-    margin-right: 0;
-    width: 100%;
+    width: auto;
 }
 
 .leftSide, .centr, .rightSide {
@@ -89,10 +89,12 @@ h1 {
 .tablePlace {
     margin-top: 16px !important;
     margin-left: 0;
+    margin-right: 24px;
 }
 
 .table{
-    margin-left: 0;
+    margin-left: 0!important;
+
 }
 
 .toolBar .leftSide .buttonMap{

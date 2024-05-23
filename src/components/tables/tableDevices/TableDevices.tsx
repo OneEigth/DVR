@@ -80,6 +80,7 @@ const TableDevices: React.FC = () => {
                     <Buttonsfilter onFilterButtonClick={handleFilterButtonClick} />
                 </div>
             </div>
+
             <div className="tablePlace">
                 {activeDeviceSize === 'small' && <AllDevicesSmall onSelectDevice={handleSelectDevice} />}
                 {activeDeviceSize === 'medium' && <AllDevicesMedium onSelectDevice={handleSelectDevice} />}

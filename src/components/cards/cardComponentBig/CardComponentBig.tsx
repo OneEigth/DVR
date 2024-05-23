@@ -1,7 +1,7 @@
 import React from "react";
 import {Card} from 'antd';
 import {useNavigate} from 'react-router-dom';
-import './style/style.css';
+import '../../tables/tableDevices/tableDevices/big/style/style.css';
 import {ONLINE_PLAY_URL, VIDEO_PREVIEW_URL} from "../../../const/const";
 import IconOnline from "../../icons/iconOnline/IconOnline";
 import IconOffline from "../../icons/iconOffline/IconOffline";
