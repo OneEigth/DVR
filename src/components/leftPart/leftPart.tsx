@@ -61,80 +61,7 @@ const LeftPart: React.FC<LeftPartProps> = ({leftMenuState}) => {
         fetchDevices();
     }, []);
 
-    // Создание структуры меню с подгруппами и устройствами
-    const items: MenuItem[] = groups.map((group) => {
-        const groupDevices = devices.filter((device) => device.groupUID === group.uid);
-        const childrenItems: MenuItem[] = groupDevices.map((device) =>
-            getItem(device.name, device.UID, <VideoCameraOutlined />)
-        );
 
-        const subMenus: MenuItem[] = group.sub_groups.map((subgroup) => {
-            const subgroupDevices = devices.filter((device) => device.groupUID === subgroup.uid);
-            const subgroupChildrenItems: MenuItem[] = subgroupDevices.map((device) =>
-                getItem(device.name, device.UID, <VideoCameraOutlined />)
-            );
-
-            return getItem(
-                subgroup.name,
-                subgroup.uid,
-                <MenuOutlined />,
-                subgroupChildrenItems,
-                'subgroup'
-            );
-        });
-
-        return getItem(
-            group.name,
-            group.uid,
-            <MenuOutlined />,
-            [...childrenItems, ...subMenus],
-            'group'
-        );
-    });
-
-    interface LevelKeysProps {
-        key?: string;
-        children?: LevelKeysProps[];
-    }
-
-    const getLevelKeys = (items1: LevelKeysProps[]) => {
-
-        const key: Record<string, number> = {};
-        const func = (items2: LevelKeysProps[], level = 1) => {
-            items2.forEach((item) => {
-                if (item.key) {
-                    key[item.key] = level;
-                }
-                if (item.children) {
-                    return func(item.children, level + 1);
-                }
-            });
-        };
-        func(items1);
-        return key;
-    };
-    const levelKeys = getLevelKeys(items as LevelKeysProps[]);
-
-    const onOpenChange: MenuProps['onOpenChange'] = (openKeys) => {
-        const currentOpenKey = openKeys.find((key) => stateOpenKeys.indexOf(key) === -1);
-        // open
-        if (currentOpenKey !== undefined) {
-            const repeatIndex = openKeys
-                .filter((key) => key !== currentOpenKey)
-                .findIndex((key) => levelKeys[key] === levelKeys[currentOpenKey]);
-
-            setStateOpenKeys(
-                openKeys
-                    // remove repeat key
-                    .filter((_, index) => index !== repeatIndex)
-                    // remove current level all child
-                    .filter((key) => levelKeys[key] <= levelKeys[currentOpenKey]),
-            );
-        } else {
-            // close
-            setStateOpenKeys(openKeys);
-        }
-    };
 
     const toggleCollapsed = () => {
         setCollapsed(!collapsed);
@@ -145,9 +72,9 @@ const LeftPart: React.FC<LeftPartProps> = ({leftMenuState}) => {
 
     const getGroupIcon = (uid:any) => {
         switch (uid) {
-            case '00000000-0000-0000-0000-000000000002':
+            case '00000000-0000-0000-0000-000000000003':
                 return <IconLeftMenuAllDevice/>; // Ваша первая иконка
-            case 'f882fcec-18bd-11ef-9b9b-0001693eb0e4':
+            case '00000000-0000-0000-0000-000000000002':
                 return <IconLeftMenuUnsorded />; // Ваша вторая иконка
             default:
                 return <IconLeftMenuDevice />; // Иконка по умолчанию
@@ -221,7 +148,7 @@ const LeftPart: React.FC<LeftPartProps> = ({leftMenuState}) => {
                         <Menu
                             className="LeftMenu"
                             triggerSubMenuAction="click"
-                            mode={collapsed ? 'inline' : 'inline'}
+                            mode="inline"
                             openKeys={stateOpenKeys}
                             onOpenChange={(keys) => setStateOpenKeys(keys as string[])} // Приведение типа, если необходимо
                             inlineCollapsed={collapsed}
@@ -238,15 +165,17 @@ const LeftPart: React.FC<LeftPartProps> = ({leftMenuState}) => {
                                             <Menu.Item
                                                 key={device.UID}
                                                 onClick={() => handleDeviceClick(device)}
+
                                                 icon={<IconLeftMenuDevice/>}
                                             >
-                                                {collapsed ? '' : device.name}
+
+                                               {device.name}
                                             </Menu.Item>
                                         ))}
 
                                     {/* Подгруппы текущей группы */}
                                     {group.sub_groups.map((subgroup) => (
-                                        <SubMenu key={subgroup.uid} title={collapsed ? '' : subgroup.name} icon={<IconLeftMenuDevice/>}>
+                                        <SubMenu key={subgroup.uid} title={subgroup.name}/*{collapsed ? '' : subgroup.name}*/ icon={<IconLeftMenuDevice/>} >
                                             {devices
                                                 .filter((device) => device.groupUID === subgroup.uid)
                                                 .map((device) => (
@@ -255,7 +184,8 @@ const LeftPart: React.FC<LeftPartProps> = ({leftMenuState}) => {
                                                         onClick={() => handleDeviceClick(device)}
                                                         icon={<IconLeftMenuDevice/>}
                                                     >
-                                                        {collapsed ? '' : device.name}
+
+                                                        {device.name}
                                                     </Menu.Item>
                                                 ))}
                                         </SubMenu>
