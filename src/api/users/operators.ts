@@ -1,5 +1,5 @@
 import axios, { AxiosError } from 'axios';
-import { OPERATORS_API_URL, OPERATORS_HEADERS } from '../../const/const';
+import { OPERATORS_API_URL,  } from '../../const/const';
 export const getOperators = async (SmartDVRToken: string, userLogin: string) => {
 
     if (!userLogin || !SmartDVRToken) {

@@ -1,5 +1,5 @@
 import axios, { AxiosError } from 'axios';
-import { USERS_API_URL, USERS_HEADERS } from '../../const/const';
+import { USERS_API_URL } from '../../const/const';
 export const getUsers = async (SmartDVRToken: string, userLogin: string) => {
 
     if (!userLogin || !SmartDVRToken) {

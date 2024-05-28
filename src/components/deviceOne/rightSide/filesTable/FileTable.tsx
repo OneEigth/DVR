@@ -18,6 +18,37 @@ const FileTable: React.FC<FileTableProps> = ({device}) => {
     const [pageSize, setPageSize] = useState<number>(7);
 
 
+    /*useEffect(() => {
+        if (selectedDate) {
+
+
+            // Корректировка на локальный часовой пояс
+            const localDate = new Date(selectedDate);
+            const adjustedDate = new Date(localDate.getTime() - localDate.getTimezoneOffset() * 60000);
+
+            // Устанавливаем начало выбранного дня
+            const start = new Date(adjustedDate);
+            start.setHours(-19, 0, 0, 0);
+
+            // Устанавливаем конец выбранного дня
+            const end = new Date(adjustedDate);
+            end.setHours(4, 59, 59, 999);
+
+            // Форматируем даты для запроса
+            const formattedStart = start.toISOString().split('.')[0] + '+05:00';
+            const formattedEnd = end.toISOString().split('.')[0] + '+05:00';
+
+            setStartDateTime(start);
+
+            setEndDateTime(end);
+
+
+            fetchFiles(deviceUID, formattedStart, formattedEnd);
+        }
+    }, [selectedDate, fetchFiles]);*/
+
+
+
 
     //все медиа файлы выбранного устройства
     useEffect(() => {
@@ -27,7 +58,7 @@ const FileTable: React.FC<FileTableProps> = ({device}) => {
         fetchFiles(deviceUID, startDateTime, endDateTime);
     }, [device, fetchFiles]);
 
-    console.log("fileTable files"+files)
+    console.log("SelectedFiles "+selectedFiles)
 
     /*//видео файлы выбранные с NavigationTimeLine
     const startIndex = (currentPage - 1) * pageSize;

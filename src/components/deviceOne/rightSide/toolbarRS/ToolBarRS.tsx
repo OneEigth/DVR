@@ -3,19 +3,49 @@ import SearchInput from "../../../searchInput/SearchInput";
 import ButtonFilterRS from "../../../buttons/buttonFilter2/ButtonFilterRS";
 import './style.css';
 import { useMenuRSStateStore } from "../../../../store/rightSideMenuState/menuRSStateStore";
-import {Button, Checkbox, ConfigProvider, DatePicker, DatePickerProps, GetProp, Modal, Space} from "antd";
-import { Dayjs } from "dayjs";
+import {
+    Button,
+    Checkbox,
+    ConfigProvider,
+    DatePicker,
+    DatePickerProps,
+    GetProp,
+    Menu,
+    MenuProps,
+    Modal,
+    Space
+} from "antd";
+
 import {CloseOutlined } from '@ant-design/icons';
-import {CheckboxValueType} from "antd/lib/checkbox/Group";
 import {useFilterFileStore} from "../../../../store/devices/fileFilterStote";
+
+const items: MenuProps['items'] = [
+    {
+        label: 'Все',
+        key: 'all'
+    },
+    {
+        label: 'Видео',
+        key: 'video',
+    },
+    {
+        label: 'Фото',
+        key: 'photo',
+    },
+    {
+        label: 'Аудио',
+        key: 'audio',
+    }
+];
 
 const ToolBarRS: React.FC = () => {
     const { selectedStateMenuRS } = useMenuRSStateStore();
     const [isModalVisible, setIsModalVisible] = useState(false); // State for modal visibility
     const [dateStringStart, setDateStringStart] = useState<string | string[]>("");
     const [dateStringEnd, setDateStringEnd] = useState<string | string[]>("");
-    const [stringValues, setStringValues] = useState<string[]>([])
+    const [stringCheckedValues, setStringCheckedValues] = useState<string[]>([])
     const {setFileFilterStore}=useFilterFileStore();
+    const [current, setCurrent] = useState('video');
 
     const showModal = () => {
         setIsModalVisible(true);
@@ -36,16 +66,19 @@ const ToolBarRS: React.FC = () => {
     //фильтр по важности событий
     const onChange: GetProp<typeof Checkbox.Group, 'onChange'> = (checkedValues) => {
         const stringValuesString = checkedValues.map(value => value.toString());
-        setStringValues(stringValuesString);
+        setStringCheckedValues(stringValuesString);
     };
-
+    const onClickFileMenu: MenuProps['onClick'] = (e) => {
+        console.log('click menuFileRs', e.key);
+        setCurrent(e.key);
+    };
     const handleSearch = () => {
         const Filter = {
             dateStart: dateStringStart,
             dateEnd: dateStringEnd,
-            checkedValues: stringValues
+            rating: stringCheckedValues,
         };
-
+        console.log(Filter)
         setFileFilterStore(Filter)
         handleCancel(); // Закрытие модального окна после поиска
     };
@@ -62,50 +95,52 @@ const ToolBarRS: React.FC = () => {
 
     return (
         <div className="ToolBarRS">
-            <div className="leftSideRS">
-                <h1 style={{fontFamily: 'Roboto',
-                    fontSize: '24px',
-                    fontWeight: 400,
-                    lineHeight: '32px',
-                    textAlign: 'left',
-                    margin: 0,
-                    marginBottom: '16px',
-                    padding: 0,}}>
-                    {selectedStateMenuRS === 'map' ? 'Карта' : 'Файлы'}
-                </h1>
-            </div>
-
             {selectedStateMenuRS !== 'map' && (
-                <div className="rightSideRS">
-                    <SearchInput />
-                    <ButtonFilterRS onClick={showModal} />
+                <div className="Tools">
+                    <div className="Search_Filter">
+                        <SearchInput />
+                        <ButtonFilterRS onClick={showModal} />
+                    </div>
+                    <div>
+                        <div className="filesMenu">
+                            <ConfigProvider
+                                theme={{
+                                    components: {
+                                        Menu: {
+                                            itemPaddingInline: 0,
+                                            horizontalItemSelectedColor: '#FCE49C',
+                                            activeBarHeight: 2
+                                        },
+                                    },
+                                }}
+                            >
+                                <Menu className="menuLineRS" onClick={onClickFileMenu} selectedKeys={[current]} mode="horizontal"
+                                      items={items}/>
+                            </ConfigProvider>
+                        </div>
+                    </div>
                 </div>
             )}
+
 
             <ConfigProvider
                 theme={{
                     components: {
                         Modal: {
-                            titleColor:'#21201F',
-                            titleFontSize:24,
-                            titleLineHeight:1,
-
+                            titleColor: '#21201F',
+                            titleFontSize: 24,
+                            titleLineHeight: 1,
                             paddingMD: 0,
-                            padding:20,
-                            paddingContentHorizontalLG:0,
-},
+                            padding: 20,
+                            paddingContentHorizontalLG: 0,
+                        },
                     },
                     token: {
                         borderRadiusLG: 8,
                         fontFamily:'Roboto',
-
-
-
-
                     },
                 }}
             >
-
                 <Modal
                     className="modalRight"
                     visible={isModalVisible}
@@ -123,8 +158,6 @@ const ToolBarRS: React.FC = () => {
                     closable={false}
                     okText={'Поиск'}
                     bodyStyle={{ padding: 0, height: '100%' }}
-
-
                 >
                     <div className="filterPlace">
                         {/*<div className="headerModalRight">

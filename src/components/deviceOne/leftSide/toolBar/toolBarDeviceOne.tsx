@@ -1,16 +1,23 @@
 import React from "react";
-import ButtonAddToLayout from "../../../buttons/buttonAddToLayout/ButtonAddToLayout";
-import ButtonOnlineArchive from "../../../buttons/buttonOnlineArchive/ButtonOnlineArchive";
 import './style.css'
 import {Button} from "antd";
 import {ArrowLeftOutlined} from "@ant-design/icons";
 import {useNavigate} from "react-router-dom";
+import ButtonRecordVideo from "../../../buttons/buttonForToolBarDeviceOne/ButtonRecordVideo";
+import ButtonTakeAPhoto from "../../../buttons/buttonForToolBarDeviceOne/ButtonTakeAPhoto";
+import ButtonRecordAudio from "../../../buttons/buttonForToolBarDeviceOne/ButtonRecordAudio";
 
 const ToolBarDeviceOne: React.FC = () => {
     const navigate = useNavigate();
-    const handleAddToLayout = () => {
+    const handleTakeAPhoto = () => {
         // Добавьте здесь логику обработки клика на кнопку "Добавить в раскладку"
-        console.log("Clicked on Add to Layout");
+    };
+    const handleRecordAudio = () => {
+        // Добавьте здесь логику обработки клика на кнопку "Добавить в раскладку"
+    };
+
+    const handleRecordVideo = () => {
+        // Добавьте здесь логику обработки клика на кнопку "Добавить в раскладку"
     };
 
     const handleBackToAllDevice = () => {
@@ -23,8 +30,9 @@ const ToolBarDeviceOne: React.FC = () => {
                 <Button className="buttonLeft" icon={<ArrowLeftOutlined />} style={{border: 'none'}} onClick={handleBackToAllDevice}>Устройство</Button>
             </div>
             <div className="rightSideToolBar">
-                <ButtonAddToLayout onClick={handleAddToLayout}/>
-               {/* <ButtonOnlineArchive/>*/}
+                <ButtonRecordVideo onClick={handleRecordVideo}/>
+                <ButtonTakeAPhoto onClick={handleTakeAPhoto}/>
+                <ButtonRecordAudio onClick={handleRecordAudio}/>
             </div>
         </div>
     );

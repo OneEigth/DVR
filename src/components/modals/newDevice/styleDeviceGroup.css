@@ -42,6 +42,10 @@
     flex-direction: row;
 }
 
+.form_dev{
+    margin-top: 24px;
+}
+
 .inputLabel_Device{
     text-align: left;
     width: 144px;

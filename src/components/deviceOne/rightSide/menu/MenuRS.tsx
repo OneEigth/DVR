@@ -35,9 +35,9 @@ const MenuRS: React.FC = () => {
                 theme={{
                     components: {
                         Menu: {
-                            horizontalLineHeight:2,
                             itemPaddingInline:0,
                             horizontalItemSelectedColor: '#FCE49C',
+                            activeBarHeight:4
                         },
                     },
                 }}

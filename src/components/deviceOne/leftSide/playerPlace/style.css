@@ -1,14 +1,13 @@
 .PlayerPlace{
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: start;
     width: 100%;
 
 }
 
 .Player {
     width: 100%;
-    height: 70%;
     margin-top: 16px;
     opacity: 1; /* Пример установки непрозрачности */
     background-color: #FCE49C;
@@ -16,7 +15,6 @@
 
 .Control{
     width: 100%;
-    height: 30%;
     opacity: 1; /* Пример установки непрозрачности */
     background-color: #4D4E65;
 }

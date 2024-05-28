@@ -9,6 +9,7 @@ import Settings from './pages/settings/Settings';
 import 'leaflet/dist/leaflet.css';
 import ProtectedRoute from "./components/protectedRoute/ProtectedRoute";
 import PublicRoute from "./components/publicRoute/publicRoute";
+import Layouts from "./pages/layouts/Layouts";
 
 
 const router = createBrowserRouter([
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
     {
         path: '/allcams',
         element: <ProtectedRoute element={<AllCams />} />,
+    },
+    {
+        path: '/layouts',
+        element: <ProtectedRoute element={<Layouts />} />,
     },
     {
         path: '/settings',

@@ -1,6 +1,6 @@
 import create from "zustand";
 import {Group} from "../../types/Group";
-import {getAllGroups} from "../../api/groups/Groups";
+import {getAllGroups} from "../../api/groups/AllGroups";
 import {useAuthStore} from "../auth/auth";
 
 

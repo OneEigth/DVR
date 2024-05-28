@@ -37,13 +37,11 @@ const PlayerPlace: React.FC<PlayerPlaceProps> = ({selectedOnlineUID,device}) => 
         setSelectedDate(date);
         setIsModalOpen(false); // Close the modal after selecting a date
     };
-    console.log()
     return(
         <div className="PlayerPlace">
             <div className="Player">
             <VideoPlayer src={getFilePlayUrl(device.UID, SmartDVRToken )} />
             <div className="navigateTimeLine">
-               {/*<NavigationTimeLine selectedDate={selectedDate} deviceUID={device.UID}/>*/}
                 <div className="nav_buttons">
                     <ButtonCalendar onClick={handleOpenModal} selectedDate={selectedDate}/>
                 </div>

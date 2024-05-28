@@ -4,71 +4,95 @@ import 'leaflet/dist/leaflet.css';
 import CardComponent from '../../../../cards/cardComponentMedium/CardComponent';
 import {Col, Row} from "antd";
 import {useDevicesStore} from "../../../../../store/devices/allDevices";
-
-
+import {DeviceByGroupStore} from "../../../../../store/devices/DeviceByGroupStore";
+import {useSelectedGroup} from "../../../../../store/groups/SelectedGroup";
+import {useAuthStore} from "../../../../../store/auth/auth";
+import {Device} from "../../../../../types/Device";
 
 interface AllDevicesMediumProps {
-    onSelectDevice: (selectedUID: string) => void;
+    searchText:string;
 }
 
-const AllDevicesMedium: React.FC<AllDevicesMediumProps> = ({onSelectDevice}) => {
+const AllDevicesMedium: React.FC<AllDevicesMediumProps> = ({searchText}) => {
     const {devices, fetchDevices} = useDevicesStore(); // Получаем список устройств и метод для загрузки
-    const [currentPage, setCurrentPage] = useState<number>(1); // Состояние текущей страницы
-    const [pageSize, setPageSize] = useState<number>(10); // Состояние размера страницы
-    const [showLocationMap, setShowLocationMap] = useState<boolean>(false);
+    const { devicesByStore, fetchDevicesByStore } = DeviceByGroupStore();
+    const {selectedGroup}=useSelectedGroup();
+    const {user,SmartDVRToken}=useAuthStore();
+    const [deviceData, setDeviceData] = useState<Device[]>([]); // State to store DeviceData
 
 
 
 
-     useEffect(() => {
-         fetchDevices();
-     }, []);
+    useEffect(() => {
+        if (selectedGroup === '00000000-0000-0000-0000-000000000003') {
+            fetchDevices();
+        } else if (user?.login) {
+            fetchDevicesByStore(selectedGroup, SmartDVRToken, user.login);
+        }
+    }, [selectedGroup, fetchDevices, fetchDevicesByStore, user?.login, SmartDVRToken]);
+
+    useEffect(() => {
+        let formattedDevices: Device[] = [];
+        if (selectedGroup === '00000000-0000-0000-0000-000000000003') {
+            formattedDevices = devices.map(device => ({
+                ID: device.ID,
+                UID: device.UID,
+                DID: device.DID,
+                groupUID: device.groupUID,
+                name: device.name,
+                description: device.description,
+                model: device.model,
+                pulse_time: device.pulse_time,
+                latitude: device.latitude,
+                longitude: device.longitude,
+                battery_percent: device.battery_percent,
+                ownerUID: device.ownerUID,
+                online: device.online,
+                connectState: device.connectState,
+            }));
+        } else {
+            formattedDevices = devicesByStore.map(device => ({
+                ID: device.ID,
+                UID: device.UID,
+                DID: device.DID,
+                groupUID: device.groupUID,
+                name: device.name,
+                description: device.description,
+                model: device.model,
+                pulse_time: device.pulse_time,
+                latitude: device.latitude,
+                longitude: device.longitude,
+                battery_percent: device.battery_percent,
+                ownerUID: device.ownerUID,
+                online: device.online,
+                connectState: device.connectState,
+            }));
+        }
+        setDeviceData(formattedDevices);
+    }, [devices, devicesByStore, selectedGroup]);
+
+    const filteredDevices = deviceData.filter(device =>
+        device.name.toLowerCase().includes(searchText.toLowerCase()) ||
+        device.description.toLowerCase().includes(searchText.toLowerCase()) ||
+        device.model.toLowerCase().includes(searchText.toLowerCase()) ||
+        device.groupUID.toLowerCase().includes(searchText.toLowerCase()) ||
+        device.DID.toLowerCase().includes(searchText.toLowerCase())
+    );
 
     const handleViewVideo = (uid: string) => {
         console.log('View video for UID:', uid);
     };
-
-    const startIndex = (currentPage - 1) * pageSize;
-
-    // Отображаем только устройства на текущей странице
-    const devicesOnPage = devices.slice(startIndex, startIndex + pageSize);
-
-    const handleSwitchChange = (isChecked: boolean) => {
-        setShowLocationMap(isChecked);
-    };
-
-    const halfLength = Math.ceil(devicesOnPage.length / 2);
-    const devicesFirstColumn = devicesOnPage.slice(0, halfLength);
-    const devicesSecondColumn = devicesOnPage.slice(halfLength);
-
     return (
-        //средние значки
-        /*<div className="allDevice">
-            <Row gutter={[16, 16]}>
-                <Col span={12}>
-                    {devicesFirstColumn.map((device: any) => (
-                        <CardComponent key={device.ID} file={device} handleViewVideo={handleViewVideo} />
-                    ))}
-                </Col>
-                <Col span={12}>
-                    {devicesSecondColumn.map((device: any) => (
-                        <CardComponent key={device.ID} file={device} handleViewVideo={handleViewVideo} />
-                    ))}
-                </Col>
-            </Row>
-        </div>*/
 
     <div className="allDeviceMedium">
         <Row gutter={[16, 16]}>
-            {devices.map((device: any) => (
+            {filteredDevices.map((device: any) => (
                 <Col xs={24} sm={12} lg={6} key={device.ID}>
                     <CardComponent file={device} handleViewVideo={handleViewVideo} />
                 </Col>
             ))}
         </Row>
     </div>
-
     );
 };
-
 export default AllDevicesMedium;

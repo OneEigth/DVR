@@ -1,51 +1,28 @@
-.LeftMenu {
-    font-family: Roboto, sans-serif;
-    font-size: 14px;
-    font-weight: 700;
-    line-height: 20px;
-    letter-spacing: 0.25px;
-    text-align: left;
-    color: #4D4E65 !important;
+.LeftPartSideMenu{
     background-color: #F1F1F1;
-
-}
-
-.upLeftPart{
-    background-color: #F1F1F1;
-    height: 100vmax;
-}
-
-.Search{
-    width: 216px;
-    margin-left: 28px;
-}
-
-.input-animation {
-    transition: width 0.2s ease-in-out; /* Скорость анимации */
-    position: relative; /* Позиционирование относительно родителя */
-}
-
-.input-collapse {
-    width: 32px; /* Ширина при свернутом состоянии */
-}
-
-.input-animation .ant-input-suffix {
-    position: absolute; /* Абсолютное позиционирование */
-    right: 20px; /* Правое смещение от родительского контейнера */
-    top: 50%; /* Положение по вертикали */
-    transform: translateY(-50%); /* Смещение на половину высоты иконки вверх */
+    width: 264px;;
 }
 
 .buttonMenu{
     display: flex;
     flex-direction: row;
-    justify-content: start;
+    justify-content: space-between;
     align-items: center;
-    padding-top: 24px;
+    padding-top: 20px;
     margin-top: 0;
+    border-bottom: 1px solid #CDD0D2;
+    margin-left: 12px;
+    margin-right: 12px;
 }
 
-
+.bm_1{
+    display: flex;
+    flex-direction: row;
+}
+.bm_2{
+    display: flex;
+    flex-direction: row;
+}
 
 .group_h1{
     width: 82px;
@@ -57,7 +34,6 @@
     text-align: left;
     color: #21201F;
     margin-top: 0;
-
 }
 
 .count_h1{
@@ -76,13 +52,53 @@
     margin-top: 0;
 }
 
-.button{
-    margin-left: 28px;
-    margin-top: 0;
-    margin-right: 0;
-    box-shadow: none;
+.Search{
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
 }
 
+.Search_input {
+    width: auto;
+    margin-right: 12px;
+    margin-left: 12px;
+    margin-top: 12px;
+}
+
+.Search_input:hover {
+    border-color: #AFBBC3;
+}
+
+.Search_input::shadow{
+    box-shadow: #4D4E6540;
+}
+
+.Search_input:focus, .Search_input:focus-within {
+    border-color: #4D4E65; /* Цвет границы при фокусировке и при наличии фокуса внутри .input */
+}.Search_input:hover {
+     border-color: #AFBBC3;
+ }
+
+.Search_input::shadow{
+    box-shadow: #4D4E6540;
+}
+
+.Search_input:focus, .Search_input:focus-within {
+    border-color: #4D4E65; /* Цвет границы при фокусировке и при наличии фокуса внутри .input */
+}
+
+.LeftMenu {
+    font-family: Roboto, sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 20px;
+    letter-spacing: 0.25px;
+    text-align: left;
+    color: #4D4E65 !important;
+    background-color: #F1F1F1;
+    height: 100vh!important;
+}
 .LeftMenu .ant-menu-item {
     font-family: Roboto, sans-serif;
     font-size: 14px;
@@ -97,6 +113,22 @@
     background-color: #F1F1F1;
     color: #3E405F;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

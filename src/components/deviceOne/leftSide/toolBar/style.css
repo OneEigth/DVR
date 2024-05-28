@@ -28,6 +28,14 @@
     flex-direction: row;
     justify-content: center;
 }
-.buttonAddToLayout{
-    margin-top: 0;
+
+.buttonTakeAPhoto{
+    margin-left: 12px;
+    margin-right: 12px;
+}
+.ButtonRecordVideo{
+
+}
+.ButtonRecordAudio{
+
 }

@@ -27,18 +27,16 @@ const DeviceOne: React.FC<DeviceOneProps> = ({ selectedOnlineUID, selectedFileUI
     return (
 
         <Row className="containerDeviceOne">
-            <Col span={selectedStateLeftPart ? 3 : 1} className="SideBar">
-                <LeftPart leftMenuState={true} />
-            </Col>
-            <Col span={selectedStateLeftPart ? 21 : 23}>
+
+            <Col >
                 <Row className="DeviceOne">
-                    <Col span={selectedStateLeftPart ? 16 : 17} className="leftSideDeviceOne">
+                    <Col  className="leftSideDeviceOne">
                         <ToolBarDeviceOne />
                         <PlayerPlace selectedOnlineUID={selectedOnlineUID} device={selectedDevice} />
                         <InfoBar device={selectedDevice} />
                         <Description device={selectedDevice} />
                     </Col>
-                    <Col span={6.5} className="rightSideDeviceOne">
+                    <Col  className="rightSideDeviceOne">
                         <MenuRS />
                         <ToolBarRS />
                         {selectedStateMenuRS === 'map' ? (

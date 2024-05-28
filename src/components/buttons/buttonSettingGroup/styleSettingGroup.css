@@ -1,0 +1,22 @@
+.ButtonSettingGroup{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: #4D4E65;
+    width: 32px!important;
+    height: 32px!important;
+    margin-top: 12px;
+    margin-left: 0;
+    margin-right: 12px;
+    border: none;
+}
+
+.ButtonSettingGroup:hover,
+.ButtonSettingGroup:focus,
+.ButtonSettingGroup:active{
+    background-color: #4D4E65!important;
+    color: #FFFFFF!important;
+    border: none!important;
+    box-shadow: none!important;
+}

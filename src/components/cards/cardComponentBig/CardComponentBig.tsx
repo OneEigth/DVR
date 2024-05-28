@@ -37,7 +37,7 @@ const CardComponent: React.FC<CardComponentProps> = ({file, handleViewVideo}) =>
                     className="coverCardBig"
                     key={file.ID}
                     hoverable
-                    cover={<img alt={''} src={VIDEO_PREVIEW_URL(file.UID,SmartDVRToken)}/>}
+                    cover={<img alt={''} src={VIDEO_PREVIEW_URL(file.UID,SmartDVRToken)} style={{ borderRadius: 0 }}/>}
                     onError={handleError}
                     onClick={() => handleDeviceClick(file.UID)}
                 />

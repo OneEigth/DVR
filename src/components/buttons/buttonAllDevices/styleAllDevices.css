@@ -1,0 +1,58 @@
+
+
+.ButtonAllDevices{
+    width: 225px; /* ширина элемента */
+    height: 39px; /* высота элемента */
+    padding-left: 22px; /* внутренние отступы */
+    gap: 0; /* расстояние между элементами внутри */
+    margin-top: 12px;
+    margin-left: 5px;
+    border: 0;
+
+    box-shadow: none;
+    outline: none!important;
+
+    color: #4D4E65;
+    font-family: Roboto;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 20px;
+    letter-spacing: 0.25px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    align-content: center;
+
+    background: #F1F1F1;
+}
+
+ .ant-btn-icon{
+    margin-right: 0!important;
+}
+
+.ButtonAllDevices:active {
+    background:none!important;
+
+    color: #4D4E65!important;
+    border: none!important;
+    box-shadow: none!important;
+    outline: none!important;
+}
+
+.ButtonAllDevices:focus {
+    background-color: #D3DADF!important;
+    color: #4D4E65!important;
+    border: none!important;
+    box-shadow: none!important;
+    outline: none!important;
+}
+
+.ButtonAllDevices:hover{
+    background-color: #D3DADF!important;
+    color: #4D4E65!important;
+    border: none!important;
+    box-shadow: none!important;
+    outline: none!important;
+}

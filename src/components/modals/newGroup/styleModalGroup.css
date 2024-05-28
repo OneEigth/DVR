@@ -57,7 +57,7 @@
     width: 97px;
     height: 32px;
     padding: 0 15px 0 15px;
-    border: 1px solid #4D4E65;
+
     margin-right: 12px;
     font-family: Roboto;
     font-size: 14px;
@@ -67,8 +67,22 @@
     text-align: center;
     background: #4D4E65;
     color: #FFFFFF;
+    border: none;
+}
+
+.buttonAdd:hover,
+.buttonAdd:focus,
+.buttonAdd:active{
+    background-color: #4D4E65!important;
+    color: #FFFFFF!important;
+    border: none!important;
+    box-shadow: none!important;
 }
 
 .input_Group{
     width: 504px;
+}
+
+.selectGroup{
+    width: 504px!important;
 }

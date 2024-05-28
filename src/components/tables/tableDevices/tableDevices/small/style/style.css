@@ -6,10 +6,24 @@
     width: 100%;
 }
 
+.table_container{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+}
+.ant-table-wrapper {
+    flex: 1;
+    padding: 0;
+
+}
+
+
 .tableFooter{
+    position: sticky;
+    bottom: 0;
     display: flex;
     width: 100%;
-
     align-items: center;
     flex-direction: row;
     justify-content: space-between;
@@ -89,6 +103,3 @@
     margin-left: 16px;
 }
 
-.smallTAbl{
-    margin-left: 20px;
-}

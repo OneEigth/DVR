@@ -58,6 +58,8 @@ const MainMenu: React.FC<MainMenuProps> = ({ onClick, currentMenuItem }) => {
             navigate('/allcams'); // Навигация на страницу /allcams при клике на "Все камеры"
         } else if (key === 'settings') {
             navigate('/settings'); // Навигация на страницу /settings при клике на "Настройки"
+        }else if (key === 'layouts') {
+            navigate('/layouts'); // Навигация на страницу /settings при клике на "Настройки"
         }
     };
 

@@ -1,81 +1,149 @@
-import React, { useEffect, useState } from 'react';
-import { useDevicesStore } from '../../../../../store/devices/allDevices';
-import {Button, ConfigProvider, Table, TableColumnsType} from 'antd';
-import type { Key } from 'antd/lib/table/interface';
+import React, {useEffect, useState} from 'react';
+import {ConfigProvider, Table, TableColumnsType} from 'antd';
+import type {Key} from 'antd/lib/table/interface';
 import {useNavigate} from "react-router-dom";
 import {useSelectedDevice} from "../../../../../store/devices/SelectedDevice";
 import {Device} from "../../../../../types/Device";
 import './style/style.css'
-import IconLeftMenuFooter from "../../../../icons/iconLeftMenu/IconLeftMenuFooter";
-import ButtonLeftMenuFooterEdit from "../../../../buttons/buttonLeftMenu/ButtonLeftMenuFooterEdit";
-import ButtonLeftMenuFooterDelete from "../../../../buttons/buttonLeftMenu/ButtonLeftMenuFooterDelete";
+
+import {DeviceByGroupStore} from "../../../../../store/devices/DeviceByGroupStore";
+import {useSelectedGroup} from "../../../../../store/groups/SelectedGroup";
+import {useAuthStore} from "../../../../../store/auth/auth";
+import DeleteDeviceModal from "../../../../modals/deleteDevice/DeleteDeviceModal";
+import {useDevicesStore} from "../../../../../store/devices/allDevices";
+import EditDeviceGroup from "../../../../modals/editDeviceGroup/EditDeviceGroup";
+import {useIsDeviceAdded} from "../../../../../store/devices/isDeviceAdded";
+import {useSelectedRowKeys} from "../../../../../store/devices/useSelectedRowKeys";
+import {useButtonsFromAllcams} from "../../../../../store/devices/useButtonsFromAllcams";
+
 
 interface AllDevicesSmallProps {
-    onSelectDevice: (selectedUID: string) => void;
+    searchText:string;
 }
 
-const AllDevicesSmall: React.FC<AllDevicesSmallProps> = ({onSelectDevice} ) => {
-    const { devices, fetchDevices } = useDevicesStore();
-    const [currentPage, setCurrentPage] = useState<number>(1);
-    const [pageSize, setPageSize] = useState<number>(10);
-    const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
-    const [selectionType, setSelectionType] = useState<'checkbox'>('checkbox');
+const AllDevicesSmall: React.FC<AllDevicesSmallProps> = ({ searchText}) => {
+    const { devicesByStore, fetchDevicesByStore } = DeviceByGroupStore();
+    const {devices,fetchDevices} = useDevicesStore();
+    const {selectedRowKeys, setSelectedRowKeys} = useSelectedRowKeys();
     const [deviceData, setDeviceData] = useState<Device[]>([]); // State to store DeviceData
     const navigate = useNavigate();
     const {setSelectedDevice} = useSelectedDevice();
+    const {selectedGroup}=useSelectedGroup();
+    const {user,SmartDVRToken}=useAuthStore();
+    const {isDeviceAdded,setIsDeviceAdded} = useIsDeviceAdded();
+    const {isDeleteDeviceModal, setIsDeleteDeviceModal} = useButtonsFromAllcams();
+    const {isEditDeviceGroupModal, setIsEditDeviceGroupModal} =useButtonsFromAllcams();
+
 
     const handleDeviceClick = (device: Device) => {
         navigate(`/device/${device.name}`); 
         setSelectedDevice(device);
     };
 
-    useEffect(() => {
-        fetchDevices();
-    }, []);
+    console.log("AllDeviceSmall ",isDeviceAdded);
 
     useEffect(() => {
-        // Преобразуем устройства в формат Device
-        const formattedDevices: Device[] = devices.map(device => ({
-            ID: device.ID,
-            UID: device.UID,
-            DID: device.DID,
-            groupUID: device.groupUID,
-            name: device.name,
-            description: device.description,
-            model: device.model,
-            pulse_time: device.pulse_time,
-            latitude: device.latitude,
-            longitude: device.longitude,
-            battery_percent: device.battery_percent,
-            ownerUID: device.ownerUID,
-            online: device.online,
-            connectState:device.connectState,
-        }));
+        if (isDeviceAdded) {
+            updateDeviceList();
+        }
+    }, [isDeviceAdded]);
+
+    const updateDeviceList = () => {
+        if (selectedGroup === '00000000-0000-0000-0000-000000000003') {
+            fetchDevices();
+        } else if (user?.login) {
+            fetchDevicesByStore(selectedGroup, SmartDVRToken, user.login);
+        }
+        setIsDeviceAdded(false);
+    };
+
+    useEffect(() => {
+        updateDeviceList();
+    }, [selectedGroup, fetchDevices, fetchDevicesByStore, user?.login, SmartDVRToken]);
+
+
+    useEffect(() => {
+        if (selectedGroup === '00000000-0000-0000-0000-000000000003') {
+            fetchDevices();
+            setIsDeviceAdded(false);
+        } else if (user?.login) {
+            fetchDevicesByStore(selectedGroup, SmartDVRToken, user.login);
+            setIsDeviceAdded(false);
+        }
+
+    }, [selectedGroup, fetchDevices, fetchDevicesByStore, user?.login, SmartDVRToken]);
+
+    useEffect(() => {
+        let formattedDevices: Device[] = [];
+        if (selectedGroup === '00000000-0000-0000-0000-000000000003') {
+            formattedDevices = devices.map(device => ({
+                ID: device.ID,
+                UID: device.UID,
+                DID: device.DID,
+                groupUID: device.groupUID,
+                name: device.name,
+                description: device.description,
+                model: device.model,
+                pulse_time: device.pulse_time,
+                latitude: device.latitude,
+                longitude: device.longitude,
+                battery_percent: device.battery_percent,
+                ownerUID: device.ownerUID,
+                online: device.online,
+                connectState: device.connectState,
+            }));
+        } else {
+            formattedDevices = devicesByStore.map(device => ({
+                ID: device.ID,
+                UID: device.UID,
+                DID: device.DID,
+                groupUID: device.groupUID,
+                name: device.name,
+                description: device.description,
+                model: device.model,
+                pulse_time: device.pulse_time,
+                latitude: device.latitude,
+                longitude: device.longitude,
+                battery_percent: device.battery_percent,
+                ownerUID: device.ownerUID,
+                online: device.online,
+                connectState: device.connectState,
+            }));
+        }
         setDeviceData(formattedDevices);
-    }, [devices]);
+    }, [devices, devicesByStore, selectedGroup]);
 
 
-    // rowSelection object indicates the need for row selection
-    /*const rowSelection = {
-        onChange: (selectedRowKeys: React.Key[], selectedRows: Device[]) => {
-            console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-        },
-        getCheckboxProps: (record: Device) => ({
-            disabled: record.name === 'Disabled User', // Column configuration not to be checked
-            name: record.name,
-        }),
-    };*/
+    const handleOkDeleteDeviceModal = () => {
+        setIsDeleteDeviceModal(false);
+        updateDeviceList();
+    };
+    const handleOkEditDeviceGroup = () => {
+        setIsEditDeviceGroupModal(false);
+        updateDeviceList();
+    };
+    const handleCancelEditDeviceGroup = () => {
+        setIsEditDeviceGroupModal(false);
+    };
+    const handleCancelDeleteDeviceModal = () => {
+        setIsDeleteDeviceModal(false);
+        console.log("allDevice ", isDeleteDeviceModal)
+    };
 
+    // Фильтрация устройств на основе текста поиска
+    const filteredDevices = deviceData.filter(device =>
+        device.name.toLowerCase().includes(searchText.toLowerCase()) ||
+        device.description.toLowerCase().includes(searchText.toLowerCase()) ||
+        device.model.toLowerCase().includes(searchText.toLowerCase()) ||
+        device.groupUID.toLowerCase().includes(searchText.toLowerCase()) ||
+        device.DID.toLowerCase().includes(searchText.toLowerCase())
+    );
 
     const columns:TableColumnsType<Device> = [
         {
             title: 'Название',
             dataIndex: 'name',
             key: 'name',
-            /*render: (text: string, record: Device) => (
-                <Button type="link" onClick={() => handleDeviceClick(record)}>
-                    {text}
-                </Button>),*/
         },
         {
             title: 'Описание',
@@ -99,11 +167,7 @@ const AllDevicesSmall: React.FC<AllDevicesSmallProps> = ({onSelectDevice} ) => {
         },
     ];
 
-    const startIndex = (currentPage - 1) * pageSize;
-    const devicesOnPage = deviceData.slice(startIndex, startIndex + pageSize);
-
     const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
-        console.log('selectedRowKeys changed: ', newSelectedRowKeys);
         setSelectedRowKeys(newSelectedRowKeys);
     };
 
@@ -111,62 +175,62 @@ const AllDevicesSmall: React.FC<AllDevicesSmallProps> = ({onSelectDevice} ) => {
         selectedRowKeys,
         onChange: onSelectChange,
     };
+
     const hasSelected = selectedRowKeys.length > 0;
-
-    const handleDeviceDelete = () => {
-
-    };
-
-    const handleDeviceEdit = () => {
-
-    };
 
     return (
         <div className="smallTAbl">
-        <ConfigProvider
-            theme={{
-                token: {
-                    borderRadius: 0,
-                    colorPrimary:'#4D4E65',
+            <div className="table_container">
+                <ConfigProvider
+                      theme={{
+                            token: {
+                                borderRadius: 0,
+                                colorPrimary:'#4D4E65',
+                            },
+                            components: {
+                                 Table: {
+                                     rowHoverBg:'#F4F6F7',
+                                     rowSelectedHoverBg:'#F4F6F7',
+                                     rowSelectedBg:'#E8EBED'
+
+                                 },
+                            },
+                      }}
+                 >
+                    <Table
+                        className="table"
+                        columns={columns}
+                        dataSource={filteredDevices}
+                        pagination={false}
+                        rowKey="UID"
+                        rowSelection={rowSelection}
+                        onRow={(record) => ({
+                            onClick: () => handleDeviceClick(record),
+                        })}
 
 
-                },
-                components: {
-                    Table: {
-                        rowHoverBg:'#F4F6F7',
-                        rowSelectedHoverBg:'#F4F6F7',
-                        rowSelectedBg:'#E8EBED'
+                    />
+                </ConfigProvider>
+            </div>
 
-                    },
-                },
-            }}
-        >
-            <Table
-                className="table"
-                columns={columns}
-                dataSource={devicesOnPage}
-                pagination={false}
-                rowKey="UID"
-                rowSelection={rowSelection}
-                onRow={(record) => ({
-                    onClick: () => handleDeviceClick(record),
-                })}
 
+            {hasSelected ?
+                ''
+                :
+                ''}
+
+            <DeleteDeviceModal  visible={isDeleteDeviceModal}
+                                device={selectedRowKeys}
+                                onOk={handleOkDeleteDeviceModal}
+                                onCancel={handleCancelDeleteDeviceModal}
             />
-
-        </ConfigProvider>
-
-                <div className="tableFooter">
-                    <span className="countDeviceFooter"><IconLeftMenuFooter/><h3 className="h3Footer">Выбрано: {selectedRowKeys.length}</h3></span>
-                    <div>
-
-                            <ButtonLeftMenuFooterEdit onClick={handleDeviceEdit}/>
-
-                        <ButtonLeftMenuFooterDelete onClick={handleDeviceDelete}/>
-                    </div>
-                </div>
-
+            <EditDeviceGroup visible={isEditDeviceGroupModal}
+                             onOk={handleOkEditDeviceGroup}
+                             onCancel={handleCancelEditDeviceGroup}
+                             device={selectedRowKeys}
+            />
         </div>
+
     );
 };
 

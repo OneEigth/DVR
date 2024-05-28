@@ -3,8 +3,26 @@
     flex-direction: row;
     justify-content: space-between;
     width: 100%;
-    border-bottom: 1px solid #CDD0D2;
     margin-bottom: 8px;
+}
+
+.Tools{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.Search_Filter{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.filesMenu{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 16px;
 }
 
 .rightSideRS{
@@ -12,6 +30,7 @@
     flex-direction: row;
     justify-content: end;
     width: 100%!important;
+
 }
 
 .modalRight {
@@ -179,3 +198,43 @@ button.ant-modal-close {
     align-items: center;
     align-content: center;
 }
+
+
+.menuLineRS{
+    width: 100%;
+    padding-bottom: 16px;
+    border-bottom: #FFFFFF;
+}
+
+.menuLineRS .ant-menu-item {
+    font-family: Roboto;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    letter-spacing: 0.25px;
+    text-align: left;
+    color: #3E405F;
+}
+
+.menuLineRS .ant-menu-item {
+    padding-left: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    margin-right: 12px;
+    margin-top: 0;
+}
+
+.menuLineRS .ant-menu-item:hover,
+.menuLineRS .ant-menu-item:active{
+    color: #3E405F !important;
+}
+.menu-item:hover,
+.menu-item:active {
+    color: #3E405F !important;
+}
+
+.menuLineRS .ant-menu-item-selected {
+    color: #3E405F !important;
+    font-weight: 700;
+}
+
