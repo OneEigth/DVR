@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import {ConfigProvider, Table, TableColumnsType} from 'antd';
-import type {Key} from 'antd/lib/table/interface';
 import {useNavigate} from "react-router-dom";
 import {useSelectedDevice} from "../../../../../store/devices/SelectedDevice";
 import {Device} from "../../../../../types/Device";
@@ -15,6 +14,8 @@ import EditDeviceGroup from "../../../../modals/editDeviceGroup/EditDeviceGroup"
 import {useIsDeviceAdded} from "../../../../../store/devices/isDeviceAdded";
 import {useSelectedRowKeys} from "../../../../../store/devices/useSelectedRowKeys";
 import {useButtonsFromAllcams} from "../../../../../store/devices/useButtonsFromAllcams";
+import IconOnline from "../../../../icons/iconOnline/IconOnline";
+import IconOffline from "../../../../icons/iconOffline/IconOffline";
 
 
 interface AllDevicesSmallProps {
@@ -41,6 +42,7 @@ const AllDevicesSmall: React.FC<AllDevicesSmallProps> = ({ searchText}) => {
     };
 
     console.log("AllDeviceSmall ",isDeviceAdded);
+
 
     useEffect(() => {
         if (isDeviceAdded) {
@@ -81,6 +83,7 @@ const AllDevicesSmall: React.FC<AllDevicesSmallProps> = ({ searchText}) => {
                 UID: device.UID,
                 DID: device.DID,
                 groupUID: device.groupUID,
+                groupName:device.groupName,
                 name: device.name,
                 description: device.description,
                 model: device.model,
@@ -90,7 +93,8 @@ const AllDevicesSmall: React.FC<AllDevicesSmallProps> = ({ searchText}) => {
                 battery_percent: device.battery_percent,
                 ownerUID: device.ownerUID,
                 online: device.online,
-                connectState: device.connectState,
+                connectionState: device.connectionState,
+                memory:device.memory,
             }));
         } else {
             formattedDevices = devicesByStore.map(device => ({
@@ -98,6 +102,7 @@ const AllDevicesSmall: React.FC<AllDevicesSmallProps> = ({ searchText}) => {
                 UID: device.UID,
                 DID: device.DID,
                 groupUID: device.groupUID,
+                groupName:device.groupName,
                 name: device.name,
                 description: device.description,
                 model: device.model,
@@ -107,7 +112,8 @@ const AllDevicesSmall: React.FC<AllDevicesSmallProps> = ({ searchText}) => {
                 battery_percent: device.battery_percent,
                 ownerUID: device.ownerUID,
                 online: device.online,
-                connectState: device.connectState,
+                connectionState: device.connectionState,
+                memory:device.memory,
             }));
         }
         setDeviceData(formattedDevices);
@@ -135,7 +141,7 @@ const AllDevicesSmall: React.FC<AllDevicesSmallProps> = ({ searchText}) => {
         device.name.toLowerCase().includes(searchText.toLowerCase()) ||
         device.description.toLowerCase().includes(searchText.toLowerCase()) ||
         device.model.toLowerCase().includes(searchText.toLowerCase()) ||
-        device.groupUID.toLowerCase().includes(searchText.toLowerCase()) ||
+        device.groupName.toLowerCase().includes(searchText.toLowerCase()) ||
         device.DID.toLowerCase().includes(searchText.toLowerCase())
     );
 
@@ -144,6 +150,16 @@ const AllDevicesSmall: React.FC<AllDevicesSmallProps> = ({ searchText}) => {
             title: 'Название',
             dataIndex: 'name',
             key: 'name',
+            render: ((text: string, record: Device) => (
+                <span>
+                {record.online ? (
+                    <IconOnline style={{ marginRight: 8 }} />
+                ) : (
+                    <IconOffline style={{ marginRight: 8 }} />
+                )}
+                    {text}
+            </span>
+            ))
         },
         {
             title: 'Описание',
@@ -157,8 +173,8 @@ const AllDevicesSmall: React.FC<AllDevicesSmallProps> = ({ searchText}) => {
         },
         {
             title: 'Группа',
-            dataIndex: 'groupUID',
-            key: 'groupUID',
+            dataIndex: 'groupName',
+            key: 'groupName',
         },
         {
             title: 'Серийный номер',

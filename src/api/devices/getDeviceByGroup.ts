@@ -12,7 +12,7 @@ export const getDeviceByGroup = async ( SmartDVRToken: string, userLogin: string
     console.log(API_DEVICE_BY_GROUP(groupUID))
     try {
         const response = await axios.get(
-            `http://45.141.76.30:8172/device/group/${groupUID}/1/5`,
+            `http://45.141.76.30:8172/device/group/${groupUID}/1/30`,
             {headers: {
                     SmartDVRLogin: userLogin,
                     SmartDVRToken: SmartDVRToken,

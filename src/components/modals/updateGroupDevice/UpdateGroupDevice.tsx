@@ -23,8 +23,10 @@ const UpdateGroupDevice: React.FC<DeleteModalGroupProps> = ({ visible,group, onO
 
 
     useEffect(() => {
-        fetchGroups();
-    }, []);
+        if (groups.length === 0) {
+            fetchGroups();
+        }
+    }, [fetchGroups, groups.length]);
 
     if (!group) return null;
 

@@ -1,10 +1,7 @@
-import React, {useEffect, useState} from 'react';
-import {Button, Form, Modal, Select} from 'antd';
+import React from 'react';
+import {Button, Modal} from 'antd';
 import {CloseOutlined} from "@ant-design/icons";
 import {useAuthStore} from "../../../store/auth/auth";
-import {DeleteGroup} from "../../../api/groups/DeleteGroup";
-import {useGroupsStore} from "../../../store/groups/Groups";
-import {Device} from "../../../types/Device";
 import {DeleteDevice} from "../../../api/devices/deleteDevice";
 import {Key} from "antd/lib/table/interface";
 import {useButtonsFromAllcams} from "../../../store/devices/useButtonsFromAllcams";

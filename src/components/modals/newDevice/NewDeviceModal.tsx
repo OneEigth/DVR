@@ -42,14 +42,16 @@ const NewDeviceModal: React.FC<NewGroupModalProps> = ({ visible, onOk, onCancel 
     });
 
     useEffect(() => {
-        fetchGroups();
-    }, [fetchGroups]);
+        if (groups.length === 0) {
+            fetchGroups();
+        }
+    }, [fetchGroups, groups.length]);
 
     const handleOk = () => {
 
         form.validateFields().then(values => {
             if (!values.groupUID) {
-                values.groupUID = '00000000-0000-0000-0000-000000000001';
+                values.groupUID = '00000000-0000-0000-0000-000000000002';
             }
             if (user) {
                 getCreateDevice(SmartDVRToken, user.login, values)

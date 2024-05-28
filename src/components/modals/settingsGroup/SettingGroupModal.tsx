@@ -10,6 +10,8 @@ import {Group} from "../../../types/Group";
 import DeleteModalGroup from "../deleteGroup/DeleteModalGroup";
 import {useAuthStore} from "../../../store/auth/auth";
 import {UpdateGroup} from "../../../api/groups/UpdateGroup";
+import IconCheck from "../../icons/iconCheck/IconCheck";
+import IconClose from "../../icons/iconClose/IconClose";
 
 interface SettingGroupModalProps {
     visible: boolean;
@@ -27,8 +29,10 @@ const SettingGroupModal: React.FC<SettingGroupModalProps> = ({ visible, onOk, on
     const { user, SmartDVRToken } = useAuthStore();
 
     useEffect(() => {
-        fetchGroups();
-    }, []);
+        if (groups.length === 0) {
+            fetchGroups();
+        }
+    }, [fetchGroups, groups.length]);
 
     const getGroupIcon = (uid:any) => {
         switch (uid) {
@@ -67,11 +71,39 @@ const SettingGroupModal: React.FC<SettingGroupModalProps> = ({ visible, onOk, on
         editingGroup === entity.uid ? (
             <div className="editGroup">
                 <Input
+                    className="input_EG"
                     value={isSubGroup ? newGroupName : newGroupName}
                     onChange={(e) => setNewGroupName(e.target.value)}
                 />
-                <Button type="link" onClick={() => handleSaveGroup(entity)} icon={<CheckOutlined />} />
-                <Button danger onClick={() => handleDeleteGroup(entity)} icon={<CloseOutlined />} />
+                <Button  onClick={() => handleSaveGroup(entity)}
+                         className="button_EG"
+                         icon={<IconCheck />}
+                         style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    borderColor: "#4D4E65",
+                             width:"32px",
+                             height:"32px",
+                             marginLeft:"8px",
+                             marginRight:"8px",
+                             paddingLeft:"7px",
+                             paddingRight:"7px"
+                }}/>
+                <Button  onClick={() => handleDeleteGroup(entity)}
+                         className="button_EG"
+                         icon={<IconClose />}
+                         style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    borderColor: "#4D4E65",
+                             width:"32px",
+                             height:"32px",
+                             marginRight:"8px",
+                             paddingLeft:"7px",
+                             paddingRight:"7px"
+                }} />
             </div>
         ) : (
             entity.name
@@ -127,7 +159,7 @@ const SettingGroupModal: React.FC<SettingGroupModalProps> = ({ visible, onOk, on
                     >Сохранить</Button>
                 }
                 width={400}
-                style={{top: 0, right: 0, margin: 0, height: '100%'}}
+                style={{top: 0, right: 0, margin: 0}}
                 title={<span className="titleModalSetting"><CloseOutlined className="closeBut" onClick={onCancel}
                                                                           style={{
                                                                               marginLeft: 'auto',

@@ -1,10 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import {Button, ConfigProvider, Form, Input, Modal, Select} from 'antd';
+import {Button,  Form,  Modal, Select} from 'antd';
 import {CloseOutlined} from "@ant-design/icons";
 import './styleEditDeviceGroup.css'
 import {useGroupsStore} from "../../../store/groups/Groups";
 import {Group} from "../../../types/Group";
-import {CreateGroup} from "../../../api/groups/CreateGroup";
 import {useAuthStore} from "../../../store/auth/auth";
 import {getGroupEditDevice} from "../../../api/devices/getEditDeviceGroup";
 import {Key} from "antd/lib/table/interface";
@@ -27,8 +26,10 @@ const NewGroupModal: React.FC<NewGroupModalProps> = ({ visible, onOk, onCancel, 
 
 
     useEffect(() => {
-        fetchGroups();
-    }, [fetchGroups]);
+        if (groups.length === 0) {
+            fetchGroups();
+        }
+    }, [fetchGroups, groups.length]);
 
     const handleParentUidChange = (value: string) => {
         setGroupUID(value);
@@ -63,7 +64,7 @@ const NewGroupModal: React.FC<NewGroupModalProps> = ({ visible, onOk, onCancel, 
                     console.log('Group created:', response);
                     if (response.success) {
                         onOk(); // Close modal on success
-                        setIsEditDeviceGroupModal(true);
+                        setIsEditDeviceGroupModal(false);
                     } else {
                         console.error('Error creating group:', response.error);
                         console.log('Error creating group:', response.error)

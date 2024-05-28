@@ -9,6 +9,17 @@
     overflow: hidden; /* Избавляется от скроллинга */
 }
 
+.second {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.basic{
+    margin-top:32px
+}
+
 .cart {
     display: flex;
     flex-direction: column;
@@ -77,11 +88,14 @@
 }
 
 .label {
+    width: 81px;
+    height: 44px;
     font-family: 'Roboto', sans-serif;
     font-size: 36px;
     font-weight: 400;
     line-height: 44px;
-    text-align: center;
+    text-align: center!important;
+    margin-bottom: 32px;
 }
 
 .ButtonLogIn {

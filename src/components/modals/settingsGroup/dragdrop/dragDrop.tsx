@@ -29,8 +29,10 @@ const SettingGroupModalDD: React.FC<SettingGroupModalProps> = ({ visible, onOk, 
     const menuRef = useRef<MenuRef>(null);
 
     useEffect(() => {
-        fetchGroups();
-    }, []);
+        if (groups.length === 0) {
+            fetchGroups();
+        }
+    }, [fetchGroups, groups.length]);
 
     const getGroupIcon = (uid:any) => {
         switch (uid) {

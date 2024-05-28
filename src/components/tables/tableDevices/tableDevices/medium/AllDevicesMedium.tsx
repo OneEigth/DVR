@@ -39,6 +39,7 @@ const AllDevicesMedium: React.FC<AllDevicesMediumProps> = ({searchText}) => {
                 UID: device.UID,
                 DID: device.DID,
                 groupUID: device.groupUID,
+                groupName:device.groupName,
                 name: device.name,
                 description: device.description,
                 model: device.model,
@@ -48,7 +49,8 @@ const AllDevicesMedium: React.FC<AllDevicesMediumProps> = ({searchText}) => {
                 battery_percent: device.battery_percent,
                 ownerUID: device.ownerUID,
                 online: device.online,
-                connectState: device.connectState,
+                connectionState: device.connectionState,
+                memory:device.memory,
             }));
         } else {
             formattedDevices = devicesByStore.map(device => ({
@@ -56,6 +58,7 @@ const AllDevicesMedium: React.FC<AllDevicesMediumProps> = ({searchText}) => {
                 UID: device.UID,
                 DID: device.DID,
                 groupUID: device.groupUID,
+                groupName:device.groupName,
                 name: device.name,
                 description: device.description,
                 model: device.model,
@@ -65,7 +68,8 @@ const AllDevicesMedium: React.FC<AllDevicesMediumProps> = ({searchText}) => {
                 battery_percent: device.battery_percent,
                 ownerUID: device.ownerUID,
                 online: device.online,
-                connectState: device.connectState,
+                connectionState: device.connectionState,
+                memory:device.memory,
             }));
         }
         setDeviceData(formattedDevices);
@@ -75,7 +79,7 @@ const AllDevicesMedium: React.FC<AllDevicesMediumProps> = ({searchText}) => {
         device.name.toLowerCase().includes(searchText.toLowerCase()) ||
         device.description.toLowerCase().includes(searchText.toLowerCase()) ||
         device.model.toLowerCase().includes(searchText.toLowerCase()) ||
-        device.groupUID.toLowerCase().includes(searchText.toLowerCase()) ||
+        device.groupName.toLowerCase().includes(searchText.toLowerCase()) ||
         device.DID.toLowerCase().includes(searchText.toLowerCase())
     );
 

@@ -6,8 +6,13 @@
     margin: 0;
     transition: right 0.3s ease; /* Анимация смещения */
     z-index: 1000;
+    height: 70vh;
 }
 
+
+.modalSettingGroup .ant-modal{
+    height: 100vh;
+}
 button.ant-modal-close {
     position: fixed;
     left: 20px; /* Установите отступ слева */
@@ -34,6 +39,7 @@ button.ant-modal-close {
     height: 64px;
     display: flex;
     justify-content: center;
+
 }
 
 .closeBut{
@@ -89,6 +95,7 @@ button.ant-modal-close {
 .menuSetting{
     background: #FFFFFF;
     margin: 24px 24px;
+    height: 80vh;
 }
 
 .SettingGroupMenu{
@@ -97,7 +104,7 @@ button.ant-modal-close {
 }
 
 .SettingGroupMenu .ant-menu-submenu{
-    width: 375px;
+    width: 370px;
 
 }
 
@@ -106,12 +113,28 @@ button.ant-modal-close {
     display: none;
 }
 
-
-
-
-
-
 .editGroup{
     display: flex;
     flex-direction: row;
+    width: 100%;
+}
+ .button_EG .ant-btn{
+    width: 32px!important;
+    height: 32px!important;
+}
+
+ .input_EG{
+     width: 100%;
+ }
+
+.input_EG:hover {
+    border-color: #AFBBC3;
+}
+
+.input_EG::shadow{
+    box-shadow: #4D4E6540;
+}
+
+.input_EG:focus, .input_EG:focus-within {
+    border-color: #4D4E65; /* Цвет границы при фокусировке и при наличии фокуса внутри .input */
 }

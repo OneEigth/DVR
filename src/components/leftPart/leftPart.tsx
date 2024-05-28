@@ -31,8 +31,10 @@ const LeftPart: React.FC= () => {
     }
 
     useEffect(() => {
-        fetchGroups();
-    }, []);
+        if (groups.length === 0) {
+            fetchGroups();
+        }
+    }, [fetchGroups, groups.length]);
 
      const getGroupIcon = (uid:any) => {
         switch (uid) {

@@ -12,7 +12,7 @@ export const POST_DELETE_GROUP_URL= `${URL}/group/delete`
 
 //Device
 export const API_URL = `${URL}/device/get_by/all`;
-export const API_DEVICE_BY_GROUP =(groupUID: string) => `${URL}/device/${groupUID}/1/10`
+export const API_DEVICE_BY_GROUP =(groupUID: string) => `${URL}/device/${groupUID}/1/30`
 export const POST_DELETE_DEVICE_URL= `${URL}/device/delete_array`
 export const POST_CREATE_DEVICE_URL=`${URL}/device/insert`;
 export const POST_GROUP_EDIT_DEVICE_URL=`${URL}/device/regroup_array`;

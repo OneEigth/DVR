@@ -22,8 +22,10 @@ const NewGroupModal: React.FC<NewGroupModalProps> = ({ visible, onOk, onCancel }
     const { user, SmartDVRToken } = useAuthStore();
 
     useEffect(() => {
-        fetchGroups();
-    }, [fetchGroups]);
+        if (groups.length === 0) {
+            fetchGroups();
+        }
+    }, [fetchGroups, groups.length]);
 
     const getAllSubGroups = (group: Group): Group[] => {
         const subGroups: Group[] = [];
