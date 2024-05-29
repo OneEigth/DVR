@@ -1,9 +1,10 @@
 import React from 'react';
 
 
-interface IconMapMenuProps extends React.SVGProps<SVGSVGElement> {}
-const IconMapMenu: React.FC<IconMapMenuProps> = (props) => (
-    <svg width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg"{...props}>
+interface IconUserMenuProps extends React.SVGProps<SVGSVGElement> {}
+const IconUserMenu: React.FC = () => (
+    <svg className="icon-main-menu" width="15" height="14" viewBox="0 0 15 14" fill="none"
+         xmlns="http://www.w3.org/2000/svg">
         <path fill-rule="evenodd" clip-rule="evenodd"
               d="M6.99289 8.82678L7.95508 8.16699L8.91726 8.82678L7.95508 10.23L6.99289 8.82678ZM8.632 7.06312C8.26962
               7.70828 7.95508 8.16699 7.95508 8.16699C7.95508 8.16699 7.64053 7.70828 7.27815 7.06312C6.78577 6.18653
@@ -21,8 +22,8 @@ const IconMapMenu: React.FC<IconMapMenuProps> = (props) => (
               9.33366ZM7.95508 4.95866C8.43833 4.95866 8.83008 4.56691 8.83008 4.08366C8.83008 3.60041 8.43833 3.20866
               7.95508 3.20866C7.47183 3.20866 7.08008 3.60041 7.08008 4.08366C7.08008 4.56691 7.47183 4.95866 7.95508
               4.95866Z"
-              fill="white"/>
+              />
     </svg>
 );
 
-export default IconMapMenu;
+export default IconUserMenu;

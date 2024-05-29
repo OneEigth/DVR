@@ -10,6 +10,10 @@ import 'leaflet/dist/leaflet.css';
 import ProtectedRoute from "./components/protectedRoute/ProtectedRoute";
 import PublicRoute from "./components/publicRoute/publicRoute";
 import Layouts from "./pages/layouts/Layouts";
+import Users from "./pages/users/users";
+import Reports from "./pages/reports/Reports";
+import Archive from "./pages/archive/Archive";
+import Map from "./pages/map/Map";
 
 
 const router = createBrowserRouter([
@@ -32,6 +36,22 @@ const router = createBrowserRouter([
     {
         path: '/layouts',
         element: <ProtectedRoute element={<Layouts />} />,
+    },
+    {
+        path: '/map',
+        element: <ProtectedRoute element={<Map />} />,
+    },
+    {
+        path: '/archive',
+        element: <ProtectedRoute element={<Archive />} />,
+    },
+    {
+        path: '/users',
+        element: <ProtectedRoute element={<Users />} />,
+    },
+    {
+        path: '/reports',
+        element: <ProtectedRoute element={<Reports />} />,
     },
     {
         path: '/settings',

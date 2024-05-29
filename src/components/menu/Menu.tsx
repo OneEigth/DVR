@@ -6,6 +6,13 @@ import logo from './Logo.png';
 import ButtonLogOut from "../buttons/buttonLogOut/ButtonLogOut";
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/auth/auth';
+import IconLayoutMenu from "../icons/iconMainMenu/IconLayoutMenu";
+import IconAllCamsMenu from "../icons/iconMainMenu/IconAllCamsMenu";
+import IconMapMenu from "../icons/iconMainMenu/IconMapMenu";
+import IconArchiveMenu from "../icons/iconMainMenu/IconArchiveMenu";
+import IconUserMenu from "../icons/iconMainMenu/IconUserMenu";
+import IconReportsMenu from "../icons/iconMainMenu/IconReportsMenu";
+import IconSettingMenu from "../icons/iconMainMenu/IconSettingMenu";
 
 interface MenuItem {
     label: string;
@@ -29,19 +36,43 @@ const items: MenuItem[] = [
     {
         label: 'Раскладки',
         key: 'layouts',
-        icon: <IconMainMenu />,
+        icon: <IconLayoutMenu />,
         className: "menu-item"
     },
     {
         label: 'Все камеры',
         key: 'allCams',
-        icon: <IconMainMenu />,
+        icon: <IconAllCamsMenu />,
+        className: "menu-item"
+    },
+    {
+        label: 'Карты',
+        key: 'map',
+        icon: <IconMapMenu />,
+        className: "menu-item"
+    },
+    {
+        label: 'Архив',
+        key: 'archive',
+        icon: <IconArchiveMenu />,
+        className: "menu-item"
+    },
+    {
+        label: 'Пользователи',
+        key: 'users',
+        icon: <IconUserMenu />,
+        className: "menu-item"
+    },
+    {
+        label: 'Отчёты',
+        key: 'reports',
+        icon: <IconReportsMenu />,
         className: "menu-item"
     },
     {
         label: 'Настройка',
         key: 'settings',
-        icon: <IconMainMenu />,
+        icon: <IconSettingMenu />,
         className: "menu-item"
     }
 ];
@@ -51,16 +82,22 @@ const MainMenu: React.FC<MainMenuProps> = ({ onClick, currentMenuItem }) => {
     const { logout } = useAuthStore();
 
     const handleClick = ({ key }: { key: string }) => {
-        onClick(key);
-        if (key === 'main') {
-            navigate('/main'); // Навигация на страницу /main при клике на "Главное"
-        } else if (key === 'allCams') {
-            navigate('/allcams'); // Навигация на страницу /allcams при клике на "Все камеры"
-        } else if (key === 'settings') {
-            navigate('/settings'); // Навигация на страницу /settings при клике на "Настройки"
-        }else if (key === 'layouts') {
-            navigate('/layouts'); // Навигация на страницу /settings при клике на "Настройки"
+        const routes: { [key: string]: string } = {
+            main: '/main',
+            layouts: '/layouts',
+            allCams: '/allcams',
+            map:'/map',
+            archive:'/archive',
+            users:'/users',
+            reports:'/reports',
+            settings: '/settings'
+        };
+
+        const path = routes[key];
+        if (path) {
+            navigate(path);
         }
+        onClick(key);
     };
 
     const handleLogout = () => {

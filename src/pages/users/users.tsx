@@ -1,25 +1,43 @@
-import React from 'react';
-import TableUsers from "../../components/tables/tableUsers/TableUsers";
-import TableAdmins from "../../components/tables/tableAdmins/TableAdmins";
-import TableOperators from "../../components/tables/tableOperators/TableOperators";
-import TableFileDeviceDB from "../../components/tables/tableFileDeviceDB/TableFileDeviceFromDB";
-import TableDevices from "../../components/tables/tableDevices/TableDevices";
+import React, { useState } from 'react';
+import MainMenu from "../../components/menu/Menu";
+import {useSelectedDevice} from "../../store/devices/SelectedDevice";
+import {Layout} from "antd";
 
-const Users = () => {
+
+
+const { Header, Sider, Content, Footer } = Layout;
+
+const Users: React.FC = () => {
+    const [currentMenuItem, setCurrentMenuItem] = useState('users');
+    const{selectedDevice}=useSelectedDevice();
+
+    const handleMenuClick = (key: string) => {
+        setCurrentMenuItem(key);
+    };
+
     return (
-        <div>
-            <h3> Список файлов устройств ранее загруженных в Базу </h3>
-            <TableFileDeviceDB/>
-            <h3> Пользователи </h3>
-            <TableUsers/>
-            <h3> Администраторы </h3>
-            <TableAdmins/>
-            <h3> Операторы </h3>
-            <TableOperators/>
-            <h3> Видеокамеры </h3>
-            <TableDevices/>
-        </div>
-    );
-};
+        <Layout>
+            <Header style={{
+                position: 'sticky',
+                top: 0,
+                zIndex: 1,
+                width: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                paddingLeft:0,
+                paddingRight:0
+            }}>
+                <div className="menu">
+                    <MainMenu onClick={handleMenuClick} currentMenuItem={currentMenuItem}/>
+                </div>
+            </Header>
+            <Layout>
+                <Content  style={{ overflowX: 'auto', background:'#ffffff' }}>
+
+                </Content >
+            </Layout>
+        </Layout>
+    );};
+
 
 export default Users;

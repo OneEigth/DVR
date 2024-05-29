@@ -28,24 +28,11 @@ const Layouts: React.FC = () => {
                 paddingRight: 0
             }}>
                 <div className="menu">
-                    <MainMenu onClick={handleMenuClick} currentMenuItem={''} />
+                    <MainMenu onClick={handleMenuClick} currentMenuItem={currentMenuItem} />
                 </div>
             </Header>
 
             <Layout>
-                <Sider width="264px"
-                       style={{
-                           height: '100%',
-                           position: 'sticky',
-                           left: 0,
-                           top: 0,
-                           bottom: 0,
-                           zIndex: 0
-                       }}>
-                    <div className="LeftSideMenu">
-                        <LeftPart />
-                    </div>
-                </Sider>
 
                 <Layout>
                     <Content style={{
@@ -65,7 +52,8 @@ const Layouts: React.FC = () => {
                         paddingRight: 0,
                         background: "blue",
                         position: 'relative',
-                        bottom: 0
+                        bottom: 0,
+                        backgroundColor:'#ffffff'
                     }}>
                         {/* Ваш футер здесь */}
                     </Footer>
