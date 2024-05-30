@@ -1,8 +1,9 @@
-.LeftPartSideMenu{
+.SM_container{
     width: 264px;
+position: fixed;
 }
 
-.buttonMenu{
+.SM_buttons{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -14,16 +15,12 @@
     margin-right: 12px;
 }
 
-.bm_1{
-    display: flex;
-    flex-direction: row;
-}
-.bm_2{
+.SM_bm_1{
     display: flex;
     flex-direction: row;
 }
 
-.group_h1{
+.SM_group_h1{
     width: 82px;
     height: 32px;
     font-family: Roboto, sans-serif;
@@ -35,7 +32,7 @@
     margin-top: 0;
 }
 
-.count_h1{
+.SM_count_h1{
     display: flex;
     justify-content: center;
     width: 43px;
@@ -51,60 +48,63 @@
     margin-top: 0;
 }
 
+.SM_bm_2{
+    display: flex;
+    flex-direction: row;
+}
 
-
-
-.Search{
+.SM_Search{
     display: flex;
     flex-direction: row;
     justify-content: start;
     align-items: center;
 }
 
-.Search_input {
+.SM_Search_input {
     width: auto;
     margin-right: 12px;
     margin-left: 12px;
     margin-top: 12px;
 }
-.Search_input:focus, .Search_input:focus-within {
+.SM_Search_input:focus, .SM_Search_input:focus-within {
     border-color: #4D4E65; /* Цвет границы при фокусировке и при наличии фокуса внутри .input */
 }
 
-.Search_input:hover {
-     border-color: #AFBBC3;
+.SM_Search_input:hover {
+    border-color: #AFBBC3;
 }
 
-.Search_input::shadow{
+.SM_Search_input::shadow{
     box-shadow: #4D4E6540;
 }
 
 
+.SM_menu{
+    font-family: Roboto, sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 20px;
+    letter-spacing: 0.25px;
+    text-align: left;
+    color: #4D4E65 !important;
+    background: #F1F1F1 ;
+}
+
+.SM_menu .ant-menu-submenu-title{
+    font-family: Roboto, sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 20px;
+    letter-spacing: 0.25px;
+    text-align: left;
+    margin: 0;
+    width: 100%;
 
 
+}
 
+.SM_menu .ant-menu-submenu-title:hover{
+    width: 100%;
+    margin: 0;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}

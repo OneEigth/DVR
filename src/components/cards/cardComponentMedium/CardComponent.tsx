@@ -49,7 +49,7 @@ const CardComponent: React.FC<CardComponentProps> = ({file, handleViewVideo}) =>
                     {file.name}
                 </h1>
                 <div className="propertyGroup">
-                    <h3 className="property">Группа {file.groupUID}</h3>
+                    <h3 className="property">Группа {file.groupName}</h3>
                     <h3 className="property">Модель {file.model}</h3>
                     <h3 className="property">Серийный номер {file.DID}</h3>
                     <h3 className="property">Сотрудник {file.ownerUID}</h3>

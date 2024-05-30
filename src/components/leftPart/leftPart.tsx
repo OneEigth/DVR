@@ -3,7 +3,6 @@ import {SearchOutlined} from '@ant-design/icons';
 import {ConfigProvider, Input, Menu} from 'antd';
 import './style/style.css'
 
-import SubMenu from "antd/es/menu/SubMenu";
 import IconLeftMenuDevice from "../icons/iconLeftMenu/IconLeftMenuDevice";
 import IconLeftMenuUnsorded from "../icons/iconLeftMenu/IconLeftMenuUnsorded";
 import ButtonAddPlus from "../buttons/buttonAddPlus/ButtonAddPlus";
@@ -13,6 +12,10 @@ import SettingGroupModal from "../modals/settingsGroup/SettingGroupModal";
 import {useSelectedGroup} from "../../store/groups/SelectedGroup";
 import {useGroupsStore} from '../../store/groups/Groups'
 import ButtonAllDevices from "../buttons/buttonAllDevices/ButtonAllDevices";
+import {Group} from "../../types/Group";
+
+
+const { SubMenu } = Menu;
 
 const LeftPart: React.FC= () => {
     const [stateOpenKeys, setStateOpenKeys] = useState(['2', '23']);
@@ -86,17 +89,55 @@ const LeftPart: React.FC= () => {
         return groupMatches || subGroupMatches;
     });
 
+    const getAllSubGroups = (group: Group): Group[] => {
+        const subGroups: Group[] = [];
+        group.sub_groups.forEach(subGroup => {
+            subGroups.push(subGroup);
+            if (subGroup.sub_groups) {
+                subGroups.push(...getAllSubGroups(subGroup));
+            }
+        });
+        return subGroups;
+    };
+
+    // Объединяем группы и подгруппы в один массив
+    const allGroups: Group[] = [];
+    groups.forEach(group => {
+        allGroups.push(group);
+        if (group.sub_groups) {
+            allGroups.push(...getAllSubGroups(group));
+        }
+
+    });
+
+    //Рекурсивная функция для генерации подменю, чтобы обрабатывать любые уровни вложенности подгрупп.
+    const generateSubMenu = (group: Group): React.ReactNode => {
+        return (
+            <SubMenu
+                key={group.uid}
+                title={group.name}
+                icon={getGroupIcon(group.uid)}
+                onTitleClick={() => handleGroupClick(group.uid)}
+                className="custom-selected-item" // Добавление класса
+            >
+                {group.sub_groups.map((subgroup) => generateSubMenu(subgroup))}
+            </SubMenu>
+        );
+    }
+
     return (
             <div className="LeftPartSideMenu">
+
                 <div className="buttonMenu">
                     <div className="bm_1">
                     <h1 className="group_h1">Группы</h1>
-                    <h1 className="count_h1">({groups.length})</h1>
-                    </div>
+                    <h1 className="count_h1">({allGroups.length})</h1>
+                </div>
                     <div className="bm_2">
-                    <ButtonAddPlus onClick={showModalNewGroup}/>
+                        <ButtonAddPlus onClick={showModalNewGroup}/>
                     </div>
                 </div>
+
                 <div className="Search">
                     <Input
                         placeholder={"Поиск"}
@@ -107,20 +148,24 @@ const LeftPart: React.FC= () => {
                     />
                     <ButtonSettingGroup onClick={showModalSettingGroup}/>
                 </div>
+
                 <div className="alldeviceButton">
                     <ButtonAllDevices onClick={handleAllDevices}/>
                 </div>
 
                 <div>
-                    <ConfigProvider
+                   {/* <ConfigProvider
                         theme={{
                             components: {
                                 Menu: {
                                     lineType: 'none',
                                     motionDurationSlow: '0.2',
                                     iconMarginInlineEnd: 15,
+                                    itemSelectedBg:'#ffffff',
+                                    subMenuItemBg:'#F1F1F1',
+                                    itemActiveBg:'#D3DADF',
                                     itemHoverBg:'#D3DADF',
-                                    subMenuItemBg:'#F1F1F1'
+
                                 },
                             },
                             token: {
@@ -133,20 +178,29 @@ const LeftPart: React.FC= () => {
                             triggerSubMenuAction="click"
                             mode="inline"
                             openKeys={stateOpenKeys}
+                            defaultSelectedKeys={['1']}
                             onOpenChange={(keys) => setStateOpenKeys(keys as string[])} // Приведение типа, если необходимо
-
-                            style={{ width: '234px' }}
                         >
-                                {filteredGroups.filter(group => group.uid !== '00000000-0000-0000-0000-000000000003').map((group) => (
-                                <SubMenu key={group.uid} title={group.name} icon={getGroupIcon(group.uid)}  onTitleClick={() => handleGroupClick(group.uid)}>
-                                    {group.sub_groups.map((subgroup) => (
-                                        <SubMenu key={subgroup.uid} title={subgroup.name} icon={<IconLeftMenuDevice/>} onTitleClick={() => handleGroupClick(subgroup.uid)}/>
-                                    ))}
-                                </SubMenu>
-                            ))}
+                            {filteredGroups
+                                .filter(group => group.uid !== '00000000-0000-0000-0000-000000000003')
+                                .map((group) => generateSubMenu(group))}
                         </Menu>
-                    </ConfigProvider>
+                    </ConfigProvider>*/}
+
+
+                    <Menu
+
+                        mode="vertical"
+                    >
+                        {filteredGroups
+                            .filter(group => group.uid !== '00000000-0000-0000-0000-000000000003')
+                            .map((group) => generateSubMenu(group))}
+                    </Menu>
+
+
                 </div>
+
+
                 <NewGroupModal
                     visible={isModalNewGroupOpen}
                     onOk={handleOkNewGroupModal}

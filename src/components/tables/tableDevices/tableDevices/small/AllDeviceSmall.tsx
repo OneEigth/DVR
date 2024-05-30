@@ -16,6 +16,7 @@ import {useSelectedRowKeys} from "../../../../../store/devices/useSelectedRowKey
 import {useButtonsFromAllcams} from "../../../../../store/devices/useButtonsFromAllcams";
 import IconOnline from "../../../../icons/iconOnline/IconOnline";
 import IconOffline from "../../../../icons/iconOffline/IconOffline";
+import {useSelectedDeviceCount} from "../../../../../store/devices/useSelectedDevices";
 
 
 interface AllDevicesSmallProps {
@@ -34,6 +35,8 @@ const AllDevicesSmall: React.FC<AllDevicesSmallProps> = ({ searchText}) => {
     const {isDeviceAdded,setIsDeviceAdded} = useIsDeviceAdded();
     const {isDeleteDeviceModal, setIsDeleteDeviceModal} = useButtonsFromAllcams();
     const {isEditDeviceGroupModal, setIsEditDeviceGroupModal} =useButtonsFromAllcams();
+    const {selectedDeviceCount,setSelectedDeviceCount}=useSelectedDeviceCount();
+    const [filteredDevices, setFilteredDevices] = useState<Device[]>([]);
 
 
     const handleDeviceClick = (device: Device) => {
@@ -41,7 +44,7 @@ const AllDevicesSmall: React.FC<AllDevicesSmallProps> = ({ searchText}) => {
         setSelectedDevice(device);
     };
 
-    console.log("AllDeviceSmall ",isDeviceAdded);
+
 
 
     useEffect(() => {
@@ -136,14 +139,20 @@ const AllDevicesSmall: React.FC<AllDevicesSmallProps> = ({ searchText}) => {
         console.log("allDevice ", isDeleteDeviceModal)
     };
 
+    useEffect(() => {
     // Фильтрация устройств на основе текста поиска
-    const filteredDevices = deviceData.filter(device =>
+    const filtered = deviceData.filter(device =>
         device.name.toLowerCase().includes(searchText.toLowerCase()) ||
         device.description.toLowerCase().includes(searchText.toLowerCase()) ||
         device.model.toLowerCase().includes(searchText.toLowerCase()) ||
         device.groupName.toLowerCase().includes(searchText.toLowerCase()) ||
         device.DID.toLowerCase().includes(searchText.toLowerCase())
     );
+        setFilteredDevices(filtered)
+        setSelectedDeviceCount(filteredDevices.length);
+
+    }, [searchText, deviceData, setSelectedDeviceCount, filteredDevices]);
+
 
     const columns:TableColumnsType<Device> = [
         {

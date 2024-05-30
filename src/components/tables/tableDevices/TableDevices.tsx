@@ -1,8 +1,5 @@
 import React, { useState} from 'react';
-
-import {useDevicesStore} from '../../../store/devices/allDevices';
 import './style/style.css'
-
 import Buttonsfilter from "../../buttons/buttonFilter/Buttonsfilter";
 import 'leaflet/dist/leaflet.css';
 
@@ -13,25 +10,19 @@ import ButtonAddPlus from "../../buttons/buttonAddPlus/ButtonAddPlus";
 import NewDeviceModal from "../../modals/newDevice/NewDeviceModal";
 import {SearchOutlined} from "@ant-design/icons";
 import {Input} from "antd";
+import {useSelectedDeviceCount} from "../../../store/devices/useSelectedDevices";
 
 
 const TableDevices: React.FC = () => {
-    const {devices, fetchDevices} = useDevicesStore(); // Получаем список устройств и метод для загрузки
     const [activeDeviceSize, setActiveDeviceSize] = useState<'small' | 'medium' | 'big'>('small');
-    const [selectedUID, setSelectedUID] = useState<string>();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [searchText, setSearchText] = useState('');
-
+    const {selectedDeviceCount}=useSelectedDeviceCount()
 
 
     const handleFilterButtonClick = (size: 'small' | 'medium' | 'big') => {
         setActiveDeviceSize(size);
     };
-
-    const handleSelectDevice = (UID: string) => {
-        setSelectedUID(UID);
-    };
-
 
     const showModal = () => {
         setIsModalOpen(true);
@@ -52,7 +43,7 @@ const TableDevices: React.FC = () => {
                 <div className="toolBar">
                     <div className="leftSide">
                         <h1 className="device_h1">Устройства</h1>
-                        <h1 className="count_h1">({devices.length})</h1>
+                        <h1 className="count_h1">({selectedDeviceCount})</h1>
                         <ButtonAddPlus onClick={showModal}/>
                     </div>
 

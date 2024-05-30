@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import MainMenu from "../../components/menu/Menu";
-import LeftPart from "../../components/leftPart/leftPart";
 import './style/style.css'
 import TableDevices from "../../components/tables/tableDevices/TableDevices";
 import { Layout } from 'antd';
@@ -9,6 +8,7 @@ import ButtonLeftMenuFooterEdit from "../../components/buttons/buttonLeftMenu/Bu
 import ButtonLeftMenuFooterDelete from "../../components/buttons/buttonLeftMenu/ButtonLeftMenuFooterDelete";
 import {useSelectedRowKeys} from "../../store/devices/useSelectedRowKeys";
 import {useButtonsFromAllcams} from "../../store/devices/useButtonsFromAllcams";
+import SideMenu from "../../components/sideMenu/SideMenu";
 
 const { Header, Sider, Content, Footer } = Layout;
 
@@ -47,9 +47,9 @@ const AllCams: React.FC = () => {
             </div>
         </Header>
         <Layout>
-             <Sider width="264px" style={{ width:'264px', height: '100%', position: 'sticky', left: 0, top: 0, bottom: 0 }}>
-                <div className="LeftSideMenu">
-                    <LeftPart/>
+             <Sider width="264px" style={{ width:'264px', height: '100vh', position: 'sticky', left: 0, top: 0, bottom: 0, backgroundColor:'#F1F1F1'}}>
+                <div className="SideMenu">
+                    <SideMenu/>
                 </div>
             </Sider>
             <Layout>

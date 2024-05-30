@@ -21,6 +21,7 @@ const NewGroupModal: React.FC<NewGroupModalProps> = ({ visible, onOk, onCancel }
     const [parentUid, setParentUid] = useState<string | undefined>('00000000-0000-0000-0000-000000000001'); // Состояние для выбранной группы
     const { user, SmartDVRToken } = useAuthStore();
 
+
     useEffect(() => {
         if (groups.length === 0) {
             fetchGroups();
@@ -45,7 +46,9 @@ const NewGroupModal: React.FC<NewGroupModalProps> = ({ visible, onOk, onCancel }
         if (group.sub_groups) {
             allGroups.push(...getAllSubGroups(group));
         }
+
     });
+
 
     const handleParentUidChange = (value: string) => {
         setParentUid(value);
@@ -53,6 +56,8 @@ const NewGroupModal: React.FC<NewGroupModalProps> = ({ visible, onOk, onCancel }
     const handleGroupNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setGroupName(e.target.value);
     };
+
+
 
     const handleOk = () => {
         if (groupName && parentUid && user) {
