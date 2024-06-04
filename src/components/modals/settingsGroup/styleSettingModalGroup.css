@@ -98,34 +98,92 @@ button.ant-modal-close {
     height: 80vh;
 }
 
-.SettingGroupMenu{
+.SettingGroupMenu.ant-menu-item{
+    background: #FFFFFF;
+   }
 
+.SettingGroupMenu .ant-menu-submenu-title {
+    background: #FFFFFF;
     width: 100%;
 }
 
-.SettingGroupMenu .ant-menu-submenu{
-    width: 370px;
+/* Ensure the top-level menu items (groups) have no left padding */
+.SettingGroupMenu > .ant-menu-item,
+.SettingGroupMenu > .ant-menu-submenu > .ant-menu-submenu-title {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+/* Ensure the submenu items (subgroups) have 24px left padding */
+.SettingGroupMenu .ant-menu-sub.ant-menu-inline > .ant-menu-item,
+.SettingGroupMenu .ant-menu-sub.ant-menu-inline > .ant-menu-submenu > .ant-menu-submenu-title {
+    padding-left: 24px !important;
+    padding-right: 0;
 
 }
 
 
-.ant-menu-submenu-arrow{
+.SettingGroupMenu .ant-menu-submenu-title:hover{
+    padding-right: 8px!important;
+    border-radius: 0;
+}
+
+.menu-item-content {
+
+    position: relative;
+    padding: 4px 12px;
+
+   }
+
+.menu-item-buttons {
     display: none;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
-.editGroup{
+
+.menu-item-content:hover .menu-item-buttons {
     display: flex;
-    flex-direction: row;
-    width: 100%;
 }
+
+.menu-item-buttons .ant-btn {
+    margin-left: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 24px;
+    height: 24px;
+}
+
+.editGroup {
+    display: flex;
+    align-items: end;
+    width: 100%!important;
+}
+
+.input_EG {
+    flex-grow: 1!important;
+    
+}
+
+.button_EG {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-color: #4D4E65;
+    width: 32px;
+    height: 32px;
+    padding-left: 7px;
+    padding-right: 7px;
+}
+
  .button_EG .ant-btn{
     width: 32px!important;
     height: 32px!important;
 }
-
- .input_EG{
-     width: 100%;
- }
 
 .input_EG:hover {
     border-color: #AFBBC3;

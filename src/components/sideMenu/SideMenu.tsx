@@ -1,10 +1,10 @@
-import React, {ReactNode, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useGroupsStore} from "../../store/groups/Groups";
 import {useSelectedGroup} from "../../store/groups/SelectedGroup";
 import IconLeftMenuUnsorded from "../icons/iconLeftMenu/IconLeftMenuUnsorded";
 import IconLeftMenuDevice from "../icons/iconLeftMenu/IconLeftMenuDevice";
 import {Group} from "../../types/Group";
-import {ConfigProvider, GetProp, Input, Menu, MenuProps, SubMenuProps} from "antd";
+import {ConfigProvider,Input, Menu} from "antd";
 import ButtonAddPlus from "../buttons/buttonAddPlus/ButtonAddPlus";
 import {SearchOutlined,DownOutlined, UpOutlined} from "@ant-design/icons";
 import ButtonSettingGroup from "../buttons/buttonSettingGroup/ButtonSettingGroup";
@@ -30,13 +30,11 @@ const SideMenu: React.FC= () => {
         const groupUID='00000000-0000-0000-0000-000000000003';
         setSelectedGroup(groupUID)
     }
-
     useEffect(() => {
         if (groups.length === 0) {
             fetchGroups();
         }
     }, [fetchGroups, groups.length]);
-
     const getGroupIcon = (uid:any) => {
         switch (uid) {
             case '00000000-0000-0000-0000-000000000002':
@@ -45,7 +43,6 @@ const SideMenu: React.FC= () => {
                 return <IconLeftMenuDevice />; // Иконка по умолчанию
         }
     };
-
     const showModalNewGroup = () => {
         setIsModalNewGroupOpen(true);
     };
@@ -59,12 +56,10 @@ const SideMenu: React.FC= () => {
     const handleCancelNewGroupModal = () => {
         setIsModalNewGroupOpen(false);
     };
-
     const handleOkSettingGroupModal = () => {
         setIsModalSettingGroupOpen(false);
         fetchGroups();
     };
-
     const handleCancelSettingGroupModal = () => {
         setIsModalSettingGroupOpen(false);
     };
@@ -74,7 +69,6 @@ const SideMenu: React.FC= () => {
         if (b.uid === '00000000-0000-0000-0000-000000000002') return 1;
         return 0;
     });
-
     const filteredGroups = sortedGroups.filter(group => {
         if (searchText.trim() === '') return true;
         const groupMatches = group.name.toLowerCase().includes(searchText.toLowerCase());
@@ -83,7 +77,6 @@ const SideMenu: React.FC= () => {
         );
         return groupMatches || subGroupMatches;
     });
-
     const getAllSubGroups = (group: Group): Group[] => {
         const subGroups: Group[] = [];
         group.sub_groups.forEach(subGroup => {
@@ -94,7 +87,6 @@ const SideMenu: React.FC= () => {
         });
         return subGroups;
     };
-
     // Объединяем группы и подгруппы в один массив
     const allGroups: Group[] = [];
     groups.forEach(group => {
@@ -104,8 +96,6 @@ const SideMenu: React.FC= () => {
         }
 
     });
-
-
     //Рекурсивная функция для генерации подменю, чтобы обрабатывать любые уровни вложенности подгрупп.
     const generateSubMenu = (group: Group): React.ReactNode => {
         const isSelected = selectedGroup === group.uid;
@@ -131,7 +121,6 @@ const SideMenu: React.FC= () => {
             </SubMenu>
         );
     }
-
     const handleOpenChange = (keys: string[]) => {
         setOpenKeys(keys);
     };
