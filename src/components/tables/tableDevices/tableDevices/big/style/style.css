@@ -28,6 +28,7 @@
 .propertiesBig {
     padding: 16px;
     transition: width 0.3s ease;
+    background: #F1F1F1;
 }
 
 .propertiesBig h1 {

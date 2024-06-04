@@ -1,12 +1,11 @@
 
-.modalSettingGroup {
-    position: fixed;
-    top: 0;
-    right: -400px; /* Скрыть модальное окно за правой границей */
-    margin: 0;
-    transition: right 0.3s ease; /* Анимация смещения */
-    z-index: 1000;
-    height: 70vh;
+.modalSettingGroup .ant-drawer-header{
+    background: #E8EBED;
+    border:0;
+}
+.modalSettingGroup .ant-drawer-footer{
+
+    border:0;
 }
 
 

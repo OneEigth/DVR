@@ -178,7 +178,6 @@ const SideMenu: React.FC= () => {
                     expandIcon={false}
                     openKeys={openKeys}
                     onOpenChange={handleOpenChange}
-
                 >
                     {filteredGroups
                         .filter(group => group.uid !== '00000000-0000-0000-0000-000000000003')

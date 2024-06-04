@@ -31,15 +31,13 @@ const CardComponent: React.FC<CardComponentProps> = ({file, handleViewVideo}) =>
     };
 
     return (
-        <div className="containerCardBig">
+        <div className="containerCardBig" onClick={() => handleDeviceClick(file.UID)}>
             <div className="coverBig">
                 <Card
                     className="coverCardBig"
                     key={file.ID}
-                    hoverable
                     cover={<img alt={''} src={VIDEO_PREVIEW_URL(file.UID,SmartDVRToken)} style={{ borderRadius: 0 }}/>}
                     onError={handleError}
-                    onClick={() => handleDeviceClick(file.UID)}
                 />
             </div>
             <div className="propertiesBig">

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Button, ConfigProvider, Input, Menu, Modal} from 'antd';
+import {Button, ConfigProvider, Drawer, Input, Menu, Modal} from 'antd';
 import './styleSettingModalGroup.css'
 import {useGroupsStore} from "../../../store/groups/Groups";
 import SubMenu from "antd/es/menu/SubMenu";
@@ -191,16 +191,19 @@ const SettingGroupModal: React.FC<SettingGroupModalProps> = ({ visible, onOk, on
                 },
             }}
         >
-            <Modal
+            <Drawer
                 className="modalSettingGroup"
                 visible={visible}
-                onCancel={onCancel}
+
                 footer={
-                    <Button
-                        className="buttonModalSetting"
-                        onClick={onOk}
-                        style={{}}
-                    >Сохранить</Button>
+                    <div style={{display: 'flex', justifyContent: 'center'}}>
+                        <Button
+                            className="buttonModalSetting"
+                            onClick={onOk}
+                        >
+                            Сохранить
+                        </Button>
+                    </div>
                 }
                 width={400}
                 style={{top: 0, right: 0, margin: 0}}
@@ -210,7 +213,7 @@ const SettingGroupModal: React.FC<SettingGroupModalProps> = ({ visible, onOk, on
                                                                               cursor: 'pointer'
                                                                           }}/>Настройка групп</span>}
                 closable={false}
-                okText={'Сохранить'}
+                /*okText={'Сохранить'}*/
                 bodyStyle={{padding: 0, height: '100%'}}
             >
                 <div className="menuSetting">
@@ -241,7 +244,7 @@ const SettingGroupModal: React.FC<SettingGroupModalProps> = ({ visible, onOk, on
                         </Menu>
                     </ConfigProvider>
                 </div>
-            </Modal>
+            </Drawer>
         </ConfigProvider>
             <DeleteModalGroup visible={isModalDeleteModalGroup}
                               group={selectedGroup}

@@ -2,7 +2,7 @@ import React from "react";
 import {Card} from 'antd';
 import {useNavigate} from 'react-router-dom';
 import '../../tables/tableDevices/tableDevices/medium/style/style.css'
-import {ONLINE_PLAY_URL, VIDEO_PREVIEW_URL} from "../../../const/const";
+import {VIDEO_PREVIEW_URL} from "../../../const/const";
 import IconOnline from "../../icons/iconOnline/IconOnline";
 import IconOffline from "../../icons/iconOffline/IconOffline";
 import {useSelectedDevice} from "../../../store/devices/SelectedDevice";
@@ -34,12 +34,12 @@ const CardComponent: React.FC<CardComponentProps> = ({file, handleViewVideo}) =>
     return (
 
         <div className="containerCard"
+            onClick={() => handleDeviceClick(file.UID)}
             style={{borderRadius:0}}>
             <Card
                 className="coverCard"
                 key={file.ID}
                 cover={<img alt="" className="img" src={VIDEO_PREVIEW_URL(file.UID,SmartDVRToken)} style={{width:340, height:192, borderRadius:0}}/>}
-                onClick={() => handleViewVideo(file.UID)}
                 onError={handleError}
                 style={{borderRadius:0}}
             />
