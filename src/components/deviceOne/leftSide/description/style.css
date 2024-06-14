@@ -120,3 +120,6 @@
     border: none!important;
     box-shadow: none!important;
 }
+.ant-form-item-required::before{
+    display: none!important;
+}

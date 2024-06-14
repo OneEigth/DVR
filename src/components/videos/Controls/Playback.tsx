@@ -11,7 +11,7 @@ interface PlaybackProps {
 }
 
 const Playback: React.FC<PlaybackProps> = ({ isPlaying, onToggle }) => (
-  <Btn /*label={isPlaying ? 'Pause' : 'Play'}*/ onClick={onToggle}>
+  <Btn label={isPlaying ? 'Pause' : 'Play'} onClick={onToggle}>
     {isPlaying ? <PauseIcon/> : <PlayIcon /> }
   </Btn>
 );

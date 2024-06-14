@@ -17,16 +17,22 @@ import { useTimeout } from '../../../src/hooks/timer-hook';
 import { useLocalStorage } from '../../../src/hooks/storage-hook';
 import { formatTime } from '../../../src/utils/format';
 import './VideoPlayer.css';
+import IconOnline from "../icons/iconOnline/IconOnline";
+import {useOnlineStateStream} from "../../store/devices/onlineStream";
+import {Device} from "../../types/Device";
+import device from "../../pages/device/Device";
+import IconOffline from "../icons/iconOffline/IconOffline";
 
 
 interface VideoPlayerProps {
   src: any;
   autoPlay?: boolean;
+  device:Device;
 }
 
-const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, autoPlay = true }) => {
+const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, autoPlay = true ,device}) => {
 
-
+  const {setIsStreamOnline}=useOnlineStateStream();
 
   const [displayControls, setDisplayControls] = useState(true);
   const [playbackState, setPlaybackState] = useState(false);
@@ -119,6 +125,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, autoPlay = true }) => {
 
   const videoPauseHandler = useCallback(() => {
     setPlaybackState(false);
+    const video = videoRef.current!;
+    video.pause();
     showControlsHandler();
   }, [showControlsHandler]);
 
@@ -202,6 +210,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, autoPlay = true }) => {
     }
 
     // Time
+    if (!isNaN(currentTime) && !isNaN(duration)) {
     const formattedCurrentTime = formatTime(Math.round(currentTime));
     const formattedRemainedTime = formatTime(
       Math.round(duration) - Math.round(currentTime)
@@ -209,6 +218,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, autoPlay = true }) => {
 
     setCurrentTimeUI(formattedCurrentTime);
     setRemainedTimeUI(formattedRemainedTime);
+    }
   }, []);
 
   /**
@@ -495,7 +505,9 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, autoPlay = true }) => {
    * RENDER
    */
 
-
+  const handleOnlineStream = () => {
+    setIsStreamOnline(true)
+  }
 
   return (
     <div
@@ -506,6 +518,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, autoPlay = true }) => {
       onMouseLeave={hideControlsHandler}
     >
       <video
+          className="video_Place"
         ref={videoRef}
         src={src}
         controls={false}
@@ -561,6 +574,24 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, autoPlay = true }) => {
                 onToggle={toggleMuteHandler}
                 onSeek={volumeInputHandler}
             />
+          </div>
+          <div className="vp-controls__body_center">
+            {device.online ?
+                <div className="online" onClick={handleOnlineStream}>
+                  <IconOnline/>
+                  <h1>Онлайн</h1>
+                </div>
+                :
+                <div className="online">
+                  <IconOffline/>
+                  <h1>Офлайн</h1>
+                </div>
+            }
+            {/*
+            <div className="online" onClick={handleOnlineStream}>
+              <IconOnline/>
+              <h1>Записывается аудио</h1>
+            </div>*/}
           </div>
           <div className="vp-controls__body_right">
             <Settings onToggle={toggleDropdownHandler} />

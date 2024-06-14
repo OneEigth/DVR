@@ -44,11 +44,13 @@ const AllDevicesBig: React.FC<AllDevicesBigProps> = ({searchText}) => {
                 pulse_time: device.pulse_time,
                 latitude: device.latitude,
                 longitude: device.longitude,
-                battery_percent: device.battery_percent,
+                battery_level: device.battery_level,
                 ownerUID: device.ownerUID,
                 online: device.online,
                 connectionState: device.connectionState,
                 memory:device.memory,
+                signal_level:device.signal_level,
+                storageInfo:device.storageInfo
 
             }));
         } else {
@@ -64,11 +66,13 @@ const AllDevicesBig: React.FC<AllDevicesBigProps> = ({searchText}) => {
                 pulse_time: device.pulse_time,
                 latitude: device.latitude,
                 longitude: device.longitude,
-                battery_percent: device.battery_percent,
+                battery_level: device.battery_level,
                 ownerUID: device.ownerUID,
                 online: device.online,
                 connectionState: device.connectionState, memoryAv:device.memory.available,
-                memory:device.memory
+                memory:device.memory,
+                signal_level:device.signal_level,
+                storageInfo:device.storageInfo
             }));
         }
         setDeviceData(formattedDevices);

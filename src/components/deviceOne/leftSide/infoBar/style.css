@@ -47,11 +47,18 @@
 
 }
 
+.iconSignalLow{
+    margin-right: 12px;
+}
+
 .progress{
-    padding-bottom: 8px;
+    padding-bottom: 8px!important;
     padding-left: 12px;
     padding-right: 12px;
     padding-top: 0;
+    width: 477px;
+    display: flex;
+    flex-direction: row;
 }
 
 .h1hdd{
@@ -71,9 +78,40 @@
 
 .ant-progress-outer {
     display: none;
-    margin-top: 0;
-    margin-right: 0;
+    margin-top: 0!important;
+    margin-right: 0!important;
+    margin-bottom: 0!important;
+    margin-left: 0!important;
+    padding: 0!important;
+}
+.ant-progress-text{
+    margin-top: 7px;
+}
+.hdd{
+    padding-bottom: 0;
+}
+
+.time{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.h1time{
     margin-bottom: 0;
-    margin-left: 0;
-    padding: 0;
+}
+.h1OnlineTime{
+    display: flex;
+    flex-direction: row;
+    justify-content: center!important;
+    justify-items: center!important;
+    font-family: Roboto;
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 32px;
+    text-align: left;
+    width: 100%;
+    margin-bottom: 12px!important;
+    margin-top: 0;
+
 }

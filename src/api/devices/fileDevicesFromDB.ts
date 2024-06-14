@@ -1,7 +1,16 @@
 import axios from 'axios';
-import { FILE_API_URL } from '../../const/const';
+import {URL_A} from "../../const/const";
 
-export const getFileDevicesFromDB = async (deviceUID: string, startDateTime: string, endDateTime: string, SmartDVRToken: string, userLogin: string) => {
+
+interface FileData{
+    deviceUID?:string,
+    start?:string,
+    end?:string,
+    rating?:number[],
+}
+export const getFileDevicesFromDB = async (fileData:FileData, SmartDVRToken: string, userLogin: string, page: number,pageSize: number) => {
+
+    const FILE_API_URL = `${URL_A}/media_file/filter/${page}/${pageSize}`;
 
     if (!userLogin || !SmartDVRToken) {
         console.error('User information is missing.');
@@ -11,15 +20,11 @@ export const getFileDevicesFromDB = async (deviceUID: string, startDateTime: str
     try {
         const response = await axios.post(
             FILE_API_URL,
-            {
-                deviceUID,
-                startDateTime,
-                endDateTime,
-            },
+           fileData,
             {
                 headers: {
-                    SmartDVRLogin: userLogin,
-                    SmartDVRToken: SmartDVRToken,
+                    SmartDVRLogin: SmartDVRToken,
+                    SmartDVRToken: userLogin,
                 },
             }
         );

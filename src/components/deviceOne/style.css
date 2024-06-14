@@ -1,6 +1,7 @@
 .containerDeviceOne{
     display: flex;
     flex-direction: column;
+    justify-content: start;
     height: 100vh;
     margin: 0;
     padding: 0!important;
@@ -8,20 +9,22 @@
 
 .DeviceOne {
     display: flex;
+    flex-direction: row;
+    justify-content: start;
     flex: 1;
     margin: 24px 24px;
 }
 .leftSideDeviceOne{
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: start;
     margin-right: 16px;
     padding: 0 !important;
     flex-grow: 1; /* Allow left side to grow */
 }
 
 .rightSideDeviceOne{
-    width: 480px; /* Fixed width */
+    width: 480px;
     display: flex;
     flex-direction: column;
     justify-content: start;
@@ -36,3 +39,35 @@
 .rightSideDeviceOne .MenuRs{
 
 }
+
+.L_LeftSide{
+    position: sticky!important;
+    display: flex;
+    padding-top: 24px;
+    padding-left: 24px;
+    padding-bottom: 24px;
+    background: #fff;
+    width: 100%;
+
+}
+
+.L_RightSide{
+
+    width:545px!important;
+    display: flex;
+    flex-direction: column;
+    padding-top: 24px;
+    padding-left: 16px;
+    padding-right: 24px;
+    padding-bottom: 24px;
+    background: #fff;
+    align-items: end;
+}
+
+.C_RightSide{
+
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+}
+

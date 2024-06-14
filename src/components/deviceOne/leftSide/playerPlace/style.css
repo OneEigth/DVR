@@ -3,15 +3,8 @@
     flex-direction: column;
     justify-content: start;
     width: 100%;
-
 }
 
-.Player {
-    width: 100%;
-    margin-top: 16px;
-    opacity: 1; /* Пример установки непрозрачности */
-    background-color: #FCE49C;
-}
 
 .Control{
     width: 100%;

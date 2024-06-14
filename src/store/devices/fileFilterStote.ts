@@ -1,11 +1,24 @@
 import create from "zustand";
 
-interface fileFilterStore {
-    fileFilterStore: object;
-    setFileFilterStore: (selectedFiles: any) => void;
+interface FileFilterStore {
+    fileFilterStore: {
+        dateStart: string;
+        dateEnd: string;
+        rating: string[];
+
+    };
+    setFileFilterStore: (fileFilterStore: Partial<FileFilterStore['fileFilterStore']>) => void;
 }
 
-export const useFilterFileStore = create<fileFilterStore>((set) => ({
-    fileFilterStore: [],
-    setFileFilterStore: (fileFilterStore) => set({ fileFilterStore }),
+export const useFilterFileStore = create<FileFilterStore>((set) => ({
+    fileFilterStore: {
+        dateStart: "",
+        dateEnd: "",
+        rating: [],
+
+    },
+    setFileFilterStore: (fileFilterStore) =>
+        set((state) => ({
+            fileFilterStore: { ...state.fileFilterStore, ...fileFilterStore }
+        })),
 }));

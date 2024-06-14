@@ -1,0 +1,33 @@
+.button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    background: none;
+    height: 32px;
+    padding: 0;
+    border: 0;
+    border-radius: 5px;
+    font-family: Roboto;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 20px;
+    letter-spacing: 0.25px;
+    text-align: left;
+    color: #FFFFFF!important;
+    margin: 0;
+    box-shadow: none !important;
+}
+
+
+.button:hover,
+.button:focus,
+.button:active{
+    background: none!important;
+    border: 0;
+    color: #FFFFFF!important;
+    box-shadow: none!important;
+}
+
+.IconOnline{
+    margin-right: 8px;
+}

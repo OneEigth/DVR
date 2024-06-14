@@ -12,12 +12,12 @@ const TableFileDeviceDB: React.FC = () => {
     const [gridSize, setGridSize] = useState<number>(4); // Начальное значение 4 для 2x2 раскладки
     const pageSize = gridSize * gridSize; // Количество элементов на странице
 
-    useEffect(() => {
+  /*  useEffect(() => {
         const deviceUID = 'e7727a41-d03d-3f36-b7a2-9ccf8c95dac5';
         const startDateTime = '2024-02-27T20:22:49+05:00';
         const endDateTime = '2024-12-14T23:59:59+05:00';
         fetchFiles(deviceUID, startDateTime, endDateTime);
-    }, [fetchFiles]);
+    }, [fetchFiles]);*/
 
     const handleViewVideo = (uid: string) => {
         setSelectedVideoUID(uid);
@@ -40,7 +40,7 @@ const TableFileDeviceDB: React.FC = () => {
 
     const paginatedFiles = files.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
-    const renderGrid = () => {
+    /*const renderGrid = () => {
         const gridLayout = [];
         for (let i = 0; i < gridSize; i++) {
             const rowLayout = [];
@@ -48,23 +48,23 @@ const TableFileDeviceDB: React.FC = () => {
                 const fileIndex = i * gridSize + j;
                 const file = paginatedFiles[fileIndex];
                 rowLayout.push(
-                    <Col key={file?.id} span={24 / gridSize}>
+                   /!* <Col key={file?.id} span={24 / gridSize}>
                         {file && (
-                            <Card
+                           /!* <Card
                                 hoverable
-                             /*   cover={<img alt={''} src={FILE_PLAY_URL(file.UID)} />}*/
+                             /!*   cover={<img alt={''} src={FILE_PLAY_URL(file.UID)} />}*!/
                                 onClick={() => handleViewVideo(file.UID)}
                             >
                                 <Card.Meta title={file.id} />
-                            </Card>
+                            </Card>*!/
                         )}
-                    </Col>
+                    </Col>*!/
                 );
             }
             gridLayout.push(<Row gutter={[16, 16]} key={i}>{rowLayout}</Row>);
         }
         return gridLayout;
-    };
+    };*/
 
     return (
         <div className="Container">

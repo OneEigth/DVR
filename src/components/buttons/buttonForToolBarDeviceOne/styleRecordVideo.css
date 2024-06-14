@@ -12,4 +12,23 @@
     line-height: 20px;
     letter-spacing: 0.25px;
     text-align: left;
+    color: #4D4E65;
+    box-shadow:none;
+}
+
+.IconRecordVideo{
+    margin-right: 8px;
+}
+
+.IconRecordAudio{
+    margin-right: 8px;;
+}
+
+
+.ButtonRecordVideo:hover,
+.ButtonRecordVideo:focus,
+.ButtonRecordVideo:active{
+    border: 1px solid #4D4E65!important;
+    color: #4D4E65!important;
+    box-shadow: none!important;
 }

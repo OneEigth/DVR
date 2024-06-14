@@ -15,12 +15,12 @@ const TableFileDeviceDB: React.FC = () => {
     const pageSize = gridSize * gridSize; // Количество элементов на странице
     const { SmartDVRToken } = useAuthStore.getState();
 
-    useEffect(() => {
+   /* useEffect(() => {
         const deviceUID = 'e7727a41-d03d-3f36-b7a2-9ccf8c95dac5';
         const startDateTime = '2024-02-27T20:22:49+05:00';
         const endDateTime = '2024-12-14T23:59:59+05:00';
         fetchFiles(deviceUID, startDateTime, endDateTime);
-    }, [fetchFiles]);
+    }, [fetchFiles]);*/
 
     const handleViewVideo = (uid: string) => {
         setSelectedVideoUID(uid);

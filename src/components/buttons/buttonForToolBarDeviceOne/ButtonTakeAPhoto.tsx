@@ -8,7 +8,7 @@ interface ButtonTakeAPhotoProps {
 }
 
 const ButtonTakeAPhoto: React.FC<ButtonTakeAPhotoProps> = ({ onClick }) => (
-    <Button className="buttonTakeAPhoto" onClick={onClick} icon={<PictureOutlined />}>Сделать фото</Button>
+    <Button className="buttonTakeAPhoto" onClick={onClick} icon={<PictureOutlined className="PictureOutlined" />}>Сделать фото</Button>
 );
 
 export default ButtonTakeAPhoto;

@@ -10,7 +10,7 @@ interface SkipProps {
 
 const Skip: React.FC<SkipProps> = ({ onSkip }) => {
   return (
-    <Btn /*label="+ 10 сек"*/ onClick={onSkip}>
+    <Btn label="+ 10 сек" onClick={onSkip}>
       <ForwardOutlined />
     </Btn>
   );

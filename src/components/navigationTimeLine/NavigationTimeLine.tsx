@@ -21,7 +21,7 @@ const NavigationTimeLine: React.FC<NavigationTimeLineProps> = ({
 
 
         // отправляем запрос - поулчаем файлы
-    useEffect(() => {
+    /*useEffect(() => {
         if (selectedDate) {
 
 
@@ -48,7 +48,7 @@ const NavigationTimeLine: React.FC<NavigationTimeLineProps> = ({
 
             fetchFiles(deviceUID, formattedStart, formattedEnd);
         }
-    }, [selectedDate, fetchFiles]);
+    }, [selectedDate, fetchFiles]);*/
 
     // разметка временной 24-часовой шкалы
     const generateTimeMarkers = (): JSX.Element[] => {
@@ -75,7 +75,7 @@ const NavigationTimeLine: React.FC<NavigationTimeLineProps> = ({
         return markers;
     };
 
-    const renderFilesOnTimeline = (startDateTime: Date | null, endDateTime: Date | null): JSX.Element[] => {
+    /*const renderFilesOnTimeline = (startDateTime: Date | null, endDateTime: Date | null): JSX.Element[] => {
         if (!startDateTime || !endDateTime || !files.length) return [];
 
         const mp4Files = files.filter(file => file.fileType === 'mp4');
@@ -97,7 +97,7 @@ const NavigationTimeLine: React.FC<NavigationTimeLineProps> = ({
                 ></div>
             );
         });
-    };
+    };*/
 
     const handleFileSelection = (selectedFiles: any[]) => {
         // Обновляем выбранные файлы в хранилище
@@ -112,8 +112,8 @@ const NavigationTimeLine: React.FC<NavigationTimeLineProps> = ({
                 <div className="Nav-progress__range">
                     <div className="time-markers-container">{generateTimeMarkers()}</div>
 
-                    <div className="Nav-progress__range--background"/>
-                    <div className="files-container">{renderFilesOnTimeline(startDateTime, endDateTime)}</div>
+                   {/* <div className="Nav-progress__range--background"/>
+                    <div className="files-container">{renderFilesOnTimeline(startDateTime, endDateTime)}</div>*/}
 
 
                     {/*<input className="Nav-progress__range--seek" type="range" step="any"/>*/}

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import SearchInput from "../../../searchInput/SearchInput";
 import ButtonFilterRS from "../../../buttons/buttonFilter2/ButtonFilterRS";
 import './style.css';
 import { useMenuRSStateStore } from "../../../../store/rightSideMenuState/menuRSStateStore";
@@ -8,16 +7,17 @@ import {
     Checkbox,
     ConfigProvider,
     DatePicker,
-    DatePickerProps,
-    GetProp,
+    DatePickerProps, Drawer,
+    GetProp, Input,
     Menu,
     MenuProps,
     Modal,
     Space
 } from "antd";
 
-import {CloseOutlined } from '@ant-design/icons';
+import {CloseOutlined, SearchOutlined} from '@ant-design/icons';
 import {useFilterFileStore} from "../../../../store/devices/fileFilterStote";
+import {useFileCurrentTypeStore} from "../../../../store/devices/fileCurrentType";
 
 const items: MenuProps['items'] = [
     {
@@ -26,15 +26,15 @@ const items: MenuProps['items'] = [
     },
     {
         label: 'Видео',
-        key: 'video',
+        key: 'mp4',
     },
     {
         label: 'Фото',
-        key: 'photo',
+        key: 'jpg',
     },
     {
         label: 'Аудио',
-        key: 'audio',
+        key: 'm4a',
     }
 ];
 
@@ -45,7 +45,10 @@ const ToolBarRS: React.FC = () => {
     const [dateStringEnd, setDateStringEnd] = useState<string | string[]>("");
     const [stringCheckedValues, setStringCheckedValues] = useState<string[]>([])
     const {setFileFilterStore}=useFilterFileStore();
-    const [current, setCurrent] = useState('video');
+    const {setFileType}=useFileCurrentTypeStore();
+    const [current, setCurrent] = useState('all');
+    const [searchText, setSearchText] = useState('');
+
 
     const showModal = () => {
         setIsModalVisible(true);
@@ -57,25 +60,29 @@ const ToolBarRS: React.FC = () => {
 
     //фильтр по периоду
     const onChangeDateStart: DatePickerProps['onChange'] = (dateStart, dateStartString) => {
+
         setDateStringStart(dateStartString);
+        console.log("start "+dateStartString)
     };
     const onChangeDateEnd: DatePickerProps['onChange'] = (dateEnd, dateEndString) => {
         setDateStringEnd(dateEndString);
+        console.log("end "+dateEndString)
     };
 
     //фильтр по важности событий
-    const onChange: GetProp<typeof Checkbox.Group, 'onChange'> = (checkedValues) => {
+    const onChange: GetProp<typeof Checkbox.Group, 'onChange'> = (checkedValues: any[]) => {
         const stringValuesString = checkedValues.map(value => value.toString());
         setStringCheckedValues(stringValuesString);
     };
     const onClickFileMenu: MenuProps['onClick'] = (e) => {
         console.log('click menuFileRs', e.key);
+        setFileType(e.key);
         setCurrent(e.key);
     };
     const handleSearch = () => {
         const Filter = {
-            dateStart: dateStringStart,
-            dateEnd: dateStringEnd,
+            dateStart: dateStringStart as string,
+            dateEnd: dateStringEnd as string,
             rating: stringCheckedValues,
         };
         console.log(Filter)
@@ -93,12 +100,20 @@ const ToolBarRS: React.FC = () => {
     ];
 
 
+
     return (
         <div className="ToolBarRS">
             {selectedStateMenuRS !== 'map' && (
                 <div className="Tools">
                     <div className="Search_Filter">
-                        <SearchInput />
+                        <Input
+                            placeholder={"Поиск"}
+                            className="TB_RS_Search_input"
+                            suffix={<SearchOutlined style={{ marginLeft: '0px', padding: 0 }} />}
+                            value={searchText} // Устанавливаем значение текста поиска
+                            onChange={e => setSearchText(e.target.value)} // Обработчик изменения текста поиска
+
+                        />
                         <ButtonFilterRS onClick={showModal} />
                     </div>
                     <div>
@@ -141,10 +156,10 @@ const ToolBarRS: React.FC = () => {
                     },
                 }}
             >
-                <Modal
+                <Drawer
                     className="modalRight"
                     visible={isModalVisible}
-                    onCancel={handleCancel}
+                    /*onCancel={handleCancel}*/
                     footer={
                         <Button
                             className="buttonModal"
@@ -152,17 +167,14 @@ const ToolBarRS: React.FC = () => {
                         >Поиск</Button>
 
                     } // Remove the footer or customize as needed
-                    width={400} // Установите ширину модального окна
-                    style={{ top: 0, right: 0, margin: 0, height:'100%'}}
+                    style={{ top: 0, right: 0, margin: 0, width:'400px', height:'100%'}}
                     title={<span className="titleModal"><CloseOutlined  className="closeBut" onClick={handleCancel} style={{ marginLeft: 'auto', cursor: 'pointer' }} />Фильтр по файлам</span>}
                     closable={false}
-                    okText={'Поиск'}
+                    /*okText={'Поиск'}*/
                     bodyStyle={{ padding: 0, height: '100%' }}
                 >
                     <div className="filterPlace">
-                        {/*<div className="headerModalRight">
-                            <h1 className="h1Titel">Фильтр по файлам</h1>
-                        </div>*/}
+
                         <div className="contentModalRight">
                             <div className="recordingPeriod">
                                 <h1 className="h1RecordingPeriod">Период записи:</h1>
@@ -187,13 +199,13 @@ const ToolBarRS: React.FC = () => {
                                         },
                                     }}
                                 >
-                                    <Checkbox.Group options={urgentOptions} defaultValue={['1','2','3','4','5']} onChange={onChange} />
+                                    <Checkbox.Group options={urgentOptions}  onChange={onChange} />
                                 </ConfigProvider>
 
                             </div>
                         </div>
                     </div>
-                </Modal>
+                </Drawer>
             </ConfigProvider>
         </div>
     );

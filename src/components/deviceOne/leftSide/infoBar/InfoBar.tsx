@@ -1,19 +1,71 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import "./style.css"
 import IconSignalLow from "../../../icons/iconSignalLow/IconSignalLow";
 import {ConfigProvider, Progress} from "antd";
 import {Device} from "../../../../types/Device";
+import {getTimeOnline} from "../../../../api/devices/getTimeOnline";
+import {useAuthStore} from "../../../../store/auth/auth";
 
 interface DeviceProps{
     device:Device
 }
 const InfoBar: React.FC<DeviceProps> = ({device}) => {
+    const {user,SmartDVRToken}=useAuthStore();
+    const[onlineTime, setOnlineTime]=useState('');
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchTimeOnline = async () => {
+            if (user?.login && SmartDVRToken) {
+                try {
+                    const result = await getTimeOnline(SmartDVRToken, user.login, device.UID);
+                    if (result?.success) {
+                        const formattedTime = formatTime(result.data); // Use the utility function
+                        setOnlineTime(formattedTime);
+                    } else {
+                        setError(result?.error || 'Unknown error');
+                    }
+                } catch (err) {
+                    setError('An error occurred while fetching online time.');
+                }
+            }
+        };
+
+        fetchTimeOnline(); // Initial fetch
+
+        const interval = setInterval(fetchTimeOnline, 60000); // Fetch every 60 seconds
+
+        return () => clearInterval(interval); // Cleanup on unmount
+    }, [user, SmartDVRToken, device]);
+
+   /* const formatTime = (totalMinutes: number): string => {
+        const hours = Math.floor(totalMinutes / 60);
+        const minutes = totalMinutes % 60;
+        const seconds = 0; // Assuming no seconds information available
+
+        const pad = (num: number) => String(num).padStart(2, '0');
+
+        return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+    };*/
+
+    const formatTime = (totalMinutes: number): string => {
+        const hours = Math.floor(totalMinutes / 60);
+        const minutes = totalMinutes % 60;
+
+        const pad = (num: number) => String(num).padStart(2, '0');
+
+        return `${pad(hours)}:${pad(minutes)}`;
+    };
+
+    const usedMemoryPercentage = device.storageInfo
+        ? Number((device.storageInfo.internalUsed / device.storageInfo.internal * 100).toFixed(0))
+        : 0;
 
     return (
         <div className="infoBarDevice">
             <div className="battery">
                 <h1 className="h1bat">Уровень заряда</h1>
-                <span className="span"><IconSignalLow/>{device.battery_percent}%</span>
+                <span className="span"><IconSignalLow/>{device.battery_level}%</span>
             </div>
             <div className="hdd">
                 <h1 className="h1hdd">Занятость жёсткого диска</h1>
@@ -29,12 +81,16 @@ const InfoBar: React.FC<DeviceProps> = ({device}) => {
                 >
                     <Progress
                         className="progress"
-                        percent={40}
+                        percent={usedMemoryPercentage}
+
                     />
                 </ConfigProvider>
             </div>
             <div className="time">
                 <h1 className="h1time">Время онлайн</h1>
+                { device.online ?
+                <h1 className="h1OnlineTime">{onlineTime}</h1>
+                    : ""}
             </div>
         </div>
     );

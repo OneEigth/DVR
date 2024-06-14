@@ -1,58 +1,43 @@
-import React, {useState} from "react";
+import React from "react";
 import "./style.css"
 import VideoPlayer from "../../../videos/VideoPlayer";
-import NavigationTimeLine from "../../../navigationTimeLine/NavigationTimeLine";
-import ButtonCalendar from "../../../buttons/buttonCalendar/ButtonCalendar";
-import CalendarModal from "../../../modals/calendare/CalendareModal";
-import {useFileStore} from "../../../../store/devices/fileStore";
 import {Device} from "../../../../types/Device";
 import {useAuthStore} from "../../../../store/auth/auth";
+import {FILE_PLAY_URL, ONLINE_PLAY_URL} from "../../../../const/const";
+import {useFileStore} from "../../../../store/devices/fileStore";
+import {useOnlineStateStream} from "../../../../store/devices/onlineStream";
 
 interface PlayerPlaceProps {
-    selectedOnlineUID: string,
     device: Device
 }
-const PlayerPlace: React.FC<PlayerPlaceProps> = ({selectedOnlineUID,device}) => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [selectedDate, setSelectedDate] = useState<Date | null>(new Date()); // State to store selected date
-    const { selectedFileUID } = useFileStore();
+const PlayerPlace: React.FC<PlayerPlaceProps> = ({device}) => {
     const { SmartDVRToken } = useAuthStore.getState();
-
+    const { selectedFileUID, setSelectedFileUID } = useFileStore();
     console.log("PlayerPlace " + device.UID)
+    const {isStreamOnline}=useOnlineStateStream();
 
-    const getFilePlayUrl = (uid: string,authToken:string) => {
-        /*return `http://45.141.76.30:8172/play/file/${uid}/${authToken}`;*/
-        return `http://45.141.76.30:8172/play/stream/${uid}/${authToken}`
+    console.log("статус: "+selectedFileUID)
+
+    const getFilePlayUrl = (uid: string, authToken: string) => {
+
+        const playOnline= `${ONLINE_PLAY_URL}${uid}/${authToken}`;
+        const playFile= `${FILE_PLAY_URL}${selectedFileUID}/${authToken}`;
+
+
+        if(isStreamOnline && device.online){
+
+        return playOnline
+        }
+
+            return playFile
+
     };
 
-    const handleOpenModal = () => {
-        setIsModalOpen(true);
-    };
 
-    const handleCloseModal = () => {
-        setIsModalOpen(false);
-    };
 
-    const handleDateSelect = (date: Date) => {
-        setSelectedDate(date);
-        setIsModalOpen(false); // Close the modal after selecting a date
-    };
     return(
         <div className="PlayerPlace">
-            <div className="Player">
-            <VideoPlayer src={getFilePlayUrl(device.UID, SmartDVRToken )} />
-            <div className="navigateTimeLine">
-                <div className="nav_buttons">
-                    <ButtonCalendar onClick={handleOpenModal} selectedDate={selectedDate}/>
-                </div>
-                <CalendarModal
-                    isModalOpen={isModalOpen}
-                    handleOk={handleCloseModal}
-                    handleCancel={handleCloseModal}
-                    handleDateSelect={handleDateSelect} // Pass the handler to CalendarModal
-                />
-            </div>
-            </div>
+            <VideoPlayer src={getFilePlayUrl(device.UID, SmartDVRToken )} device={device} />
         </div>
     );
 }

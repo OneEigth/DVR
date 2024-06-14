@@ -1,101 +1,124 @@
-
-
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect, useCallback } from 'react';
+import { useInView } from 'react-intersection-observer';
 import CardComponentFile from "../../../cards/cardComponentFile/CardComponentFile";
-import { useSelectedFilesStore } from "../../../../store/devices/SelectedFilesState"
 import {useFilesStore} from "../../../../store/devices/fileDevicesFromDB";
 import {Device} from "../../../../types/Device";
-import {Pagination, PaginationProps} from "antd";
 import {useAuthStore} from "../../../../store/auth/auth";
+import {useFilterFileStore} from "../../../../store/devices/fileFilterStote";
+import {useFileCurrentTypeStore} from "../../../../store/devices/fileCurrentType";
+import {useFileSelectionStore} from "../../../../store/devices/useSelectedRowKeysFilesRS";
+import './style.css'
+import DeleteFilesDOF from "../../../modals/deleteFile/DeleteFilesDOF";
+import {useButtonDeleteFromDOF} from "../../../../store/devices/useButtonsDeleteFromDOF";
+
 
 interface FileTableProps {
-    device:Device;
+    device: Device;
 }
-const FileTable: React.FC<FileTableProps> = ({device}) => {
-    const { selectedFiles } = useSelectedFilesStore();
-    const {files,fetchFiles}=useFilesStore();
-    const [currentPage, setCurrentPage] = useState<number>(1);
-    const [pageSize, setPageSize] = useState<number>(7);
 
+interface FileData {
+    deviceUID: string;
+    start: string;
+    end: string;
+    rating?: number[];
+}
 
-    /*useEffect(() => {
-        if (selectedDate) {
+const FileTableLazy: React.FC<FileTableProps> = ({ device }) => {
+    const { fileFilterStore } = useFilterFileStore();
+    const { files, fetchFiles, resetFiles,hasMore } = useFilesStore();
+    const { user, SmartDVRToken } = useAuthStore();
+    const { fileType } = useFileCurrentTypeStore();
+    const { selectedFiles, setSelectedFiles } = useFileSelectionStore();
+    const { isDeleteDeviceModal, setIsDeleteDeviceModal } = useButtonDeleteFromDOF();
+    const [page, setPage] = useState(1);
+    const [pageSize, setPageSize] = useState(3);
+    const [isLoading, setIsLoading] = useState(false);
 
+    const { ref, inView } = useInView({
+        triggerOnce: false,
+        threshold: 0.1,
+    });
 
-            // Корректировка на локальный часовой пояс
-            const localDate = new Date(selectedDate);
-            const adjustedDate = new Date(localDate.getTime() - localDate.getTimezoneOffset() * 60000);
+    const handleCheckboxChange = (fileId: string, checked: boolean) => {
+        // Your logic for handling checkbox change
+    };
 
-            // Устанавливаем начало выбранного дня
-            const start = new Date(adjustedDate);
-            start.setHours(-19, 0, 0, 0);
-
-            // Устанавливаем конец выбранного дня
-            const end = new Date(adjustedDate);
-            end.setHours(4, 59, 59, 999);
-
-            // Форматируем даты для запроса
-            const formattedStart = start.toISOString().split('.')[0] + '+05:00';
-            const formattedEnd = end.toISOString().split('.')[0] + '+05:00';
-
-            setStartDateTime(start);
-
-            setEndDateTime(end);
-
-
-            fetchFiles(deviceUID, formattedStart, formattedEnd);
-        }
-    }, [selectedDate, fetchFiles]);*/
-
-
-
-
-    //все медиа файлы выбранного устройства
-    useEffect(() => {
+    const fetchFilteredFiles = useCallback(async () => {
         const deviceUID = device.UID;
-        const startDateTime = "2024-02-27T20:22:49+05:00";
-        const endDateTime = "2024-12-14T23:59:59+05:00";
-        fetchFiles(deviceUID, startDateTime, endDateTime);
-    }, [device, fetchFiles]);
+        let dateStart = "2024-02-27T20:22:49+05:00";
+        let dateEnd = "2024-12-14T23:59:59+05:00";
+        let rating: number[] = [];
 
-    console.log("SelectedFiles "+selectedFiles)
+        if (fileFilterStore) {
+            dateStart = fileFilterStore.dateStart || dateStart;
+            dateEnd = fileFilterStore.dateEnd || dateEnd;
+            if (fileFilterStore.rating.length > 0) {
+                rating = fileFilterStore.rating.map(Number);
+            }
+        }
 
-    /*//видео файлы выбранные с NavigationTimeLine
-    const startIndex = (currentPage - 1) * pageSize;
-    const devicesOnPage = selectedFiles.slice(startIndex, startIndex + pageSize);*/
+        const startDate = new Date(dateStart);
+        const endDate = new Date(dateEnd);
+        const isoStartDate = startDate.toISOString();
+        const isoEndDate = endDate.toISOString();
 
-    //все медиа файлы выбранного устройства по странично
-    const startIndex = (currentPage - 1) * pageSize;
-    const devicesOnPage = files.slice(startIndex, startIndex + pageSize);
-    const showTotal: PaginationProps['showTotal'] = (total) => `Total ${total} items`;
-    const handlePageChange = (page: number) => {
-        setCurrentPage(page);
+        const fileData: FileData = {
+            deviceUID,
+            start: isoStartDate,
+            end: isoEndDate,
+            rating: rating.length > 0 ? rating : undefined,
+        };
+
+        if (user && SmartDVRToken) {
+            setIsLoading(true);
+            await fetchFiles(fileData, user.login, SmartDVRToken, page, pageSize);
+            setIsLoading(false);
+        }
+    }, [device, fileFilterStore, fetchFiles, SmartDVRToken, user, page, pageSize]);
+
+    useEffect(() => {
+        fetchFilteredFiles();
+    }, [fetchFilteredFiles]);
+
+    useEffect(() => {
+        if (inView && !isLoading) {
+            setPage((prevPage) => prevPage + 1);
+        }
+    }, [inView, isLoading]);
+
+    useEffect(() => {
+        setPage(1);
+        resetFiles();
+    }, [device, fileFilterStore, fileType, resetFiles]);
+
+    const filteredFiles = fileType === "all" ? files : files.filter((file: any) => file.fileType === fileType);
+
+    const handleOkDeleteFileModal = () => {
+        setIsDeleteDeviceModal(false);
+        useFileSelectionStore.getState().clearSelectedFiles();
+        fetchFilteredFiles(); // Обновляем список файлов после удаления
+    };
+
+    const handleCancelDeleteFileModal = () => {
+        setIsDeleteDeviceModal(false);
     };
 
     return (
         <div className="FileTable">
             <div className="allDevice">
-                {/*<Pagination
-                    size="small"
-                    total={files.length}
-                    showTotal={showTotal}
-                    pageSize={pageSize}
-                    pageSizeOptions={[7]}
-                    defaultPageSize={7}
-                    onChange={handlePageChange}
-                    current={currentPage}
-                    showSizeChanger={false}
-                />*/}
-                {devicesOnPage.map((files: any) => (
+                {filteredFiles.map((file: any, index: number) => (
                     <CardComponentFile
-                        key={files.ID}
-                        file={files}
-
+                        key={file.ID}
+                        file={file}
+                        isSelected={!!selectedFiles[file.UID]}
+                        onCheckboxChange={handleCheckboxChange}
                     />
                 ))}
+                {hasMore && <div ref={ref} style={{ height: '1px' }} />}
             </div>
+            {isLoading && <div>Loading...</div>}
+            <DeleteFilesDOF visible={isDeleteDeviceModal} files={selectedFiles} onOk={handleOkDeleteFileModal} onCancel={handleCancelDeleteFileModal} />
         </div>
     );
 };
-
-export default FileTable;
+export default FileTableLazy;

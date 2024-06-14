@@ -11,12 +11,19 @@ export interface Device {
     pulse_time: string,
     latitude: number,
     longitude: number,
-    battery_percent: number,
     ownerUID: string,
     online: boolean,
+    battery_level: number,
+    signal_level: number,
     memory:{
         available:string,
         total:string,
         used:string
+    }
+    storageInfo: {
+        external: number,
+        externalUsed: number,
+        internal: number,
+        internalUsed: number
     }
 }

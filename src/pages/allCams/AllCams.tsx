@@ -32,6 +32,7 @@ const AllCams: React.FC = () => {
     return (
 
     <Layout >
+
         <Header style={{
             position: 'sticky',
             top: 0,
@@ -46,6 +47,7 @@ const AllCams: React.FC = () => {
                 <MainMenu onClick={handleMenuClick} currentMenuItem={currentMenuItem}/>
             </div>
         </Header>
+
         <Layout>
              <Sider width="264px" style={{ width:'264px', height: '100vh', position: 'sticky', left: 0, top: 0, bottom: 0, backgroundColor:'#F1F1F1'}}>
                 <div className="SideMenu">
@@ -53,11 +55,13 @@ const AllCams: React.FC = () => {
                 </div>
             </Sider>
             <Layout>
-            <Content  style={{ overflowX: 'auto', background:'#ffffff' }}>
+
+                <Content  style={{ overflowX: 'auto', background:'#ffffff' }}>
                 <div className="table">
                     <TableDevices />
                 </div>
-            </Content >
+                </Content >
+
                 <Footer style={{
                     width: '100%',
                     display: selectedRowKeys.length>0 ? 'initial':'none',
@@ -79,7 +83,10 @@ const AllCams: React.FC = () => {
                     </div>
                 </Footer>
             </Layout>
+
         </Layout>
+
+
     </Layout>
 
     );

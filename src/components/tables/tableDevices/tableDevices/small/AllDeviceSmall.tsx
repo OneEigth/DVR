@@ -93,11 +93,13 @@ const AllDevicesSmall: React.FC<AllDevicesSmallProps> = ({ searchText}) => {
                 pulse_time: device.pulse_time,
                 latitude: device.latitude,
                 longitude: device.longitude,
-                battery_percent: device.battery_percent,
+                battery_level: device.battery_level,
                 ownerUID: device.ownerUID,
                 online: device.online,
                 connectionState: device.connectionState,
                 memory:device.memory,
+                storageInfo:device.storageInfo,
+                signal_level:device.signal_level
             }));
         } else {
             formattedDevices = devicesByStore.map(device => ({
@@ -112,11 +114,15 @@ const AllDevicesSmall: React.FC<AllDevicesSmallProps> = ({ searchText}) => {
                 pulse_time: device.pulse_time,
                 latitude: device.latitude,
                 longitude: device.longitude,
-                battery_percent: device.battery_percent,
+                battery_level: device.battery_level,
                 ownerUID: device.ownerUID,
                 online: device.online,
                 connectionState: device.connectionState,
                 memory:device.memory,
+                storageInfo:device.storageInfo,
+                signal_level:device.signal_level,
+
+
             }));
         }
         setDeviceData(formattedDevices);

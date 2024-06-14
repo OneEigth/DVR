@@ -10,7 +10,7 @@ interface RewindProps {
 
 const Rewind: React.FC<RewindProps> = ({ onRewind }) => {
   return (
-    <Btn /*label="- 10 сек"*/ onClick={onRewind}>
+    <Btn label="- 10 сек" onClick={onRewind}>
       <BackwardOutlined />
     </Btn>
   );

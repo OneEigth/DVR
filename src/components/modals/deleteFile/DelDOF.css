@@ -1,0 +1,55 @@
+.buttonNo{
+    background:#DE7171;
+    color: #F1F1F1;
+    margin-right: 8px;
+}
+.buttonYes{
+    background:  #4D4E65;
+    color: #F1F1F1;
+}
+
+.contentText{
+    font-family: Roboto, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: 0.5px;
+    text-align: left;
+}
+
+.delDevOne_modal{
+    width: 520px!important;
+}
+.delDevOne_modal .ant-modal-title{
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    font-family: Roboto, sans-serif;
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 28px;
+    text-align: left;
+}
+
+.delDevOne_modal .ant-modal-footer{
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    justify-items: end;
+}
+
+.titleModal_delDevOne{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between!important;
+    width: 100%;
+    border-bottom: 0;
+
+}
+.spanGroup_delDevOne{
+    display: flex;
+    flex-direction: row;
+    justify-content: start!important;
+    width: 100%;
+}

@@ -1,7 +1,10 @@
 import React from 'react';
 
-const IconRecordAudio: React.FC = () => (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+interface IconRecordAudioProps extends React.SVGProps<SVGSVGElement> {}
+
+const IconRecordAudio: React.FC<IconRecordAudioProps> = (props) => (
+    <svg className="IconRecordAudio" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"{...props}>
+
         <path fill-rule="evenodd" clip-rule="evenodd"
               d="M13.6673 7.99967C13.6673 11.1293 11.1303 13.6663 8.00065 13.6663C4.87104 13.6663 2.33398 11.1293 2.33398 7.99967C2.33398 4.87006 4.87104 2.33301 8.00065 2.33301C11.1303 2.33301 13.6673 4.87006 13.6673 7.99967ZM14.6673 7.99967C14.6673 11.6816 11.6825 14.6663 8.00065 14.6663C4.31875 14.6663 1.33398 11.6816 1.33398 7.99967C1.33398 4.31778 4.31875 1.33301 8.00065 1.33301C11.6825 1.33301 14.6673 4.31778 14.6673 7.99967ZM6.33398 3.99967H7.66732V11.9997H6.33398V3.99967ZM11.6673 10.6663H10.334V5.33301H11.6673V10.6663ZM4.33398 9.99967H5.66732V5.99967H4.33398V9.99967ZM9.66732 9.99967V6.66634H8.33398V9.99967H9.66732Z"
               fill="#4D4E65"/>

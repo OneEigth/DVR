@@ -9,7 +9,7 @@ interface ButtonRecordAudioProps {
 }
 
 const ButtonRecordAudio: React.FC<ButtonRecordAudioProps> = ({ onClick }) => (
-    <Button className="ButtonRecordAudio" onClick={onClick} icon={<IconRecordAudio/>}>Запись аудио</Button>
+    <Button className="ButtonRecordVideo" onClick={onClick} icon={<IconRecordAudio/>}>Запись аудио</Button>
 );
 
 export default ButtonRecordAudio;

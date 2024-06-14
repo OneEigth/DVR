@@ -15,8 +15,15 @@
 .Search_Filter{
     display: flex;
     flex-direction: row;
+    align-content: end;
+    align-items: end;
+    justify-content: end;
     width: 100%;
 }
+.TB_RS_Search_input{
+    width: 436px;
+}
+
 
 .filesMenu{
     width: 100%;

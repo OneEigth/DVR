@@ -1,10 +1,9 @@
 import React, {useState} from 'react';
 import MainMenu from "../../components/menu/Menu";
-import LeftPart from "../../components/leftPart/leftPart";
 import './style.css'
 import {Layout} from 'antd';
 
-const {Header, Sider, Content, Footer} = Layout;
+const {Header, Content, Footer} = Layout;
 
 
 const Layouts: React.FC = () => {
