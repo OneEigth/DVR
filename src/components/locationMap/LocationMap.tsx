@@ -27,7 +27,7 @@ const LocationMap: React.FC<LocationMapProps> = ({ device }) => {
                 <MapContainer
                     ref={mapRef}
                     center={[device.latitude, device.longitude]}
-                    zoom={15} style={{ height: '825px', width: '497px', borderRadius:'5px'}}
+                    zoom={15} style={{ height: '80vh', width: '450px', borderRadius:'5px'}}
                     scrollWheelZoom={false}>
                 <TileLayer
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

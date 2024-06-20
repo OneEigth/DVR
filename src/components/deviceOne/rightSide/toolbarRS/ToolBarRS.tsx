@@ -11,7 +11,6 @@ import {
     GetProp, Input,
     Menu,
     MenuProps,
-    Modal,
     Space
 } from "antd";
 
@@ -60,13 +59,10 @@ const ToolBarRS: React.FC = () => {
 
     //фильтр по периоду
     const onChangeDateStart: DatePickerProps['onChange'] = (dateStart, dateStartString) => {
-
         setDateStringStart(dateStartString);
-        console.log("start "+dateStartString)
     };
     const onChangeDateEnd: DatePickerProps['onChange'] = (dateEnd, dateEndString) => {
         setDateStringEnd(dateEndString);
-        console.log("end "+dateEndString)
     };
 
     //фильтр по важности событий
@@ -85,7 +81,6 @@ const ToolBarRS: React.FC = () => {
             dateEnd: dateStringEnd as string,
             rating: stringCheckedValues,
         };
-        console.log(Filter)
         setFileFilterStore(Filter)
         handleCancel(); // Закрытие модального окна после поиска
     };
@@ -105,17 +100,7 @@ const ToolBarRS: React.FC = () => {
         <div className="ToolBarRS">
             {selectedStateMenuRS !== 'map' && (
                 <div className="Tools">
-                    <div className="Search_Filter">
-                        <Input
-                            placeholder={"Поиск"}
-                            className="TB_RS_Search_input"
-                            suffix={<SearchOutlined style={{ marginLeft: '0px', padding: 0 }} />}
-                            value={searchText} // Устанавливаем значение текста поиска
-                            onChange={e => setSearchText(e.target.value)} // Обработчик изменения текста поиска
 
-                        />
-                        <ButtonFilterRS onClick={showModal} />
-                    </div>
                     <div>
                         <div className="filesMenu">
                             <ConfigProvider
@@ -132,7 +117,9 @@ const ToolBarRS: React.FC = () => {
                                 <Menu className="menuLineRS" onClick={onClickFileMenu} selectedKeys={[current]} mode="horizontal"
                                       items={items}/>
                             </ConfigProvider>
+                            <ButtonFilterRS onClick={showModal} />
                         </div>
+
                     </div>
                 </div>
             )}
@@ -160,15 +147,20 @@ const ToolBarRS: React.FC = () => {
                     className="modalRight"
                     visible={isModalVisible}
                     /*onCancel={handleCancel}*/
-                    footer={
+                    footer={<div className="FooterFilter">
                         <Button
                             className="buttonModal"
                             onClick={handleSearch}
                         >Поиск</Button>
+                        <Button
+                        className="buttonModalRed"
+                        onClick={handleSearch}
+                >Сброс</Button>
+                    </div>
 
                     } // Remove the footer or customize as needed
                     style={{ top: 0, right: 0, margin: 0, width:'400px', height:'100%'}}
-                    title={<span className="titleModal"><CloseOutlined  className="closeBut" onClick={handleCancel} style={{ marginLeft: 'auto', cursor: 'pointer' }} />Фильтр по файлам</span>}
+                    title={<span className="titleModal"><CloseOutlined  className="closeBut" onClick={handleCancel} style={{ margin: '0', cursor: 'pointer' }} />Фильтр по файлам</span>}
                     closable={false}
                     /*okText={'Поиск'}*/
                     bodyStyle={{ padding: 0, height: '100%' }}

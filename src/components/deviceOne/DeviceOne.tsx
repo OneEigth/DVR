@@ -17,6 +17,7 @@ import IconLeftMenuFooter from "../icons/iconLeftMenu/IconLeftMenuFooter";
 
 import ButtonDOFooterDelete from "../buttons/buttonLeftMenu/ButtonDOFooterDelete";
 import {useButtonDeleteFromDOF} from "../../store/devices/useButtonsDeleteFromDOF";
+import FileTable2 from "./rightSide/filesTable/FileTable2";
 
 const { Content, Footer } = Layout;
 
@@ -40,7 +41,9 @@ const DeviceOne: React.FC<DeviceOneProps> = ({  selectedFileUID }) => {
     return (
             <Layout  style={{ display: 'flex', flexDirection:"row", justifyContent:"space-between" }}>
 
-                <Layout className="L_LeftSide" >
+                <Layout className="L_LeftSide"
+                        style={{position: 'sticky'}}
+                >
                     <Content className="C_leftSide">
                         <ToolBarDeviceOne device={selectedDevice} />
                         <PlayerPlace  device={selectedDevice} />
@@ -87,28 +90,3 @@ const DeviceOne: React.FC<DeviceOneProps> = ({  selectedFileUID }) => {
 }
 
 export default DeviceOne;
-
-
-/*<div className="containerDeviceOne">
-
-            <div >
-                <div className="DeviceOne">
-                    <div  className="leftSideDeviceOne">
-                        <ToolBarDeviceOne device={selectedDevice} />
-                        <PlayerPlace  device={selectedDevice} />
-                        <InfoBar device={selectedDevice} />
-                        <Description device={selectedDevice} />
-                    </div>
-                    <div  className="rightSideDeviceOne">
-                        <MenuRS />
-                        <ToolBarRS />
-                        {selectedStateMenuRS === 'map' ? (
-                            <LocationMap device={selectedDevice} />
-                        ) : (
-                            <FileTable device={selectedDevice} />
-                        )}
-                    </div>
-                </div>
-            </div>
-
-        </div>*/

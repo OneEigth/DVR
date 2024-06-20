@@ -28,7 +28,7 @@ export const GET_DEVICE_TIME_ONLINE_URL=`${URL_A}/device/online_count`;
 //Получение списка файлов устройств раннее загруженных в базу
 export const FILE_API_URL = `${URL_A}/media_file/filter`;
 export const FILES_DELETE_URL = `${URL_A}/media_file/delete_array`;
-
+export const FILES_BY_DEVICE_UID =(deviceUID: string, page: number, pageSize: number, fileType?: string) => `${URL_A}/media_file/${deviceUID}/${fileType}/${page}/${pageSize}`;
 
 //Auth
 //Авторизация пользователя

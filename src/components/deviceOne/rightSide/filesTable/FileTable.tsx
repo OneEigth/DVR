@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useInView } from 'react-intersection-observer';
 import CardComponentFile from "../../../cards/cardComponentFile/CardComponentFile";
-import {useFilesStore} from "../../../../store/devices/fileDevicesFromDB";
+import {useFilesStore} from "../../../../store/devices/FilesDevicesFromDB";
 import {Device} from "../../../../types/Device";
 import {useAuthStore} from "../../../../store/auth/auth";
 import {useFilterFileStore} from "../../../../store/devices/fileFilterStote";
@@ -10,6 +10,8 @@ import {useFileSelectionStore} from "../../../../store/devices/useSelectedRowKey
 import './style.css'
 import DeleteFilesDOF from "../../../modals/deleteFile/DeleteFilesDOF";
 import {useButtonDeleteFromDOF} from "../../../../store/devices/useButtonsDeleteFromDOF";
+import MoreDetails from "../../../modals/moreDetails/MoreDetalies";
+import {useOpenMoreDetails} from "../../../../store/devices/useShowMoreDetails";
 
 
 interface FileTableProps {
@@ -33,6 +35,7 @@ const FileTableLazy: React.FC<FileTableProps> = ({ device }) => {
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(3);
     const [isLoading, setIsLoading] = useState(false);
+    const { openMoreDetails, setOpenMoreDetails } = useOpenMoreDetails();
 
     const { ref, inView } = useInView({
         triggerOnce: false,
@@ -102,6 +105,13 @@ const FileTableLazy: React.FC<FileTableProps> = ({ device }) => {
     const handleCancelDeleteFileModal = () => {
         setIsDeleteDeviceModal(false);
     };
+    const onCloseMoreDetails = () => {
+        setOpenMoreDetails(false);
+    };
+
+    const onOkMoreDetails = () => {
+        setOpenMoreDetails(false);
+    };
 
     return (
         <div className="FileTable">
@@ -118,6 +128,11 @@ const FileTableLazy: React.FC<FileTableProps> = ({ device }) => {
             </div>
             {isLoading && <div>Loading...</div>}
             <DeleteFilesDOF visible={isDeleteDeviceModal} files={selectedFiles} onOk={handleOkDeleteFileModal} onCancel={handleCancelDeleteFileModal} />
+            <MoreDetails
+                onOk={onOkMoreDetails}
+                open={openMoreDetails}
+                onCancel={onCloseMoreDetails}
+            />
         </div>
     );
 };

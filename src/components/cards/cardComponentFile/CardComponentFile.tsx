@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Card, Checkbox, CheckboxProps, Select, SelectProps} from 'antd';
+import {Card, Checkbox, Select, SelectProps} from 'antd';
 import './style/style.css'
 import { parseISO, format } from 'date-fns';
 import {useFileStore} from "../../../store/devices/fileStore";
@@ -11,21 +11,27 @@ import img from './Video picture.png'
 import {SizeType} from "antd/es/config-provider/SizeContext";
 import ButtonAction from "../../buttons/buttonAct/ButtonAction";
 import {useFileSelectionStore} from "../../../store/devices/useSelectedRowKeysFilesRS";
+import {useOpenMoreDetails} from "../../../store/devices/useShowMoreDetails";
+import {useSelectedFile} from "../../../store/devices/getSelectedFile";
 
 interface CardComponentProps {
     file: File;
     isSelected: boolean;
     onCheckboxChange: (fileId: string, checked: boolean) => void;
+
 }
 
-const CardComponentFile: React.FC<CardComponentProps> = ({ file, isSelected, onCheckboxChange }) => {
+const CardComponentFile: React.FC<CardComponentProps> = ({ file}) => {
     const { setSelectedFileUID } = useFileStore();
     const { user,SmartDVRToken } = useAuthStore.getState();
     const {setIsStreamOnline}=useOnlineStateStream();
     const [previewUrlVideo, setPreviewUrlVideo] = useState<string>('');
     const [previewUrlJpg, setPreviewUrlJpg] = useState<string>('');
-    const [size, setSize] = useState<SizeType>('middle');
+    const [size] = useState<SizeType>('middle');
     const {selectedFiles, setSelectedFiles}=useFileSelectionStore();
+    const {setOpenMoreDetails} = useOpenMoreDetails();
+    const {setSelectedFile} = useSelectedFile();
+
 
     const handleDeviceClick = (FileUid: string) => {
         setSelectedFileUID(FileUid);
@@ -53,10 +59,6 @@ const CardComponentFile: React.FC<CardComponentProps> = ({ file, isSelected, onC
     }, [file, SmartDVRToken, user]);
 
 
-    /*const handleCheckboxChange: CheckboxProps['onChange'] = (e) => {
-        setSelectedFiles(file.UID, e.target.checked);
-        console.log('onCheckboxChange ' + file.UID);
-    };*/
 
     const handleCheckboxChange = (fileId: string, checked: boolean) => {
         setSelectedFiles(fileId, checked);
@@ -78,15 +80,20 @@ const CardComponentFile: React.FC<CardComponentProps> = ({ file, isSelected, onC
         { label: '5 - высокая секретность', value: '5' }
     ];
 
-    const handleChangeButton= () =>{
-    }
 
     const handleChangeUrgent =() => {
     };
 
+    const showDrawerMoreDetails = () => {
+        if (!file){
+            setOpenMoreDetails(false);
+        }
+        setSelectedFile(file);
+        setOpenMoreDetails(true);
+    };
 
-        return (
 
+    return (
         <div className="containerCardFile" >
             <Checkbox
                 className="fileCheckbox"
@@ -128,7 +135,7 @@ const CardComponentFile: React.FC<CardComponentProps> = ({ file, isSelected, onC
                             style={{width: 152, marginBottom: 16}}
                             options={options}
                         />
-                        <ButtonAction onClick={handleChangeButton}/>
+                        <ButtonAction onClick={showDrawerMoreDetails}/>
                     </div>
                 </div>
             </div>

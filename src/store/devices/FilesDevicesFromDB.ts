@@ -1,5 +1,5 @@
 import create from 'zustand';
-import { getFileDevicesFromDB } from '../../api/devices/fileDevicesFromDB';
+import { getFileDevicesFromDB } from '../../api/devices/FilesDevicesFromDB';
 
 interface File {
     ID: string;

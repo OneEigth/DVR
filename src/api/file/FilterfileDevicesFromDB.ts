@@ -8,7 +8,7 @@ interface FileData{
     end?:string,
     rating?:number[],
 }
-export const getFileDevicesFromDB = async (fileData:FileData, SmartDVRToken: string, userLogin: string, page: number,pageSize: number) => {
+export const getFilterFileDevicesFromDB = async (fileData:FileData, SmartDVRToken: string, userLogin: string, page: number,pageSize: number) => {
 
     const FILE_API_URL = `${URL_A}/media_file/filter/${page}/${pageSize}`;
 

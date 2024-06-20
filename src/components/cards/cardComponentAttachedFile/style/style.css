@@ -1,0 +1,60 @@
+
+.containerAttachedFile{
+    display: flex;
+
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-top: 8px;
+
+
+    border-radius: 8px;
+    border: 1px solid #999C9E;
+
+    height: 72px!important;
+}
+
+.cover{
+    display: flex;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    background: #FCE49C;
+    border-radius: 4px;
+    align-items: center;
+    margin: 0!important;
+}
+ .buttons{
+    display: flex;
+    flex-direction: row!important;
+    justify-content: center!important;
+     margin-right: 12px;
+}
+
+.container_cover{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-left: 12px;
+    height: 48px;
+}
+
+
+.DownloadOutlined .path{
+    width: 19px!important;
+    height: 20px!important;
+}
+
+.h1_attachedFileName{
+    font-family: Roboto;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    letter-spacing: 0.25px;
+    text-align: center;
+    color: #21201F;
+    align-content: center;
+    align-items: center!important;
+
+}

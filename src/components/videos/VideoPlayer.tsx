@@ -13,14 +13,13 @@ import Dropdown from './Controls/Dropdown';
 import Loader from './UI/Loader/Loader';
 import KeyAction, { KeyActionHandle } from './UI/KeyAction/KeyAction';
 import Error from './UI/Error/Error';
-import { useTimeout } from '../../../src/hooks/timer-hook';
-import { useLocalStorage } from '../../../src/hooks/storage-hook';
-import { formatTime } from '../../../src/utils/format';
+import { useTimeout } from '../../hooks/timer-hook';
+import { useLocalStorage } from '../../hooks/storage-hook';
+import { formatTime } from '../../utils/format';
 import './VideoPlayer.css';
 import IconOnline from "../icons/iconOnline/IconOnline";
 import {useOnlineStateStream} from "../../store/devices/onlineStream";
 import {Device} from "../../types/Device";
-import device from "../../pages/device/Device";
 import IconOffline from "../icons/iconOffline/IconOffline";
 
 
@@ -55,7 +54,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, autoPlay = true ,device}
   );
   const [displayLoader, setDisplayLoader] = useState(true);
   const [volumeKeyAction, setvolumeKeyAction] = useState(false);
-  const [videoError, setVideoError] = useState<MediaError | null>(null);
+  const [videoError] = useState<MediaError | null>(null);
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const videoContainerRef = useRef<HTMLDivElement>(null);

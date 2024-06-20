@@ -2,12 +2,13 @@
     display: flex !important;
     flex-direction: row !important;
     justify-content: start !important;
-    align-items: start;
+    align-items: start!important;
+    justify-items: start!important;
 
 }
 
 .buttonAddPlus{
-    margin-bottom: 16px;
+    margin-bottom: 16px!important;
 }
 
 /*
