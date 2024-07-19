@@ -1,9 +1,10 @@
 import React from 'react';
-import { Input } from 'antd';
-import { SearchOutlined } from '@ant-design/icons';
+
 
 const SearchInput: React.FC = () => (
-<></>
+    <>
+        <input type="text" placeholder="Search..."/>
+    </>
 );
 
 export default SearchInput;

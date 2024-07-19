@@ -30,8 +30,11 @@ export const FILE_API_URL = `${URL_A}/media_file/filter`;
 export const FILES_DELETE_URL = `${URL_A}/media_file/delete_array`;
 export const FILES_BY_DEVICE_UID =(deviceUID: string, page: number, pageSize: number, fileType?: string) => `${URL_A}/media_file/${deviceUID}/${fileType}/${page}/${pageSize}`;
 
-export const FIlE_ATTACH_API_URL =(file:string)=> `${URL_A}/attached_file/insert/${file}`;
-
+//attachedFiles
+export const FIlE_ATTACH_API_URL =(file:string)=> `${URL_A}/attached_file/upload/${file}`;
+export const GET_ATTACHED_FILES_BY_MEDIA_FILE_UID_API_URL =(file:string)=> `${URL_A}/attached_file/media_file_uid/${file}`;
+export const GET_ATTACHED_FILES_API_URL = `${URL_A}/attached_file/get_by/all`;
+export const DELETE_ATTACHED_FILES_API_URL = `${URL_A}/attached_file/delete`;
 
 //Auth
 //Авторизация пользователя
@@ -48,8 +51,22 @@ export const USERS_API_URL = `${URL_A}/user/get_by/all`;
 
 //Получение пользователей операторы
 export const OPERATORS_API_URL = `${URL_A}/user/get_by/operator`;
+//Получение пользователей администраторы
+export const ADM_API_URL = `${URL_A}/user/get_by/admin`;
 
-export const OPERATORS_API_URL = `${URL_A}/user/get_by/operator`;
+//Получение пользователей по UID
+export const USER_BY_UID_API_URL = `${URL_A}/user/get_by/admin`;
+
+//Создание пользователя
+export const CREATE_USER_API_URL = `${URL_A}/user/insert`;
+
+//Обновление пользователя
+export const UPDATE_USER_API_URL = `${URL_A}/user/update`;
+
+//Удаление пользователя
+export const DELETE_USER_API_URL = `${URL_A}/user/delete`;
+
+
 
 
 //Получение владельцев
@@ -67,10 +84,17 @@ export const DELETE_OWNER_API_URL = `${URL_A}/owner/delete_array`;
 //Редактирование владельца
 export const UPDATE_OWNER_API_URL = `${URL_A}/owner/update`;
 
+//Video Record Device
+export const VIDEO_RECORD_START_DEVICE_API_URL = `${URL_A}/device/start_record`;
+export const VIDEO_RECORD_END_DEVICE_API_URL = `${URL_A}/device/stop_record`;
 
+//Audio Record Device
+export const AUDIO_RECORD_START_DEVICE_API_URL = `${URL_A}/device/start_audio_record`;
+export const AUDIO_RECORD_END_DEVICE_API_URL = `${URL_A}/device/stop_audio_record`;
 
+//Photo Record Device
 
-
+export const PHOTO_RECORD_START_DEVICE_API_URL = `${URL_A}/device/get_photo`;
 
 //GET_PREVIEW_PICTURES
 export const VIDEO_PREVIEW_URL = (fileUID: string, token:any) => `${URL_A}/play/file/${fileUID}/preview/${token}`;

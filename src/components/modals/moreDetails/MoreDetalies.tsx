@@ -1,28 +1,43 @@
-import React, { useState } from 'react';
-import {AutoComplete, Button, Drawer, Form, Input, Select, SelectProps} from 'antd';
-import {File} from "../../../types/File";
+import React, {useEffect, useState} from 'react';
+import {Button, Form, Input, Layout, Modal, Select, SelectProps} from 'antd';
 import "./style.css"
 import {CloseOutlined, PlusOutlined} from "@ant-design/icons";
-import {useOpenMoreDetails} from "../../../store/devices/useShowMoreDetails";
 import CardComponentAttachedFile from "../../cards/cardComponentAttachedFile/CardComponentAttachedFile";
 import {useSelectedFile} from "../../../store/devices/getSelectedFile";
 import {format, parseISO} from "date-fns";
 import {SizeType} from "antd/es/config-provider/SizeContext";
+import AttachFile from "../attachFiles/attachFile";
+
+import {useAttachedFilesByUidStore} from "../../../store/attachedFiles/attachedFilesByUid";
+import Player from "../../player/Player";
+import {FILE_PLAY_URL} from "../../../const/const";
+import {useAuthStore} from "../../../store/auth/auth";
+import {Content} from "antd/es/layout/layout";
+import {Footer} from "antd/lib/layout/layout";
 
 
 interface MoreDetailsProps {
     open: boolean;
     onOk: () => void;
     onCancel: () => void;
+
 }
 const MoreDetails: React.FC<MoreDetailsProps> = ({open, onOk, onCancel}) => {
-    const {selectedFile} = useSelectedFile();
+    const {selectedFile, setSelectedFile} = useSelectedFile();
     const [size] = useState<SizeType>('middle');
+    const [openAttacheFiles,setOpenAttacheFiles]=useState(false)
+    const {AttachedFilesByUid, fetchAttachedFilesByUid}=useAttachedFilesByUidStore();
+    const { user, SmartDVRToken } = useAuthStore();
 
 
+    useEffect(() => {
+        if (selectedFile) {
+            fetchAttachedFilesByUid(selectedFile.UID);
+        }
+    }, [selectedFile, fetchAttachedFilesByUid]);
 
-    const handleAddFile = () => {
-
+    const handleCheckboxChange = (fileId: string, checked: boolean) => {
+        // Your logic for handling checkbox change
     };
 
     if (!selectedFile) {
@@ -47,124 +62,162 @@ const MoreDetails: React.FC<MoreDetailsProps> = ({open, onOk, onCancel}) => {
     const handleChangeUrgent =() => {
     };
 
+    const handleAddFile = () => {
+        setOpenAttacheFiles(true)
+    };
+    const onCloseAttachFile = () => {
+        setOpenAttacheFiles(false);
+
+    };
+
+    const onOkAttachFile = () => {
+        setOpenAttacheFiles(false);
+        fetchAttachedFilesByUid(selectedFile.UID);
+
+    };
+
+
+    const getFilePlayUrl = (authToken: string) => {
+        if (user && SmartDVRToken) {
+            const playFile = `${FILE_PLAY_URL}${selectedFile.UID}/${authToken}`;
+            return playFile
+        }
+    };
+
+    console.log("тип: "+selectedFile.fileType)
     return (
-        <Drawer
-            placement="left"
+        <Modal
             className="DrawerMoreDetails"
             closable={false}
             title={
                 <span className="titleModal">
-                    Подробности
-                    <CloseOutlined className="closeBut2" onClick={onCancel} style={{cursor: 'pointer', marginRight: 0}}/>
+                    <div className="title0">
+                        <div className="title1">
+                    {displayDate}
+                        </div>
+                        <div className="title2">
+                            <div className="title3">
+                                {selectedFile.size.toFixed(1)} мБ |
+                            </div>
+                            <div className="title4">
+                                
+                            </div>
+                        </div>
+                    </div>
+                        <CloseOutlined className="closeBut2" onClick={onCancel} style={{cursor: 'pointer', marginRight: 0}}/>
                 </span>}
-            footer={
-                <Button
-                    className="buttonModalSave"
-                    onClick={onOk}
-                >Сохранить</Button>
-
-            }
+            footer={false}
             onClose={onCancel}
             open={open}
         >
 
-            <div className="fileData">
-                <h1 className="h1_event">Сведения файла</h1>
-                <Form
-                    className="form"
-                    name="basic"
-                    labelCol={{span: 10}}
-                    wrapperCol={{span: 14}}
-                    style={{maxWidth: '100%'}}
-                >
-                    <Form.Item
-                        label={<span className="inputLabel">Время и дата</span>}
-                        name="name"
-                        rules={[{required: true, message: 'Пожалуйста, введите номер'}]}
-                    >
-                        <h1 className="fileOption_h1">{displayDate}</h1>
-                    </Form.Item>
+            <Layout style={{background:'#ffff'}}>
+                <div className="LR_MD">
+                    <Layout>
+                        <Content className="content-MD">
+                            <div className="left_MD">
+                                <Player source={getFilePlayUrl(SmartDVRToken)} type={selectedFile.fileType}/>
+                            </div>
+                        </Content>
+                    </Layout >
+                    <Layout style={{background:'#ffff', width:400}}>
+                        <Content className="content-RMD" >
+                    <div className="right_MD">
+                        <div className="fileData">
+                            <h1 className="h1_event">Сведения файла</h1>
+                            <Form
+                                className="form"
+                                name="basic"
+                                labelCol={{span: 10}}
+                                wrapperCol={{span: 14}}
+                                style={{maxWidth: '100%'}}
+                            >
 
-                    <Form.Item
-                        label={<span className="inputLabel">Размер</span>}
-                        name="description"
-                        rules={[{required: true, message: 'Пожалуйста, введите описание'}]}
-                    >
-                      <h1 className="fileOption_h1" >{selectedFile.size.toFixed(1)} мБ</h1>
+                                <Form.Item
+                                    label={<span className="inputLabel">Секретность</span>}
+                                    name="description"
+                                    rules={[{required: false, message: 'Пожалуйста, введите описание'}]}
+                                >
+                                    <Select
+                                        className="selectUrgent"
+                                        size={size}
+                                        defaultValue="секретность"
+                                        onChange={handleChangeUrgent}
+                                        style={{width: '100%', marginBottom: 16}}
+                                        options={options}
+                                    />
+                                </Form.Item>
 
-                    </Form.Item>
+                            </Form>
+                        </div>
 
-                    <Form.Item
-                        label={<span className="inputLabel">Автор записи</span>}
-                        name="description"
-                        rules={[{required: true, message: 'Пожалуйста, введите описание'}]}
-                    >
-                        <h1 className="fileOption_h1" >{selectedFile.ownerUID}</h1>
-                    </Form.Item>
+                        <div className="eventData">
+                            <h1 className="h1_event">Сведения события</h1>
+                            <Form
+                                className="form"
+                                name="basic"
+                                labelCol={{span: 10}}
+                                wrapperCol={{span: 14}}
+                                style={{maxWidth: '100%'}}
+                            >
+                                <Form.Item
+                                    label={<span className="inputLabel">Номер</span>}
+                                    name="name"
+                                    rules={[{required: true, message: 'Пожалуйста, введите номер'}]}
+                                >
+                                    <Input className="input"/>
+                                </Form.Item>
 
-                    <Form.Item
-                        label={<span className="inputLabel">Секретность</span>}
-                        name="description"
-                        rules={[{required: false, message: 'Пожалуйста, введите описание'}]}
-                    >
-                        <Select
-                            className="selectUrgent"
-                            size={size}
-                            defaultValue="секретность"
-                            onChange={handleChangeUrgent}
-                            style={{width: '100%', marginBottom: 16}}
-                            options={options}
-                        />
-                    </Form.Item>
+                                <Form.Item
+                                    label={<span className="inputLabel">Описание</span>}
+                                    name="description"
+                                    rules={[{required: true, message: 'Пожалуйста, введите описание'}]}
+                                >
+                                    <Input className="input"/>
+                                </Form.Item>
 
-                </Form>
-            </div>
+                            </Form>
+                        </div>
 
-            <div className="eventData">
-                <h1 className="h1_event">Сведения события</h1>
-                <Form
-                    className="form"
-                    name="basic"
-                    labelCol={{span: 10}}
-                    wrapperCol={{span: 14}}
-                    style={{maxWidth: '100%'}}
-                >
-                    <Form.Item
-                        label={<span className="inputLabel">Номер события</span>}
-                        name="name"
-                        rules={[{required: true, message: 'Пожалуйста, введите номер'}]}
-                    >
-                        <Input className="input"/>
-                    </Form.Item>
+                        <div className="attachedFile">
+                            <div className="attachedTools">
+                                <h1 className="h1_attachedFiles">Прикреплённые файлы:</h1>
+                                <Button
+                                    className="buttonAddFile"
+                                    icon={<PlusOutlined/>}
+                                    onClick={handleAddFile}
+                                >
+                                </Button>
+                            </div>
+                            <div className="attachedFiles">
+                                {AttachedFilesByUid.map((attachedFile: any, index: number) => (
+                                    <CardComponentAttachedFile
+                                        key={attachedFile.ID}
+                                        file={attachedFile}
+                                        isSelected={!!selectedFile[attachedFile.UID]}
+                                        onCheckboxChange={handleCheckboxChange}
+                                    />
+                                ))}
+                            </div>
 
-                    <Form.Item
-                        label={<span className="inputLabel">Описание</span>}
-                        name="description"
-                        rules={[{required: true, message: 'Пожалуйста, введите описание'}]}
-                    >
-                        <Input className="input"/>
-                    </Form.Item>
+                        </div>
+                    </div>
 
-                </Form>
-            </div>
-
-            <div className="attachedFile">
-                <div className="attachedTools">
-                    <h1 className="h1_attachedFiles">Прикреплённые файлы:</h1>
-                    <Button
-                        className="buttonAddFile"
-                        icon={<PlusOutlined/>}
-                        onClick={handleAddFile}
-                    >
-                    </Button>
+                        </Content>
+                        <Footer style={{background:'#ffff'}}>
+                            <Button
+                                className="buttonModalSave"
+                                onClick={onOk}
+                            >
+                                Сохранить
+                            </Button>
+                        </Footer>
+                    </Layout>
                 </div>
-                <div className="attachedFiles">
-                    <CardComponentAttachedFile/>
-                </div>
-            </div>
+                <AttachFile onCancel={onCloseAttachFile} onOk={onOkAttachFile} visible={openAttacheFiles}/>
 
-
-        </Drawer>
+            </Layout>
+        </Modal>
     );
 };
 

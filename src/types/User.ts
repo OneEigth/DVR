@@ -8,6 +8,7 @@ export interface User {
     password: string;
     name: string;
     role:string;
-    groups: Group[]
+    groups: Group[];
+    isAdmin: boolean
 }
 

@@ -1,28 +1,27 @@
 import create from "zustand";
-import {Group} from "../../types/Group";
-import {getAllGroups} from "../../api/groups/AllGroups";
-import {useAuthStore} from "../auth/auth";
+import { useAuthStore } from "../auth/auth";
+import { AttachedFile } from "../../types/AttachedFiles";
+import { getAttachedFilesByMediaFile } from "../../api/file/getAttachedFilesByMediaFile";
 
-
-interface GroupsStore {
-    groups: Group[];
-    fetchGroups: () => Promise<void>;
+interface AttachedFilesByUidStore {
+    AttachedFilesByUid: AttachedFile[];
+    fetchAttachedFilesByUid: (uid: string) => Promise<void>;
 }
 
-export const useGroupsStore = create<GroupsStore>((set) => ({
-    groups: [],
-    fetchGroups: async () => {
+export const useAttachedFilesByUidStore = create<AttachedFilesByUidStore>((set) => ({
+    AttachedFilesByUid: [],
+    fetchAttachedFilesByUid: async (uid) => {
         const { SmartDVRToken, user } = useAuthStore.getState();
         if (!user || !SmartDVRToken) {
             console.error('User or token information is missing.');
             return;
         }
         try {
-            const response = await getAllGroups(SmartDVRToken, user.login);
-            const groups = response.data || []; // Извлекаем массив устройств из ответа
-            set({ groups });
+            const response = await getAttachedFilesByMediaFile(SmartDVRToken, user.login, uid);
+            const AttachedFilesByUid = response.data || []; // Extracting the array of files from the response
+            set({ AttachedFilesByUid });
         } catch (error) {
-            console.error('Error fetching groups:', error);
+            console.error('Error fetching AttachedFiles:', error);
         }
     },
 }));

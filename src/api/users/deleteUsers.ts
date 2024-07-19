@@ -1,12 +1,13 @@
 
 import axios, {AxiosError} from 'axios';
-import {POST_DELETE_DEVICE_URL, POST_DELETE_GROUP_URL} from '../../const/const';
+import {DELETE_USER_API_URL, POST_DELETE_DEVICE_URL, POST_DELETE_GROUP_URL} from '../../const/const';
 import {Device} from "../../types/Device";
+import {User} from "../../types/User";
 
-interface DeleteDeviceData {
-    devices: Device ;
+interface DeleteUserData {
+    users: User ;
 }
-export const DeleteDevice = async (SmartDVRToken: string, userLogin: string, devices:DeleteDeviceData) => {
+export const DeleteUser = async (SmartDVRToken: string, userLogin: string, users:DeleteUserData) => {
 
     if (!userLogin || !SmartDVRToken) {
         console.error('User information is missing.');
@@ -15,8 +16,8 @@ export const DeleteDevice = async (SmartDVRToken: string, userLogin: string, dev
 
     try {
         const response = await axios.post(
-            POST_DELETE_DEVICE_URL,
-            devices,
+            DELETE_USER_API_URL,
+            users,
             {
                 headers: {
                     SmartDVRLogin: userLogin,
@@ -26,7 +27,7 @@ export const DeleteDevice = async (SmartDVRToken: string, userLogin: string, dev
         return response.data;
     } catch (error) {
         const err = error as AxiosError;
-        console.error('Error delete device:', err.response?.status, err.response?.data);
+        console.error('Error delete user:', err.response?.status, err.response?.data);
         return [];
     }
 };

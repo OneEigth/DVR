@@ -12,6 +12,7 @@ import DeleteFilesDOF from "../../../modals/deleteFile/DeleteFilesDOF";
 import {useButtonDeleteFromDOF} from "../../../../store/devices/useButtonsDeleteFromDOF";
 import MoreDetails from "../../../modals/moreDetails/MoreDetalies";
 import {useOpenMoreDetails} from "../../../../store/devices/useShowMoreDetails";
+import {useSelectedFile} from "../../../../store/devices/getSelectedFile";
 
 
 interface FileTableProps {
@@ -31,9 +32,10 @@ const FileTableLazy: React.FC<FileTableProps> = ({ device }) => {
     const { user, SmartDVRToken } = useAuthStore();
     const { fileType } = useFileCurrentTypeStore();
     const { selectedFiles, setSelectedFiles } = useFileSelectionStore();
+    const {selectedFile,setSelectedFile} = useSelectedFile();
     const { isDeleteDeviceModal, setIsDeleteDeviceModal } = useButtonDeleteFromDOF();
     const [page, setPage] = useState(1);
-    const [pageSize, setPageSize] = useState(3);
+    const [pageSize, setPageSize] = useState(15);
     const [isLoading, setIsLoading] = useState(false);
     const { openMoreDetails, setOpenMoreDetails } = useOpenMoreDetails();
 
@@ -113,6 +115,7 @@ const FileTableLazy: React.FC<FileTableProps> = ({ device }) => {
         setOpenMoreDetails(false);
     };
 
+
     return (
         <div className="FileTable">
             <div className="allDevice">
@@ -129,6 +132,7 @@ const FileTableLazy: React.FC<FileTableProps> = ({ device }) => {
             {isLoading && <div>Loading...</div>}
             <DeleteFilesDOF visible={isDeleteDeviceModal} files={selectedFiles} onOk={handleOkDeleteFileModal} onCancel={handleCancelDeleteFileModal} />
             <MoreDetails
+
                 onOk={onOkMoreDetails}
                 open={openMoreDetails}
                 onCancel={onCloseMoreDetails}

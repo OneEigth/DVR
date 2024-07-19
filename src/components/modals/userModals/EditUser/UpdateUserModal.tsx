@@ -1,20 +1,22 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Form, Input, Modal, Select, Switch, message } from 'antd';
 import {CloseOutlined} from "@ant-design/icons";
-import './styleModalUser.css'
+import './styleUpdateModalUser.css'
 import {useGroupsStore} from "../../../../store/groups/Groups";
 import {Group} from "../../../../types/Group";
 import {useAuthStore} from "../../../../store/auth/auth";
 import {getCreateUser} from "../../../../api/users/getCreateUser";
+import {User} from "../../../../types/User";
 
 const { Option } = Select;
 interface NewGroupModalProps {
     visible: boolean;
     onOk: () => void;
     onCancel: () => void;
+    selectedUser: User | null;
 
 }
-const NewUserModal: React.FC<NewGroupModalProps> = ({ visible, onOk, onCancel }) => {
+const NewUserModal: React.FC<NewGroupModalProps> = ({ visible, onOk, onCancel, selectedUser }) => {
 
     const { groups, fetchGroups } = useGroupsStore();
 
@@ -24,7 +26,7 @@ const NewUserModal: React.FC<NewGroupModalProps> = ({ visible, onOk, onCancel })
     const [login, setLogin] = useState<string>(''); // State for login
     const [password, setPassword] = useState<string>(''); // State for password
     const [isAdmin, setIsAdmin] = useState<boolean>(false); // State for admin status
-    const [parentUid, setParentUid] = useState<string | undefined>('00000000-0000-0000-0000-000000000001'); // State for selected group
+    const [parentUid, setParentUid] = useState<string | undefined>(); // State for selected group
 
     useEffect(() => {
         if (groups.length === 0) {
@@ -84,7 +86,7 @@ const NewUserModal: React.FC<NewGroupModalProps> = ({ visible, onOk, onCancel })
                 login: login,
                 password: password,
                 role: isAdmin ? 'admin' : 'user', // Assuming 'role' based on isAdmin state
-                groups: parentUid ? [parentUid] : []
+                groups: parentUid
             };
             getCreateUser(SmartDVRToken, user.login, userData as any)
                 .then((response) => {
@@ -110,72 +112,73 @@ const NewUserModal: React.FC<NewGroupModalProps> = ({ visible, onOk, onCancel })
 
 
     return (
-            <Modal
-                title={
+        <Modal
+            title={
                 <div className="titleModal_Group">
                     <span className="spanGroup">Добавить пользователя</span>
                     <CloseOutlined onClick={onCancel} className="closeBut_Group"/>
                 </div>
             }
-                className="newGroup_modal"
-                visible={visible}
-                onOk={onOk}
-                onCancel={onCancel}
-                width={720}
-                closable={false}
-                footer={<Button className="buttonAdd" onClick={handleOk}>Сохранить</Button>}
+            className="newGroup_modal"
+            visible={visible}
+            onOk={onOk}
+            onCancel={onCancel}
+            width={720}
+            closable={false}
+            footer={<Button className="buttonAdd" onClick={handleOk}>Сохранить</Button>}
+        >
+            <Form.Item
+                className="form_Group"
+                label={<span className="inputLabel_Group">Имя</span>}
+                name="name"
+                required={false}
             >
-                <Form.Item
-                    className="form_Group"
-                    label={<span className="inputLabel_Group">Имя</span>}
-                    name="name"
-                    required={false}
+                <Input className="input_Group" onChange={handleNameChange} />
+            </Form.Item>
+            <Form.Item
+                className="form_Group"
+                label={<span className="inputLabel_Group">Группа</span>}
+                name="parent_uid"
+                required={false}
+            >
+                <Select
+                    className="selectGroup"
+                    placeholder="Введите название или выберите из списка"
+                    onChange={handleParentUidChange}
+                    maxCount={10}
+                    mode="multiple"
                 >
-                    <Input className="input_Group" onChange={handleNameChange} />
-                </Form.Item>
-                <Form.Item
-                    className="form_Group"
-                    label={<span className="inputLabel_Group">Группа</span>}
-                    name="parent_uid"
-                    required={false}
-                >
-                    <Select
-                        className="selectGroup"
-                        placeholder="Введите название или выберите из списка"
-                        onChange={handleParentUidChange}
-                        maxCount={1}
-                    >
-                        {allGroups.filter(group => group.uid !== '00000000-0000-0000-0000-000000000003').map(group => (
-                            <Option key={group.uid} value={group.uid}>{group.name}</Option>
-                        ))}
-                    </Select>
-                </Form.Item>
-                <Form.Item
-                    className="form_Group"
-                    label={<span className="inputLabel_Group">Логин</span>}
-                    name="login"
-                    required={false}
-                >
-                    <Input className="input_Group" onChange={handleLoginChange} />
-                </Form.Item>
-                <Form.Item
-                    className="form_Group"
-                    label={<span className="inputLabel_Group">Администратор</span>}
-                    name="isAdmin"
-                    required={false}
-                >
-                    <Switch defaultChecked onChange={handleIsAdminChange} />
-                </Form.Item>
-                <Form.Item
-                    className="form_Group"
-                    label={<span className="inputLabel_Group">Пароль</span>}
-                    name="password"
-                    required={false}
-                >
-                    <Input className="input_Group" onChange={handlePasswordChange} />
-                </Form.Item>
+                    {allGroups.filter(group => group.uid !== '00000000-0000-0000-0000-000000000003').map(group => (
+                        <Option key={group.uid} value={group.uid}>{group.name}</Option>
+                    ))}
+                </Select>
+            </Form.Item>
+            <Form.Item
+                className="form_Group"
+                label={<span className="inputLabel_Group">Логин</span>}
+                name="login"
+                required={false}
+            >
+                <Input className="input_Group" onChange={handleLoginChange} />
+            </Form.Item>
+            <Form.Item
+                className="form_Group"
+                label={<span className="inputLabel_Group">Администратор</span>}
+                name="isAdmin"
+                required={false}
+            >
+                <Switch defaultChecked onChange={handleIsAdminChange} />
+            </Form.Item>
+            <Form.Item
+                className="form_Group"
+                label={<span className="inputLabel_Group">Пароль</span>}
+                name="password"
+                required={false}
+            >
+                <Input className="input_Group" onChange={handlePasswordChange} />
+            </Form.Item>
 
-            </Modal>
+        </Modal>
     );
 };
 export default NewUserModal;

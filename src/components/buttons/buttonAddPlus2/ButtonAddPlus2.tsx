@@ -7,10 +7,10 @@ interface ButtonAddPlusProps {
     onClick: () => void;
 }
 
-const ButtonAddPlus: React.FC<ButtonAddPlusProps> = ({ onClick }) => (
+const ButtonAddPlus2: React.FC<ButtonAddPlusProps> = ({ onClick }) => (
     <Flex gap="small" wrap="wrap" className="flex">
-    <Button className="buttonAddPlus" icon={<PlusOutlined />} onClick={onClick} style={{ backgroundColor: '#4D4E65' , color:  '#FFFFFF' , margin:0, border: '1px solid #4D4E65', display: 'flex', alignItems: 'center', justifyContent: 'center' }} ></Button>
+    <Button className="buttonAddPlus" icon={<PlusOutlined />} onClick={onClick} style={{ backgroundColor: '#4D4E65' , color:  '#FFFFFF' , border: '1px solid #4D4E65', display: 'flex', alignItems: 'center', justifyContent: 'center' }} ></Button>
     </Flex>
 );
 
-export default ButtonAddPlus;
+export default ButtonAddPlus2;

@@ -1,10 +1,35 @@
 .DrawerMoreDetails {
-    width: 400px!important;
+    width: 1440px!important;
+    height: 992px;
 }
 
 .DrawerMoreDetails .ant-drawer-header{
-    background: #E8EBED;
+
 }
+
+.header_MD{
+    display: flex;
+    flex-direction: column;
+}
+
+.LR_MD{
+    display: flex;
+    flex-direction: row;
+}
+
+.right_MD{
+    display: flex;
+    flex-direction: column;
+    margin-left: 24px;
+    width: 400px;
+}
+.left_MD{
+    width: 952px;
+}
+.ant-modal-footer{
+    display: none;
+}
+
 
 .titleModal{
     display: flex;
@@ -21,6 +46,15 @@
     line-height: 32px;
     text-align: right;
     color: #21201F;
+}
+
+.title0{
+    display: flex;
+    flex-direction: column;
+}
+.title2{
+    display: flex;
+    flex-direction: row;
 }
 
 .closeBut2{
@@ -119,5 +153,20 @@
     line-height: 20px;
     letter-spacing: 0.25px;
     text-align: left;
+
+}
+
+.h1_event{
+    width: 100%;
+    font-family: Roboto;
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 28px;
+    text-align: left;
+
+
+}
+
+.content-MD .content-RMD{
 
 }

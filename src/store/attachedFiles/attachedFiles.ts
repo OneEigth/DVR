@@ -1,28 +1,27 @@
 import create from "zustand";
-import {Group} from "../../types/Group";
-import {getAllGroups} from "../../api/groups/AllGroups";
-import {useAuthStore} from "../auth/auth";
+import { useAuthStore } from "../auth/auth";
+import { AttachedFile } from "../../types/AttachedFiles";
+import { getAllAttachedFiles } from "../../api/file/getAttachedFiles";
 
-
-interface GroupsStore {
-    groups: Group[];
-    fetchGroups: () => Promise<void>;
+interface AllAttachedFilesStore {
+    AllAttachedFiles: AttachedFile[];
+    fetchAllAttachedFiles: () => Promise<void>;
 }
 
-export const useGroupsStore = create<GroupsStore>((set) => ({
-    groups: [],
-    fetchGroups: async () => {
+export const useAllAttachedFilesStore = create<AllAttachedFilesStore>((set) => ({
+    AllAttachedFiles: [],
+    fetchAllAttachedFiles: async () => {
         const { SmartDVRToken, user } = useAuthStore.getState();
         if (!user || !SmartDVRToken) {
             console.error('User or token information is missing.');
             return;
         }
         try {
-            const response = await getAllGroups(SmartDVRToken, user.login);
-            const groups = response.data || []; // Извлекаем массив устройств из ответа
-            set({ groups });
+            const response = await getAllAttachedFiles(SmartDVRToken, user.login);
+            const AllAttachedFiles = response.data || []; // Extracting the array of files from the response
+            set({ AllAttachedFiles });
         } catch (error) {
-            console.error('Error fetching groups:', error);
+            console.error('Error fetching AttachedFiles:', error);
         }
     },
 }));

@@ -2,10 +2,10 @@ import React, {useEffect, useState} from 'react';
 import {Button, Form, Input, Modal, Select, Switch, message } from 'antd';
 import {CloseOutlined} from "@ant-design/icons";
 import './styleModalUser.css'
-import {useGroupsStore} from "../../../store/groups/Groups";
-import {Group} from "../../../types/Group";
-import {useAuthStore} from "../../../store/auth/auth";
-import {getCreateUser} from "../../../api/users/getCreateUser";
+import {useGroupsStore} from "../../../../store/groups/Groups";
+import {Group} from "../../../../types/Group";
+import {useAuthStore} from "../../../../store/auth/auth";
+import {getCreateUser} from "../../../../api/users/getCreateUser";
 
 const { Option } = Select;
 interface NewGroupModalProps {

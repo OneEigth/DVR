@@ -1,12 +1,12 @@
 
 import axios, {AxiosError} from 'axios';
-import {VIDEO_RECORD_START_DEVICE_API_URL} from '../../const/const';
+import {AUDIO_RECORD_START_DEVICE_API_URL, VIDEO_RECORD_START_DEVICE_API_URL} from '../../const/const';
 
 
 interface DeviceUIDData {
     UID: string;
 }
-export const VideoRecordStart = async (SmartDVRToken: string, userLogin: string, UID:DeviceUIDData) => {
+export const AudioRecordStart = async (SmartDVRToken: string, userLogin: string, UID:DeviceUIDData) => {
 
     if (!userLogin || !SmartDVRToken) {
         console.error('User information is missing.');
@@ -15,7 +15,7 @@ export const VideoRecordStart = async (SmartDVRToken: string, userLogin: string,
 
     try {
         const response = await axios.post(
-            VIDEO_RECORD_START_DEVICE_API_URL,
+            AUDIO_RECORD_START_DEVICE_API_URL,
             UID,
             {
                 headers: {
@@ -26,7 +26,7 @@ export const VideoRecordStart = async (SmartDVRToken: string, userLogin: string,
         return response.data;
     } catch (error) {
         const err = error as AxiosError;
-        console.error('Error videoRecordStart device:', err.response?.status, err.response?.data);
+        console.error('Error audioRecordStart device:', err.response?.status, err.response?.data);
         return;
     }
 };

@@ -12,6 +12,7 @@ export interface Device {
     latitude: number,
     longitude: number,
     ownerUID: string,
+    ownerName: string,
     online: boolean,
     battery_level: number,
     signal_level: number,

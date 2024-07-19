@@ -1,12 +1,12 @@
 // MenuRSStateStore.ts
 import create from 'zustand';
 
-interface MenuRSStateStore {
-    selectedStateMenuRS: string;
-    setSelectedStateMenuRS: (uid: string) => void;
+interface useMenuUsersStateStore {
+    selectedStateMenuUsers: string;
+    setSelectedStateMenuUsers: (uid: string) => void;
 }
 
-export const useMenuRSStateStore = create<MenuRSStateStore>((set) => ({
-    selectedStateMenuRS: '',
-    setSelectedStateMenuRS: (uid: string) => set({ selectedStateMenuRS: uid }),
+export const useMenuUsersState = create<useMenuUsersStateStore>((set) => ({
+    selectedStateMenuUsers: '',
+    setSelectedStateMenuUsers: (uid: string) => set({ selectedStateMenuUsers: uid }),
 }));

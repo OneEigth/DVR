@@ -20,7 +20,7 @@ interface CardComponentProps {
     onCheckboxChange: (fileId: string, checked: boolean) => void;
 }
 
-const CardComponentAttachedFile: React.FC = () => {
+const CardComponentAttachedFile: React.FC<CardComponentProps> = ({file}) => {
     const { setSelectedFileUID } = useFileStore();
     const { user,SmartDVRToken } = useAuthStore.getState();
     const {setIsStreamOnline}=useOnlineStateStream();
@@ -60,7 +60,7 @@ const CardComponentAttachedFile: React.FC = () => {
             <div className="container_cover">
               <div className="cover">
               </div>
-               <h1 className="h1_attachedFileName">Name</h1>
+               <h1 className="h1_attachedFileName">{file.name}</h1>
             </div>
 
              <div className="buttons">

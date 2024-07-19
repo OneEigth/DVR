@@ -12,6 +12,8 @@ import {Group} from "../../../../types/Group";
 import DeleteDeviceOneModal from "../../../modals/deleteDevice/DeleteDeviceOne";
 import {useIsFormChanged} from "../../../../store/devices/getDeviceChange";
 import NotSavedChanges from "../../../modals/notSavedChanges/NotSavedChanges";
+import {useOwnerStore} from "../../../../store/owner/useOwnerStore";
+import {Owner} from "../../../../types/Owner";
 
 
 interface DescriptionsProps{
@@ -23,9 +25,13 @@ const Description: React.FC<DescriptionsProps> = ({device}) => {
     const {user,SmartDVRToken}=useAuthStore();
     const [messageApi, contextHolder] = message.useMessage();
     const { groups, fetchGroups } = useGroupsStore();
+    const {owners,fetchOwners}=useOwnerStore();
     const [selectedGroup, setSelectedGroup] = useState<Group | null>(null);
+    const [selectedOwner, setSelectedOwner] = useState<Owner | null>(null);
     const [isDeleteDeviceOneModal, setIsDeleteDeviceOneModal] = useState(false);
     const {setIsFormChanged, setIsNotSavedModalVisible, isNotSavedModalVisible} = useIsFormChanged();
+    const [page, setPage] = useState(1);
+    const [pageSize, setPageSize] = useState(15);
 
     const initialValuesLeft = {
         name: device.name,
@@ -34,17 +40,19 @@ const Description: React.FC<DescriptionsProps> = ({device}) => {
     };
 
     const initialValuesRight = {
-        ownerUID: device.ownerUID,
+        ownerName: device.ownerName,
         serialNumber: device.DID,
         model: device.model,
     };
 
     useEffect(() => {
+
         formLeft.setFieldsValue(initialValuesLeft);
         formRight.setFieldsValue(initialValuesRight);
 
+        fetchOwners(page,pageSize);
         fetchGroups();
-    }, [device, formLeft, formRight, fetchGroups]);
+    }, [device, formLeft, formRight, fetchGroups, fetchOwners]);
 
     const checkForChanges = () => {
         const valuesLeft = formLeft.getFieldsValue();
@@ -85,7 +93,7 @@ const Description: React.FC<DescriptionsProps> = ({device}) => {
                     groupUID: device.groupUID,
                 };
                 const initialValuesRight = {
-                    ownerUID: device.ownerUID,
+                    ownerName: device.ownerName,
                     serialNumber: device.DID,
                     model: device.model,
                 };
@@ -98,6 +106,7 @@ const Description: React.FC<DescriptionsProps> = ({device}) => {
                     ...changedValuesLeft,
                     ...changedValuesRight,
                     groupUID: selectedGroup ? selectedGroup.uid : valuesLeft.groupUID,
+                    ownerUID: selectedOwner ? selectedOwner.UID : valuesRight.ownerUID,
                 };
 
                 const response = await getEditDevice(SmartDVRToken, user.login, updatedDeviceData);
@@ -139,6 +148,7 @@ const Description: React.FC<DescriptionsProps> = ({device}) => {
         setIsNotSavedModalVisible(false)
     }
 
+    console.log("owners"+owners)
     return (
         <div className="description_cont">
             {contextHolder}
@@ -155,9 +165,9 @@ const Description: React.FC<DescriptionsProps> = ({device}) => {
 
                     >
                         <Form.Item
-                            label={<span className="inputLabel">Название</span>}
+                            label={<span className="inputLabel">Позывной</span>}
                             name="name"
-                            rules={[{ required: true, message: 'Пожалуйста, введите название' }]}
+                            rules={[{ required: true, message: 'Пожалуйста, введите позывной' }]}
 
                         >
                             <Input className="input" />
@@ -208,11 +218,23 @@ const Description: React.FC<DescriptionsProps> = ({device}) => {
                         onValuesChange={checkForChanges}
                     >
                         <Form.Item
-                            label={<span className="inputLabel">Сотрудник</span>}
-                            name="ownerUID"
-                            rules={[{ required: false, message: 'Пожалуйста, введите сотрудника' }]}
+                            label={<span className="inputLabel">Владелец</span>}
+                            name="ownerName"
+                            rules={[{ required: true, message: 'Пожалуйста, выберите владельца' }]}
                         >
-                            <Input className="input" />
+                            <AutoComplete
+                                options={owners.map(owner => ({ value: owner.name}))}
+                                filterOption={(inputValue, option) =>
+                                    option?.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                                }
+                                onSelect={(selectedValueOwner) => {
+                                    const selectedOwner = owners.find(owner => owner.name === selectedValueOwner);
+                                    setSelectedOwner(selectedOwner ?? null);
+                                    formRight.setFieldsValue({ ownerUID: selectedOwner ? selectedOwner.UID : null });
+                                }}
+                            >
+                                <Input className="input" />
+                            </AutoComplete>
                         </Form.Item>
 
                         <Form.Item

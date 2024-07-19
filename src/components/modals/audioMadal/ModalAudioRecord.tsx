@@ -1,29 +1,29 @@
 import React, {useEffect, useState} from 'react';
 import {Button, ConfigProvider, message, Modal, notification} from 'antd';
 import {useAuthStore} from "../../../store/auth/auth";
-import "./vrStyle.css"
+import "./arStyle.css"
 
 import {Device} from "../../../types/Device";
-import {VideoRecordEnd} from "../../../api/videoRec/VideoRecStop";
+import {AudioRecordEnd} from "../../../api/audioRec/AudioRecStop";
 
-interface RecordVideoModal {
+interface RecordAudioModal {
     visible: boolean;
     device:Device;
     onOk: () => void;
     onCancel: () => void;
 }
-const RecordVideoModal: React.FC<RecordVideoModal> = ({ visible,device, onOk, onCancel }) => {
+const RecordAudioModal: React.FC<RecordAudioModal> = ({ visible,device, onOk, onCancel }) => {
 
     const { user, SmartDVRToken } = useAuthStore();
     const [messageApi] = message.useMessage();
     const [time, setTime] = useState(0);
     const [isRecording, setIsRecording] = useState(false);
 
-    //Действие завершения видеозаписи
+    //Действие завершения аудиозаписи
     const handleOk =async () => {
-        // Вызов API для начала записи видео
+        // Вызов API для начала записи аудио
         if (SmartDVRToken && user?.login && device.UID) {
-            await VideoRecordEnd(SmartDVRToken, user.login, { UID: device.UID });
+            await AudioRecordEnd(SmartDVRToken, user.login, { UID: device.UID });
             onOk()
         } else {
             console.error('Missing SmartDVRToken, user login or device UID.');
@@ -89,7 +89,7 @@ const RecordVideoModal: React.FC<RecordVideoModal> = ({ visible,device, onOk, on
                             {formatTime(time)}
                         </div>
                         <div>
-                            <h1 className="h1_vr">Запись видео</h1>
+                            <h1 className="h1_vr">Запись аудио</h1>
                         </div>
                     </div>
 
@@ -102,4 +102,4 @@ const RecordVideoModal: React.FC<RecordVideoModal> = ({ visible,device, onOk, on
     );
 };
 
-export default RecordVideoModal;
+export default RecordAudioModal;
