@@ -131,8 +131,10 @@ const FileTableLazy: React.FC<FileTableProps> = ({ device }) => {
             </div>
             {isLoading && <div>Loading...</div>}
             <DeleteFilesDOF visible={isDeleteDeviceModal} files={selectedFiles} onOk={handleOkDeleteFileModal} onCancel={handleCancelDeleteFileModal} />
-            <MoreDetails
 
+
+
+            <MoreDetails
                 onOk={onOkMoreDetails}
                 open={openMoreDetails}
                 onCancel={onCloseMoreDetails}

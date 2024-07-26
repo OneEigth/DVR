@@ -1,6 +1,6 @@
 
 import axios, {AxiosError} from 'axios';
-import { POST_DEVICE_UPDATE_URL} from '../../const/const';
+import {POST_DEVICE_UPDATE_URL, UPDATE_LAYOUT_URL} from '../../const/const';
 
 
 interface getEditDeviceData{
@@ -33,6 +33,6 @@ export const getEditDevice = async (SmartDVRToken: string, userLogin: string, gr
     } catch (error) {
         const err = error as AxiosError;
         console.error('Error edit device group:', err.response?.status, err.response?.data);
-        return { success: false, error: err.response?.data || 'Unknown error' };
+        return {success: false, error: err.response?.data || 'Unknown error'};
     }
-};
+}

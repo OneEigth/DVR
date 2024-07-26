@@ -21,7 +21,11 @@ export const POST_DEVICE_UPDATE_URL=`${URL_A}/device/update`;
 export const GET_DEVICE_TIME_ONLINE_URL=`${URL_A}/device/online_count`;
 
 
-
+//layouts
+export const GET_ALL_LAYOUTS_URL= `${URL_A}/layout/get_by/all`
+export const CREATE_LAYOUT_URL= `${URL_A}/layout/insert`
+export const UPDATE_LAYOUT_URL= `${URL_A}/layout/update`
+export const DELETE_LAYOUT_URL= `${URL_A}/layout/delete`
 
 
 //Files

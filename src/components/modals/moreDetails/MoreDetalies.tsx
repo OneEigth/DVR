@@ -109,10 +109,13 @@ const MoreDetails: React.FC<MoreDetailsProps> = ({open, onOk, onCancel}) => {
             footer={false}
             onClose={onCancel}
             open={open}
+            width={selectedFile.fileType === 'm4a' ? 646: 1440}
         >
 
             <Layout style={{background:'#ffff'}}>
                 <div className="LR_MD">
+                    {selectedFile.fileType === 'm4a' ? (
+                        <></> ) : (
                     <Layout>
                         <Content className="content-MD">
                             <div className="left_MD">
@@ -120,9 +123,20 @@ const MoreDetails: React.FC<MoreDetailsProps> = ({open, onOk, onCancel}) => {
                             </div>
                         </Content>
                     </Layout >
+                        )}
                     <Layout style={{background:'#ffff', width:400}}>
                         <Content className="content-RMD" >
                     <div className="right_MD">
+
+                        {selectedFile.fileType === 'm4a' ? (
+                                <div className="left_MD">
+                                    <Player source={getFilePlayUrl(SmartDVRToken)} type={selectedFile.fileType}/>
+                                </div>
+
+                            ) : (
+                            <></>
+                        )}
+
                         <div className="fileData">
                             <h1 className="h1_event">Сведения файла</h1>
                             <Form

@@ -37,6 +37,12 @@ const CardComponentFile: React.FC<CardComponentProps> = ({ file}) => {
         setSelectedFileUID(FileUid);
         setIsStreamOnline(false);
 
+        if (!file){
+            setOpenMoreDetails(false);
+        }
+        setSelectedFile(file);
+        setOpenMoreDetails(true);
+
     };
 
 
@@ -135,7 +141,7 @@ const CardComponentFile: React.FC<CardComponentProps> = ({ file}) => {
                             style={{width: 152, marginBottom: 16}}
                             options={options}
                         />
-                        <ButtonAction onClick={showDrawerMoreDetails}/>
+
                     </div>
                 </div>
             </div>

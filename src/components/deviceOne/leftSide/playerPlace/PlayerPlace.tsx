@@ -21,15 +21,11 @@ const PlayerPlace: React.FC<PlayerPlaceProps> = ({device}) => {
     const getFilePlayUrl = (uid: string, authToken: string) => {
 
         const playOnline= `${ONLINE_PLAY_URL}${uid}/${authToken}`;
-        const playFile= `${FILE_PLAY_URL}${selectedFileUID}/${authToken}`;
-
 
         if(isStreamOnline && device.online){
 
         return playOnline
         }
-
-            return playFile
 
     };
 

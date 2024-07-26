@@ -1,21 +1,30 @@
 import React, {useState} from 'react';
 import MainMenu from "../../components/menu/Menu";
 import './style.css'
-import {Layout} from 'antd';
+import {Input, Layout, Menu} from 'antd';
+import {SearchOutlined} from "@ant-design/icons";
+import ButtonAddPlus from "../../components/buttons/buttonAddPlus/ButtonAddPlus";
 
 const {Header, Content, Footer} = Layout;
 
 
 const Layouts: React.FC = () => {
     const [currentMenuItem, setCurrentMenuItem] = useState('layouts');
+    const [searchText, setSearchText] = useState(''); // Состояние для текста поиска
 
     const handleMenuClick = (key: string) => {
         setCurrentMenuItem(key);
     };
 
+    const handleAddLayout = () => {
+    };
+
+
+
+
     return (
 
-        <Layout style={{ minHeight: '100vh' }}>
+        <Layout style={{minHeight: '100vh'}}>
             <Header style={{
                 position: 'sticky',
                 top: 0,
@@ -27,7 +36,7 @@ const Layouts: React.FC = () => {
                 paddingRight: 0
             }}>
                 <div className="menu">
-                    <MainMenu onClick={handleMenuClick} currentMenuItem={currentMenuItem} />
+                    <MainMenu onClick={handleMenuClick} currentMenuItem={currentMenuItem}/>
                 </div>
             </Header>
 
@@ -40,7 +49,29 @@ const Layouts: React.FC = () => {
                         flex: 1,
                         padding: '16px'
                     }}>
-                        {/* Ваш основной контент здесь */}
+                        <div className="layouts">
+                            <div className="header_layouts">
+                                <div className="left_HT">
+                                    <div className="Users">
+                                        <h1 className="name">Раскладки</h1>
+                                        <h1 className="count">(2)</h1>
+                                        <ButtonAddPlus onClick={handleAddLayout}/>
+                                    </div>
+                                </div>
+                                <div className="right_HT">
+                                    <Input
+                                        placeholder={"Поиск"}
+                                        className="right_HT_input"
+                                        suffix={<SearchOutlined style={{marginLeft: '0px', padding: 0}}/>}
+                                        value={searchText} // Устанавливаем значение текста поиска
+                                        onChange={e => setSearchText(e.target.value)} // Обработчик изменения текста поиска
+                                    />
+                                </div>
+                            </div>
+                            <div className="body_layouts">
+
+                            </div>
+                        </div>
                     </Content>
 
                     <Footer style={{
@@ -52,9 +83,9 @@ const Layouts: React.FC = () => {
                         background: "blue",
                         position: 'relative',
                         bottom: 0,
-                        backgroundColor:'#ffffff'
+                        backgroundColor: '#ffffff'
                     }}>
-                        {/* Ваш футер здесь */}
+                    {/* Ваш футер здесь */}
                     </Footer>
                 </Layout>
             </Layout>
