@@ -5,7 +5,7 @@ import L from 'leaflet';
 import {Device} from "../../types/Device";
 
 interface LocationMapProps {
-    device: Device;
+    device: Device | null;
 }
 
 L.Icon.Default.imagePath = "https://unpkg.com/leaflet@1.5.0/dist/images/"; // иконка маркера
@@ -19,7 +19,9 @@ const LocationMap: React.FC<LocationMapProps> = ({ device }) => {
         }
     }, [device]);
 
-    console.log("device "+device.UID)
+    if (!device) {
+        return <div>No device selected</div>; // Обработка случая, когда device не задан
+    }
 
     return (
         <div className="LocationMap">

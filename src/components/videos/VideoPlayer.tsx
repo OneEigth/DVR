@@ -26,7 +26,7 @@ import IconOffline from "../icons/iconOffline/IconOffline";
 interface VideoPlayerProps {
   src: any;
   autoPlay?: boolean;
-  device:Device;
+  device:Device | null;
 }
 
 const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, autoPlay = true ,device}) => {
@@ -575,7 +575,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, autoPlay = true ,device}
             />
           </div>
           <div className="vp-controls__body_center">
-            {device.online ?
+            {device && device.online ?
                 <div className="online" onClick={handleOnlineStream}>
                   <IconOnline/>
                   <h1>Онлайн</h1>

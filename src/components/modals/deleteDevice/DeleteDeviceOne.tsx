@@ -9,7 +9,7 @@ import "./DelDevOne.css"
 
 interface DeleteDeviceProps {
     visible: boolean;
-    device:Device;
+    device:Device | null;
     onOk: () => void;
     onCancel: () => void;
 }
@@ -75,7 +75,7 @@ const DeleteDeviceOneModal: React.FC<DeleteDeviceProps> = ({ visible,device, onO
                 </div>
             }
         >
-            <span className="contentText"> Удалить "Устройство {device.name}"? </span>
+            <span className="contentText"> Удалить "Устройство {device?.name}"? </span>
         </Modal>
     );
 };

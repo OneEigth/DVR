@@ -16,7 +16,7 @@ import {useSelectedFile} from "../../../../store/devices/getSelectedFile";
 
 
 interface FileTableProps {
-    device: Device;
+    device: Device | null;
 }
 
 interface FileData {
@@ -32,7 +32,6 @@ const FileTableLazy: React.FC<FileTableProps> = ({ device }) => {
     const { user, SmartDVRToken } = useAuthStore();
     const { fileType } = useFileCurrentTypeStore();
     const { selectedFiles, setSelectedFiles } = useFileSelectionStore();
-    const {selectedFile,setSelectedFile} = useSelectedFile();
     const { isDeleteDeviceModal, setIsDeleteDeviceModal } = useButtonDeleteFromDOF();
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(15);
@@ -49,6 +48,9 @@ const FileTableLazy: React.FC<FileTableProps> = ({ device }) => {
     };
 
     const fetchFilteredFiles = useCallback(async () => {
+        if (!device) {
+            return; // Добавьте проверку на null
+        }
         const deviceUID = device.UID;
         let dateStart = "2024-02-27T20:22:49+05:00";
         let dateEnd = "2024-12-14T23:59:59+05:00";

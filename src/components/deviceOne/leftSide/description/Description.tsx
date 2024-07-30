@@ -17,7 +17,7 @@ import {Owner} from "../../../../types/Owner";
 
 
 interface DescriptionsProps{
-    device: Device;
+    device: Device | null;
 }
 const Description: React.FC<DescriptionsProps> = ({device}) => {
     const [formLeft] = Form.useForm();
@@ -34,15 +34,15 @@ const Description: React.FC<DescriptionsProps> = ({device}) => {
     const [pageSize, setPageSize] = useState(15);
 
     const initialValuesLeft = {
-        name: device.name,
-        description: device.description,
-        groupName: device.groupName,
+        name: device?.name,
+        description: device?.description,
+        groupName: device?.groupName,
     };
 
     const initialValuesRight = {
-        ownerName: device.ownerName,
-        serialNumber: device.DID,
-        model: device.model,
+        ownerName: device?.ownerName,
+        serialNumber: device?.DID,
+        model: device?.model,
     };
 
     useEffect(() => {
@@ -88,40 +88,44 @@ const Description: React.FC<DescriptionsProps> = ({device}) => {
                 const valuesRight = await formRight.validateFields();
 
                 const initialValuesLeft = {
-                    name: device.name,
-                    description: device.description,
-                    groupUID: device.groupUID,
+                    name: device?.name,
+                    description: device?.description,
+                    groupUID: device?.groupUID,
                 };
                 const initialValuesRight = {
-                    ownerName: device.ownerName,
-                    serialNumber: device.DID,
-                    model: device.model,
+                    ownerName: device?.ownerName,
+                    serialNumber: device?.DID,
+                    model: device?.model,
                 };
 
                 const changedValuesLeft = getChangedFields(initialValuesLeft, valuesLeft);
                 const changedValuesRight = getChangedFields(initialValuesRight, valuesRight);
 
-                const updatedDeviceData = {
-                    UID: device.UID,
-                    ...changedValuesLeft,
-                    ...changedValuesRight,
-                    groupUID: selectedGroup ? selectedGroup.uid : valuesLeft.groupUID,
-                    ownerUID: selectedOwner ? selectedOwner.UID : valuesRight.ownerUID,
-                };
+                if (device?.UID && SmartDVRToken) {
+                    const updatedDeviceData = {
+                        UID: device.UID, // Здесь мы уже уверены, что UID не undefined
+                        ...changedValuesLeft,
+                        ...changedValuesRight,
+                        groupUID: selectedGroup ? selectedGroup.uid : valuesLeft.groupUID,
+                        ownerUID: selectedOwner ? selectedOwner.UID : valuesRight.ownerUID,
+                    };
 
-                const response = await getEditDevice(SmartDVRToken, user.login, updatedDeviceData);
+                    const response = await getEditDevice(SmartDVRToken, user.login, updatedDeviceData);
 
-                if (response?.success) {
-                    messageApi.success('Устройство обновлено');
-                    setIsFormChanged(false);
-                } else {
-                    const errorMessage = response?.error;
-
-                    if (errorMessage === "in DeviceUpdateByData user is not admin or wrong group") {
-                        messageApi.error('У пользователя нет прав на редактирование устройства');
+                    if (response?.success) {
+                        messageApi.success('Устройство обновлено');
+                        setIsFormChanged(false);
                     } else {
-                        messageApi.error('Ошибка обновления: ' + errorMessage);
+                        const errorMessage = response?.error;
+
+                        if (errorMessage === "in DeviceUpdateByData user is not admin or wrong group") {
+                            messageApi.error('У пользователя нет прав на редактирование устройства');
+                        } else {
+                            messageApi.error('Ошибка обновления: ' + errorMessage);
+                        }
                     }
+                } else {
+                    messageApi.error('Device UID or SmartDVRToken is missing');
                 }
             } catch (error) {
                 console.error('Validation failed:', error);

@@ -7,7 +7,7 @@ import {getTimeOnline} from "../../../../api/devices/getTimeOnline";
 import {useAuthStore} from "../../../../store/auth/auth";
 
 interface DeviceProps{
-    device:Device
+    device:Device | null
 }
 const InfoBar: React.FC<DeviceProps> = ({device}) => {
     const {user,SmartDVRToken}=useAuthStore();
@@ -16,7 +16,7 @@ const InfoBar: React.FC<DeviceProps> = ({device}) => {
 
     useEffect(() => {
         const fetchTimeOnline = async () => {
-            if (user?.login && SmartDVRToken) {
+            if (device && user?.login && SmartDVRToken) {
                 try {
                     const result = await getTimeOnline(SmartDVRToken, user.login, device.UID);
                     if (result?.success) {
@@ -38,15 +38,7 @@ const InfoBar: React.FC<DeviceProps> = ({device}) => {
         return () => clearInterval(interval); // Cleanup on unmount
     }, [user, SmartDVRToken, device]);
 
-   /* const formatTime = (totalMinutes: number): string => {
-        const hours = Math.floor(totalMinutes / 60);
-        const minutes = totalMinutes % 60;
-        const seconds = 0; // Assuming no seconds information available
 
-        const pad = (num: number) => String(num).padStart(2, '0');
-
-        return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
-    };*/
 
     const formatTime = (totalMinutes: number): string => {
         const hours = Math.floor(totalMinutes / 60);
@@ -57,7 +49,7 @@ const InfoBar: React.FC<DeviceProps> = ({device}) => {
         return `${pad(hours)}:${pad(minutes)}`;
     };
 
-    const usedMemoryPercentage = device.storageInfo
+    const usedMemoryPercentage = device?.storageInfo
         ? Number((device.storageInfo.internalUsed / device.storageInfo.internal * 100).toFixed(0))
         : 0;
 
@@ -65,7 +57,7 @@ const InfoBar: React.FC<DeviceProps> = ({device}) => {
         <div className="infoBarDevice">
             <div className="battery">
                 <h1 className="h1bat">Уровень заряда</h1>
-                <span className="span"><IconSignalLow/>{device.battery_level}%</span>
+                <span className="span"><IconSignalLow/>{device?.battery_level}%</span>
             </div>
             <div className="hdd">
                 <h1 className="h1hdd">Занятость жёсткого диска</h1>
@@ -88,7 +80,7 @@ const InfoBar: React.FC<DeviceProps> = ({device}) => {
             </div>
             <div className="time">
                 <h1 className="h1time">Время онлайн</h1>
-                { device.online ?
+                { device?.online ?
                 <h1 className="h1OnlineTime">{onlineTime}</h1>
                     : ""}
             </div>

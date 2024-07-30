@@ -3,37 +3,42 @@ import "./style.css"
 import VideoPlayer from "../../../videos/VideoPlayer";
 import {Device} from "../../../../types/Device";
 import {useAuthStore} from "../../../../store/auth/auth";
-import {FILE_PLAY_URL, ONLINE_PLAY_URL} from "../../../../const/const";
-import {useFileStore} from "../../../../store/devices/fileStore";
+import {ONLINE_PLAY_URL} from "../../../../const/const";
 import {useOnlineStateStream} from "../../../../store/devices/onlineStream";
+import foto from './Video.png'
 
 interface PlayerPlaceProps {
-    device: Device
+    device: Device | null;
 }
 const PlayerPlace: React.FC<PlayerPlaceProps> = ({device}) => {
     const { SmartDVRToken } = useAuthStore.getState();
-    const { selectedFileUID, setSelectedFileUID } = useFileStore();
-    console.log("PlayerPlace " + device.UID)
+
     const {isStreamOnline}=useOnlineStateStream();
 
-    console.log("статус: "+selectedFileUID)
+
 
     const getFilePlayUrl = (uid: string, authToken: string) => {
-
+        if (!device || !authToken) return "";
         const playOnline= `${ONLINE_PLAY_URL}${uid}/${authToken}`;
 
-        if(isStreamOnline && device.online){
+        if(device && isStreamOnline && device.online){
 
         return playOnline
         }
 
     };
 
-
+    const videoSrc = device ? getFilePlayUrl(device.UID, SmartDVRToken) : "";
 
     return(
         <div className="PlayerPlace">
-            <VideoPlayer src={getFilePlayUrl(device.UID, SmartDVRToken )} device={device} />
+            {videoSrc ? (
+            <VideoPlayer src={videoSrc} device={device} />
+            ) : (
+                <div className="noVideo">
+                    <img src={foto} alt=''/>
+                </div>
+            )}
         </div>
     );
 }

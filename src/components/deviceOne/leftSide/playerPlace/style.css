@@ -10,3 +10,9 @@
     width: 100%;
     background-color: #4D4E65;
 }
+.noVideo{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    background-color: #D3DADF;
+}

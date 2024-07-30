@@ -11,7 +11,7 @@ import {getEditDevice} from "../../../api/devices/getEditDevice";
 
 interface NotSavedChangesProps {
     visible: boolean;
-    device:Device;
+    device:Device | null;
     onOk: () => void;
     onCancel: () => void;
 }
@@ -55,7 +55,7 @@ const NotSavedChanges: React.FC<NotSavedChangesProps> = ({ visible,device, onOk,
                 </div>
             }
         >
-            <span className="contentText"> У вас имеются несохраненные данные "Устройства {device.name}", Сохранить?  </span>
+            <span className="contentText"> У вас имеются несохраненные данные "Устройства {device?.name}", Сохранить?  </span>
         </Modal>
     );
 };

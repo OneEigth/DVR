@@ -20,7 +20,7 @@ import {AudioRecordEnd} from "../../../../api/audioRec/AudioRecStop";
 
 
 interface ToolBarDeviceOneProps{
-    device: Device;
+    device: Device | null;
 }
 const ToolBarDeviceOne: React.FC<ToolBarDeviceOneProps> = ({device}) => {
     const navigate = useNavigate();
@@ -33,7 +33,7 @@ const ToolBarDeviceOne: React.FC<ToolBarDeviceOneProps> = ({device}) => {
     const { user, SmartDVRToken } = useAuthStore();
 
     const handleTakeAPhoto = async () => {
-        if(device.online){
+        if(device && device.online){
             // Вызов API для начала записи аудио
             if (SmartDVRToken && user?.login && device.UID) {
                 await PhotoRecord(SmartDVRToken, user.login, { UID: device.UID });
@@ -46,7 +46,7 @@ const ToolBarDeviceOne: React.FC<ToolBarDeviceOneProps> = ({device}) => {
 
     };
     const handleRecordAudio = async () => {
-        if(device.online){
+        if(device && device.online){
             setShowAudioRecord(true)
             // Вызов API для начала записи аудио
             if (SmartDVRToken && user?.login && device.UID) {
@@ -64,7 +64,7 @@ const ToolBarDeviceOne: React.FC<ToolBarDeviceOneProps> = ({device}) => {
 
 
     const handleRecordVideo = async () => {
-        if(device.online){
+        if(device && device.online){
             setShowVideoRecord(true)
         // Вызов API для начала записи видео
         if (SmartDVRToken && user?.login && device.UID) {
@@ -79,7 +79,7 @@ const ToolBarDeviceOne: React.FC<ToolBarDeviceOneProps> = ({device}) => {
     };
     
     const handleOkRecordAudio= async ()=>{
-        if (SmartDVRToken && user?.login && device.UID) {
+        if (device && SmartDVRToken && user?.login && device.UID) {
             await AudioRecordEnd(SmartDVRToken, user.login, {UID: device.UID});
             setShowAudioRecord(false)
             openNotificationEndAR();
@@ -90,7 +90,7 @@ const ToolBarDeviceOne: React.FC<ToolBarDeviceOneProps> = ({device}) => {
 
 
     const handleOkRecordVideo = async () => {
-        if (SmartDVRToken && user?.login && device.UID) {
+        if (device && SmartDVRToken && user?.login && device.UID) {
             await VideoRecordEnd(SmartDVRToken, user.login, {UID: device.UID});
             setShowVideoRecord(false)
             openNotificationEndVR();
@@ -133,7 +133,7 @@ const ToolBarDeviceOne: React.FC<ToolBarDeviceOneProps> = ({device}) => {
     api.open({
         message: 'Запись файла',
         description:
-            `Ведётся запись на "${device.name}" `,
+            `Ведётся запись на "${device?.name}" `,
         duration: 0,
         icon: <InfoCircleFilled style={{ color: '#FDB159' }} />,
     });
@@ -141,6 +141,7 @@ const ToolBarDeviceOne: React.FC<ToolBarDeviceOneProps> = ({device}) => {
 
     //Окошко уведомления о  записи Аудио
     const openNotificationStartVR = () => {
+        if(device){
         api.open({
             message: 'Запись файла',
             description:
@@ -148,6 +149,7 @@ const ToolBarDeviceOne: React.FC<ToolBarDeviceOneProps> = ({device}) => {
             duration: 0,
             icon: <InfoCircleFilled style={{ color: '#FDB159' }} />,
         });
+        }
     };
 
 
@@ -189,7 +191,7 @@ const ToolBarDeviceOne: React.FC<ToolBarDeviceOneProps> = ({device}) => {
 
     //Окошко уведомления о невозможности записи Видео
     const openNotificationNotOnline = () => {
-
+        if (device){
         api.open({
             message: 'Запись невозможна',
             description:
@@ -197,7 +199,9 @@ const ToolBarDeviceOne: React.FC<ToolBarDeviceOneProps> = ({device}) => {
             duration: 0,
             icon: <InfoCircleFilled style={{ color: '#FDB159' }} />,
         });
+        }
     };
+
 
     return (
         <div className="toolBarDeviceOne">
@@ -210,6 +214,8 @@ const ToolBarDeviceOne: React.FC<ToolBarDeviceOneProps> = ({device}) => {
                 <ButtonTakeAPhoto onClick={handleTakeAPhoto}/>
                 <ButtonRecordAudio onClick={handleRecordAudio}/>
             </div>
+            {device && (
+                <>
             <NotSavedChanges device={device}
                              onOk={handleOkNotChangedDeiceModal}
                              onCancel={handleCancelNotChangedDeiceModal}
@@ -225,6 +231,8 @@ const ToolBarDeviceOne: React.FC<ToolBarDeviceOneProps> = ({device}) => {
                               device={device}
                               onCancel={handleCancelRecordVideo}
             />
+                </>
+            )}
         </div>
     );
 }

@@ -1,3 +1,6 @@
+
+import {Device} from "./Device";
+
 export interface Layout {
     id: number,
     uid: string,
@@ -5,6 +8,6 @@ export interface Layout {
     userUID: string,
     userName: string,
     viewType: string,
-    devices: string[],
+    devices: Device[],
     owners: string[],
 }
