@@ -1,16 +1,13 @@
 
 
 import axios, {AxiosError} from 'axios';
-import {CREATE_LAYOUT_URL, GET_ALL_LAYOUTS_URL} from '../../const/const';
+import {FIND_LAYOUT_URL} from '../../const/const';
 
-interface CreateLayoutData{
+interface FindLayoutData{
     name: string,
-    userUID: string,
-    viewType: string,
-    description:string,
-    devices?: string[]
+
 }
-export const CreateLayout = async ( SmartDVRToken: string, userLogin: string, data:CreateLayoutData) => {
+export const FindLayout = async ( SmartDVRToken: string, userLogin: string, data:FindLayoutData) => {
 
     if (!userLogin || !SmartDVRToken) {
         console.error('User information is missing.');
@@ -19,7 +16,7 @@ export const CreateLayout = async ( SmartDVRToken: string, userLogin: string, da
 
     try {
         const response = await axios.post(
-            CREATE_LAYOUT_URL,
+            FIND_LAYOUT_URL,
             data,
             {headers: {
                     SmartDVRLogin: userLogin,
@@ -29,7 +26,7 @@ export const CreateLayout = async ( SmartDVRToken: string, userLogin: string, da
         return response.data;
     } catch (error) {
         const err = error as AxiosError;
-        console.error('Error create layout:', err.response?.status, err.response?.data);
+        console.error('Error find layout:', err.response?.status, err.response?.data);
         return { success: false, error: err.response?.data || 'Unknown error' };
     }
 };

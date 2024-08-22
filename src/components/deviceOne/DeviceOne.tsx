@@ -31,7 +31,7 @@ const DeviceOne: React.FC<DeviceOneProps> = ({  selectedFileUID }) => {
     const {selectedFiles}=useFileSelectionStore();
     const {setIsDeleteDeviceModal}=useButtonDeleteFromDOF();
 
-    console.log("selected files ", Object.keys(selectedFiles));
+
 
     const showDeleteDeviceModal = () => {
         setIsDeleteDeviceModal(true)

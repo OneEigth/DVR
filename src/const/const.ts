@@ -26,6 +26,7 @@ export const GET_ALL_LAYOUTS_URL= `${URL_A}/layout/get_by/all`
 export const CREATE_LAYOUT_URL= `${URL_A}/layout/insert`
 export const UPDATE_LAYOUT_URL= `${URL_A}/layout/update`
 export const DELETE_LAYOUT_URL= `${URL_A}/layout/delete`
+export const FIND_LAYOUT_URL = `${URL_A}/layout/search`
 
 
 //Files

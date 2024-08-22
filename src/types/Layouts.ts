@@ -8,6 +8,5 @@ export interface Layout {
     userUID: string,
     userName: string,
     viewType: string,
-    devices: Device[],
-    owners: string[],
+    devices: Device[]
 }

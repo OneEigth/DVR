@@ -1,6 +1,11 @@
 .layouts{
     display: flex;
-    flex-direction: column;
+    flex-direction: column!important;
+}
+
+.body_layouts{
+    display: flex;
+    flex-direction: column!important;
 }
 
 .header_layouts{

@@ -1,0 +1,33 @@
+
+
+.containerDeviceLayout{
+    width:500px;
+    height:329px;
+}
+
+.image{
+    border-radius: 0!important;
+    height: 285px!important;
+}
+
+.DeviceLayout{
+    width: 500px;
+    height: 285px!important;
+}
+
+.propertiesDeviceLayout{
+    display: flex;
+    flex-direction: column;
+    background-color: #575655;
+}
+
+.nameDeviceLayout{
+    display: flex;
+    flex-direction: row;
+    color: #F1F1F1;
+}
+
+.iconDeviceLayout{
+    margin-left: 8px;
+    margin-right: 8px;
+}

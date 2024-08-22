@@ -1,12 +1,18 @@
 
 
 import axios, {AxiosError} from 'axios';
-import {GET_ALL_LAYOUTS_URL} from '../../const/const';
+import {UPDATE_LAYOUT_URL} from '../../const/const';
+import {Device} from "../../types/Device";
 
-interface DeleteLayoutData {
-    UID: string ;
+interface UpdateLayoutData {
+    uid?:string,
+    name?: string,
+    userUID?: string,
+    userName?: string,
+    viewType?: string,
+    devices?: { UID: string }[];
 }
-export const UpdateLayouts = async ( SmartDVRToken: string, userLogin: string, data:DeleteLayoutData) => {
+export const UpdateLayouts = async ( SmartDVRToken: string, userLogin: string, data:UpdateLayoutData) => {
 
     if (!userLogin || !SmartDVRToken) {
         console.error('User information is missing.');
@@ -15,7 +21,7 @@ export const UpdateLayouts = async ( SmartDVRToken: string, userLogin: string, d
 
     try {
         const response = await axios.post(
-            GET_ALL_LAYOUTS_URL,
+            UPDATE_LAYOUT_URL,
             data,
             {headers: {
                     SmartDVRLogin: userLogin,
