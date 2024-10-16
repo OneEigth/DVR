@@ -1,0 +1,45 @@
+.layouts{
+    display: flex;
+    flex-direction: column!important;
+}
+
+.body_layouts{
+    display: flex;
+    flex-direction: column!important;
+
+}
+
+.header_layouts{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    border-bottom: 1px solid #CDD0D2;
+}
+
+.form.basicLeft{
+    display: flex;
+    justify-content: start!important;
+    justify-items: start;
+}
+
+.RadioGroupButton {
+    border: 1px solid #CDD0D2; /* Первичный цвет границы кнопки */
+    color: #21201F; /* Цвет текста кнопки */
+    width: 389px;
+    align-content: center;
+    justify-content: center!important;
+
+}
+
+/* Стили для кнопок при наведении */
+.RadioGroupButton:hover {
+    border: 1px solid #4D4E65 !important; /* Цвет границы кнопки при наведении */
+    color: #21201F;
+}
+
+/* Стили для кнопок при выборе */
+.RadioGroupButton.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
+    background-color: #4D4E65 !important;/* Цвет фона кнопки при выборе */
+    border-color: #4D4E65 !important; /* Цвет границы кнопки при выборе */
+    color: white !important; /* Цвет текста кнопки при выборе */
+}

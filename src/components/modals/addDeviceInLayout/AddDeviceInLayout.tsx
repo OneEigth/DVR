@@ -7,7 +7,7 @@ import {useGroupsStore} from "../../../store/groups/Groups";
 import {DeviceByGroupStore} from "../../../store/devices/DeviceByGroupStore";
 import {Group} from "../../../types/Group";
 import {UpdateLayouts} from "../../../api/layout/UpdateLayout";
-import { getAllLayouts } from "../../../api/layout/getAllLayouts";
+
 
 const { TreeNode } = TreeSelect;
 const { Option } = Select;

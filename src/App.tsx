@@ -14,6 +14,8 @@ import Users from "./pages/users/users";
 import Reports from "./pages/reports/Reports";
 import Archive from "./pages/archive/Archive";
 import Map from "./pages/map/Map";
+import LayoutOne from "./pages/layouts/Layout/layout";
+import EditLayout from "./pages/layouts/editLayout/EditLayout";
 
 
 const router = createBrowserRouter([
@@ -36,6 +38,14 @@ const router = createBrowserRouter([
     {
         path: '/layouts',
         element: <ProtectedRoute element={<Layouts />} />,
+    },
+    {
+        path: '/layout/:id',
+        element: <ProtectedRoute element={<LayoutOne />} />,
+    },
+    {
+        path: '/editLayout/:id',
+        element: <ProtectedRoute element={<EditLayout />} />,
     },
     {
         path: '/map',

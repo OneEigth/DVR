@@ -1,0 +1,34 @@
+.buttonLeft {
+    font-family: Roboto;
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 32px;
+    text-align: left;
+    margin-top: 0;
+    padding: 0;
+}
+
+.header_layout{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    border-bottom: 1px solid #CDD0D2;
+    padding-bottom: 16px;
+}
+
+.body_layouts{
+    display: flex;
+    flex-direction: row!important;
+    justify-content: space-between;
+    height: 86vh;
+}
+
+.description_layout{
+    display: flex;
+    flex-direction: row;
+}
+
+.DescButtons_layout{
+    display: flex;
+    flex-direction: row;
+}

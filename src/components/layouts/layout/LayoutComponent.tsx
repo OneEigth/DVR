@@ -44,7 +44,7 @@ const LayoutCartComponent: React.FC<LayoutData> = ({layout,onLayoutUpdate}) => {
                     </div>
                     <div className="DeviceList">
                         {layoutItem.devices.map((device, deviceIndex) => (
-                            <DeviceCart key={`${index}-${deviceIndex}`} device={device}/>
+                            <DeviceCart key={`${index}-${deviceIndex}`} device={device} layout={layoutItem}/>
                         ))}
                     </div>
                     {currentLayoutUID === layoutItem.uid && (

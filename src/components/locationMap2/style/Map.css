@@ -1,0 +1,16 @@
+@import url("~leaflet/dist/leaflet.css");
+
+
+
+
+
+.leaflet-container{
+    width: 100vh;
+    height: 100vh;
+}
+
+#components-layout-demo-side .logo {
+    height: 32px;
+    background: rgba(255, 255, 255, 0.2);
+    margin: 16px;
+}

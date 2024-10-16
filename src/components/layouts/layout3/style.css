@@ -1,0 +1,182 @@
+.AllLayoutItem{
+    width: 100%;
+    height: 100vh;
+    padding-top: 24px;
+
+}
+
+.LayoutItem{
+    width: 564px;
+
+
+}
+
+
+
+.titleLayoutComnponent{
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    width: 100%;
+    border-bottom: 1px solid #CDD0D2;
+    padding-top: 10px;
+}
+
+.countDeviceLayout{
+    font-family: Roboto;
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 28px;
+    text-align: left;
+    margin: 0;
+    margin-left: 12px;
+    margin-top: 5px;
+    color: #999C9E;
+
+    align-content: start;
+    justify-content: start;
+}
+
+.buttonAddPlus{
+
+}
+
+.layoutH2{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    margin: 0;
+    margin-left: 12px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    font-family: Roboto;
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 28px;
+    text-align: left;
+    color: #21201F;
+
+}
+
+.containerCard {
+    display: flex;
+    justify-content: start!important;
+    flex-direction: row;
+    width: 564px;
+    height: 192px;
+    padding: 0!important;
+    border-radius: 0;
+    margin-bottom: 0;
+    margin-top: 0;
+
+}
+
+.ant-card-body{
+    width: 280px!important;
+    padding: 0!important;
+}
+
+.img{
+    width: 280px;
+    border-top-left-radius: 0!important;
+    border-top-right-radius: 0!important;
+}
+
+.coverCard{
+    width: 280px;
+    height: 192px;
+    border-radius: 0;
+    padding: 0;
+}
+
+.propertyGroup{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.property{
+    margin-bottom: 8px;
+    font-family: Roboto;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: 0.5px;
+    text-align: left;
+    color: #21201F;
+    cursor: default;
+    margin-top: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 300px;
+}
+
+.LayoutPropertiesPart1{
+    width:270px;
+    display:flex;
+    justify-content: center;
+    flex-direction: column;
+
+
+    height: 191px;
+    margin-left: 0;
+    padding-left: 17px;
+    background-color: #F1F1F1;
+}
+.titleLayout2{
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between!important;
+    align-items: center;
+    align-content: center;
+    width: 100%;
+}
+
+.name{
+    width: 100%;
+    margin-top: 8px;
+    margin-left: 12px;
+    margin-right: 15px;
+    margin-bottom: 16px;
+    color: #21201F;
+    font-family: Roboto;
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 28px;
+    text-align: left;
+    display: flex;
+    justify-content: flex-start;
+    align-content: center;
+    align-items: center;
+}
+
+.icon {
+    margin-right: 8px;
+    display: flex;
+    justify-content:center;
+}
+
+@media (max-width: 1920px) {
+    .allDeviceMedium .ant-col {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    .containerCard {
+        width: 100%;
+    }
+}
+
+@media (min-width: 1745px) {
+    .allDeviceMedium .ant-col {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+
+    .containerCard {
+        width: 100%;
+    }
+
+}

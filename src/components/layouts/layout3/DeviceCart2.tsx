@@ -1,38 +1,24 @@
 import React from 'react';
 import { Card } from 'antd';
 import {Device} from "../../../types/Device";
-import './style.css'
+import './style2.css'
 import {VIDEO_PREVIEW_URL} from "../../../const/const";
 import IconOnline from "../../icons/iconOnline/IconOnline";
 import IconOffline from "../../icons/iconOffline/IconOffline";
 import {useAuthStore} from "../../../store/auth/auth";
 import img from "./Video.png";
-import {useNavigate} from "react-router-dom";
-import {Layout} from "../../../types/Layouts";
-import layout from "../../../pages/layouts/Layout/layout";
-import {useSelectedLayout} from "../../../store/useSelectedLayout";
 
 interface deviceCartData {
-    device:Device;
-    layout:Layout;
+    device:Device
 }
-const DeviceCart: React.FC<deviceCartData> = ({device,layout} ) => {
+const DeviceCart: React.FC<deviceCartData> = ({device} ) => {
     const { SmartDVRToken } = useAuthStore.getState();
-    const navigate = useNavigate();
-    const { selectedLayout, setSelectedLayout } = useSelectedLayout();
-
-
-    const handleDeviceClick = (layout: Layout) => {
-        navigate(`/layout/${layout.uid}`);
-        setSelectedLayout(layout);
-    };
 
     const handleError = (e:any) => {
         e.target.src = img; // Устанавливаем локальную картинку при ошибке загрузки
     };
     return (
-        <div className="containerDeviceLayout"
-             onClick={() => handleDeviceClick(layout)}>
+        <div className="containerDeviceLayout">
             <div className="coverDeviceLayout">
                 <Card
                     className="DeviceLayout"

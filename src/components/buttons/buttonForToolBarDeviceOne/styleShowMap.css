@@ -1,0 +1,27 @@
+.buttonShowMap {
+    width: 161px;
+    height: 32px;
+    padding: 0 15px 0 15px;
+    border: 1px solid #4D4E65;
+    font-family: Roboto;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 20px;
+    letter-spacing: 0.25px;
+    text-align: left;
+    color:#4D4E65;
+    margin-left: 12px;
+}
+
+.PictureOutlined{
+    margin-left: 8px;
+}
+
+
+.buttonShowMap:hover,
+.buttonShowMap:focus,
+.buttonShowMap:active{
+    border: 1px solid #4D4E65!important;
+    color: #4D4E65!important;
+    box-shadow: none!important;
+}
