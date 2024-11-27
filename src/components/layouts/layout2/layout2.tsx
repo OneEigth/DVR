@@ -4,14 +4,14 @@ import 'leaflet/dist/leaflet.css';
 
 import {Col, Row} from "antd";
 import {useAuthStore} from "../../../store/auth/auth";
-import {Layout} from "../../../types/Layouts";
+import {LayoutType} from "../../../types/LayoutType";
 import DeviceCart from "../camera/DeviceCart";
 import ButtonAddPlus from "../../buttons/buttonAddPlus/ButtonAddPlus";
 import AddDeviceInLayout from "../../modals/addDeviceInLayout/AddDeviceInLayout";
 
 
 interface LayoutData{
-    layout:Layout[];
+    layout:LayoutType[];
     onLayoutUpdate: () => void;
 }
 
@@ -60,10 +60,12 @@ const LayoutCartComponent2: React.FC<LayoutData> = ({layout,onLayoutUpdate}) => 
                         </Col>
                         {currentLayoutUID === layoutItem.uid && (
                             <AddDeviceInLayout
-                                layoutUID={layoutItem.uid}
+                                key={layoutItem.uid} // Добавляем key для перерисовки
+                                layout={layoutItem}
                                 visible={showAddDeviceModal}
                                 onOk={handleOkLayoutModal}
                                 onCancel={handleCancelLayoutModal}
+                                existingDevices={layoutItem.devices.map((device) => device.UID)}
                             />
                         )}
                     </div>

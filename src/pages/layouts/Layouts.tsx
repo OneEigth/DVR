@@ -13,7 +13,7 @@ import LayoutCartComponent3 from "../../components/layouts/layout3/layout3";
 import LayoutTable from "../../components/layouts/layout4/layout4";
 import Buttonsfilter from "../../components/buttons/buttonFilter/Buttonsfilter";
 import {useIsFormChanged} from "../../store/devices/getDeviceChange";
-import {useIsLayoutFormChanged} from "../../store/layout/getLayoutChange";
+import {useIsLayoutFormChanged} from "../../store/layout/useIsLayoutFormChanged";
 
 
 const {Header, Content, Footer} = Layout;
@@ -56,7 +56,10 @@ const Layouts: React.FC = () => {
 
     const filteredLayouts = allLayouts.filter(layout =>
         layout.name.toLowerCase().includes(searchText.toLowerCase())
-    );
+    ).map(layout => ({
+        ...layout,
+        devices: layout.devices || [] // Убедитесь, что devices всегда массив
+    }));
 
 
 

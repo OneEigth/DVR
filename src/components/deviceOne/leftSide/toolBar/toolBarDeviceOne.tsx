@@ -34,7 +34,7 @@ const ToolBarDeviceOne: React.FC<ToolBarDeviceOneProps> = ({device}) => {
 
     const handleTakeAPhoto = async () => {
         if(device && device.online){
-            // Вызов API для начала записи аудио
+            // Вызов API для начала записи фото
             if (SmartDVRToken && user?.login && device.UID) {
                 await PhotoRecord(SmartDVRToken, user.login, { UID: device.UID });
                 openNotificationEndFR()
@@ -43,8 +43,8 @@ const ToolBarDeviceOne: React.FC<ToolBarDeviceOneProps> = ({device}) => {
             }} else {
             openNotificationNotOnline();
         }
-
     };
+
     const handleRecordAudio = async () => {
         if(device && device.online){
             setShowAudioRecord(true)

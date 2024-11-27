@@ -3,14 +3,14 @@ import './style.css';
 import 'leaflet/dist/leaflet.css';
 import {Card, Col, Row} from "antd";
 import {useAuthStore} from "../../../store/auth/auth";
-import {Layout} from "../../../types/Layouts";
+import {LayoutType} from "../../../types/LayoutType";
 import AddDeviceInLayout from "../../modals/addDeviceInLayout/AddDeviceInLayout";
 import ButtonAddPlus from "../../buttons/buttonAddPlus/ButtonAddPlus";
 
 
 
 interface LayoutData{
-    layout:Layout[];
+    layout:LayoutType[];
     onLayoutUpdate: () => void;
 }
 
@@ -87,10 +87,12 @@ const LayoutCartComponent3: React.FC<LayoutData> = ({layout,onLayoutUpdate}) => 
                         </Col>
                         {currentLayoutUID === layoutItem.uid && (
                             <AddDeviceInLayout
-                                layoutUID={layoutItem.uid}
+                                key={layoutItem.uid}
+                                layout={layoutItem}
                                 visible={showAddDeviceModal}
                                 onOk={handleOkLayoutModal}
                                 onCancel={handleCancelLayoutModal}
+                                existingDevices={layoutItem.devices.map((device) => device.UID)}
                             />
                         )}
                     </div>

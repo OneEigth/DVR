@@ -1,11 +1,11 @@
 import create from "zustand";
 
 import {useAuthStore} from "../auth/auth";
-import {Layout} from "../../types/Layouts";
+import {LayoutType} from "../../types/LayoutType";
 import {FindLayout} from "../../api/layout/findLayout";
 
 interface FindLayoutsStore {
-    FoundLayouts: Layout[];
+    FoundLayouts: LayoutType[];
     fetchFoundLayouts: (layoutName: string) => Promise<void>; // Добавьте layoutName как аргумент
 }
 

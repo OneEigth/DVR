@@ -17,7 +17,6 @@ import IconLeftMenuFooter from "../icons/iconLeftMenu/IconLeftMenuFooter";
 
 import ButtonDOFooterDelete from "../buttons/buttonLeftMenu/ButtonDOFooterDelete";
 import {useButtonDeleteFromDOF} from "../../store/devices/useButtonsDeleteFromDOF";
-import FileTable2 from "./rightSide/filesTable/FileTable2";
 
 const { Content, Footer } = Layout;
 

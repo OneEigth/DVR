@@ -33,7 +33,15 @@ const PlayerPlace: React.FC<PlayerPlaceProps> = ({device}) => {
     return(
         <div className="PlayerPlace">
             {videoSrc ? (
-            <VideoPlayer src={videoSrc} device={device} />
+                <iframe
+                    width="100%"
+                    height="400px"
+                    src={videoSrc}
+                    scrolling="no"
+                    frameBorder="0"
+                    style={{ borderWidth: '0px' }}
+                />
+            /*<VideoPlayer src={videoSrc} device={device} />*/
             ) : (
                 <div className="noVideo">
                     <img src={foto} alt=''/>

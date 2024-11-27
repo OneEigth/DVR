@@ -1,3 +1,5 @@
+
+
 import React, {useEffect, useState} from 'react';
 import {Button, Form,  message, Modal, Select, TreeSelect} from 'antd';
 import { CloseOutlined } from "@ant-design/icons";
@@ -7,6 +9,7 @@ import {useGroupsStore} from "../../../store/groups/Groups";
 import {DeviceByGroupStore} from "../../../store/devices/DeviceByGroupStore";
 import {Group} from "../../../types/Group";
 import {UpdateLayouts} from "../../../api/layout/UpdateLayout";
+import {LayoutType} from "../../../types/LayoutType";
 
 
 const { TreeNode } = TreeSelect;
@@ -15,10 +18,11 @@ interface NewLayoutModalProps {
     visible: boolean;
     onOk: () => void;
     onCancel: () => void;
-    layoutUID: string; // Уникальный идентификатор раскладки
+    layout: LayoutType; // Уникальный идентификатор раскладки
+    existingDevices: string[];
 }
 
-const AddDeviceInLayout: React.FC<NewLayoutModalProps> = ({ visible, onOk, onCancel,layoutUID }) => {
+const AddDeviceInLayout: React.FC<NewLayoutModalProps> = ({ visible, onOk, onCancel,layout,existingDevices  }) => {
     const { user, SmartDVRToken } = useAuthStore();
     const { groups, fetchGroups } = useGroupsStore(); // Используем хранилище групп
     const { devicesByStore, fetchDevicesByStore } = DeviceByGroupStore(); // Используем хранилище устройств по группам
@@ -27,11 +31,14 @@ const AddDeviceInLayout: React.FC<NewLayoutModalProps> = ({ visible, onOk, onCan
     const [loading, setLoading] = useState(false);
 
 
+    // Загрузка групп и установка устройств
     useEffect(() => {
         if (visible) {
-            fetchGroups(); // Загружаем группы при открытии модального окна
+            fetchGroups();
+            console.log("Setting selected devices:", existingDevices);
+            setSelectedDevices(existingDevices);
         }
-    }, [visible, fetchGroups]);
+    }, [visible, existingDevices]);
 
 
 
@@ -44,13 +51,16 @@ const AddDeviceInLayout: React.FC<NewLayoutModalProps> = ({ visible, onOk, onCan
         }
     };
 
-    const handleDeviceChange = (value: string[]) => {
-        console.log("Devices selected by user:", value); // Отладка выбранных устройств
-        setSelectedDevices(value);
+    const handleDeviceChange = (newDevices: string[]) => {
+        console.log("Devices selected by user:", newDevices);
+
+        // Объединяем старые и новые устройства
+        const uniqueDevices = Array.from(new Set([...selectedDevices, ...newDevices]));
+        setSelectedDevices(uniqueDevices);
     };
 
     const handleOk = async () => {
-        if (!layoutUID ) {
+        if (!layout.uid ) {
             message.error("UID раскладки не найден.");
             return;
         }
@@ -64,7 +74,7 @@ const AddDeviceInLayout: React.FC<NewLayoutModalProps> = ({ visible, onOk, onCan
         const devices = selectedDevices.map(deviceUID => ({ UID: deviceUID }));
 
         const data = {
-            uid: layoutUID,
+            uid: layout.uid,
             devices: devices
         };
 
@@ -73,7 +83,7 @@ const AddDeviceInLayout: React.FC<NewLayoutModalProps> = ({ visible, onOk, onCan
             setLoading(true);
             const response = await UpdateLayouts(SmartDVRToken, user.login, data);
             if (response.success) {
-                message.success("Устройство успешно обновлено!");
+                message.success("Устройство успешно добавлено!");
                 onOk();
             }
             }else {
@@ -143,12 +153,14 @@ const AddDeviceInLayout: React.FC<NewLayoutModalProps> = ({ visible, onOk, onCan
                     rules={[{ required: true, message: 'Пожалуйста, выберите устройство' }]}
                 >
                     <Select
+                        key={selectedDevices.join(',')}
                         className="select_device"
                         placeholder="Выберите устройство"
                         disabled={!selectedGroup}
                         loading={loading}
                         mode="multiple"
                         onChange={handleDeviceChange}
+                        value={selectedDevices.length ? selectedDevices : undefined}
                     >
                         {devicesByStore.map((device) => (
                             <Option key={device.UID} value={device.UID}>

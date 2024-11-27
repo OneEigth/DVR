@@ -8,13 +8,13 @@ import IconOffline from "../../icons/iconOffline/IconOffline";
 import {useAuthStore} from "../../../store/auth/auth";
 import img from "./Video.png";
 import {useNavigate} from "react-router-dom";
-import {Layout} from "../../../types/Layouts";
+import {LayoutType} from "../../../types/LayoutType";
 import layout from "../../../pages/layouts/Layout/layout";
 import {useSelectedLayout} from "../../../store/useSelectedLayout";
 
 interface deviceCartData {
     device:Device;
-    layout:Layout;
+    layout:LayoutType;
 }
 const DeviceCart: React.FC<deviceCartData> = ({device,layout} ) => {
     const { SmartDVRToken } = useAuthStore.getState();
@@ -22,7 +22,7 @@ const DeviceCart: React.FC<deviceCartData> = ({device,layout} ) => {
     const { selectedLayout, setSelectedLayout } = useSelectedLayout();
 
 
-    const handleDeviceClick = (layout: Layout) => {
+    const handleDeviceClick = (layout: LayoutType) => {
         navigate(`/layout/${layout.uid}`);
         setSelectedLayout(layout);
     };

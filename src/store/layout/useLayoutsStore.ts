@@ -3,11 +3,11 @@ import create from "zustand";
 import {Device} from "../../types/Device";
 import {useAuthStore} from "../auth/auth";
 import {getAllLayouts} from "../../api/layout/getAllLayouts";
-import {Layout} from "../../types/Layouts";
+import {LayoutType} from "../../types/LayoutType";
 
 
 interface LayoutsStore {
-    allLayouts: Layout[];
+    allLayouts: LayoutType[];
     fetchLayouts: () => Promise<void>;
 }
 

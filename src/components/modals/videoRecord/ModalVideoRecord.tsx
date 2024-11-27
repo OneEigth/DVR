@@ -15,7 +15,6 @@ interface RecordVideoModal {
 const RecordVideoModal: React.FC<RecordVideoModal> = ({ visible,device, onOk, onCancel }) => {
 
     const { user, SmartDVRToken } = useAuthStore();
-    const [messageApi] = message.useMessage();
     const [time, setTime] = useState(0);
     const [isRecording, setIsRecording] = useState(false);
 

@@ -7,6 +7,7 @@ import {Device} from "../../types/Device";
 interface UpdateLayoutData {
     uid?:string,
     name?: string,
+    description?:string,
     userUID?: string,
     userName?: string,
     viewType?: string,

@@ -93,6 +93,10 @@ export const UPDATE_OWNER_API_URL = `${URL_A}/owner/update`;
 export const VIDEO_RECORD_START_DEVICE_API_URL = `${URL_A}/device/start_record`;
 export const VIDEO_RECORD_END_DEVICE_API_URL = `${URL_A}/device/stop_record`;
 
+//Video Record Device Array
+export const VIDEO_ARRAY_RECORD_START_DEVICE_API_URL = `${URL_A}/device/start_record_array`;
+export const VIDEO_ARRAY_RECORD_END_DEVICE_API_URL = `${URL_A}/device/stop_record_array`;
+
 //Audio Record Device
 export const AUDIO_RECORD_START_DEVICE_API_URL = `${URL_A}/device/start_audio_record`;
 export const AUDIO_RECORD_END_DEVICE_API_URL = `${URL_A}/device/stop_audio_record`;
@@ -106,7 +110,8 @@ export const VIDEO_PREVIEW_URL = (fileUID: string, token:any) => `${URL_A}/play/
 export const VIDEO_FILE_PREVIEW_URL = (fileUID: string)=>`${URL_A}/media_file/preview/${fileUID}`;
 
 //GET_PLAY_ONLINE
-export const ONLINE_PLAY_URL = `${URL_A}/play/stream/`;
+export const ONLINE_PLAY_URL = `${URL_A}/play/hls-stream/`;
+export const ONLINE_PLAY_LAYOUT_URL = `${URL_A}/play/stream/`;
 
 //GET_PLAY_FILE
 export const FILE_PLAY_URL = `${URL_A}/play/file/`;

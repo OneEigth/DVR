@@ -1,30 +1,27 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import MainMenu from "../../../components/menu/Menu";
-
-import {Button, Form, Input, Layout, Radio} from "antd";
+import {Button, Form, Input, Layout, message, Radio} from "antd";
 import {ArrowLeftOutlined} from "@ant-design/icons";
-
-import {useLayoutsStore} from "../../../store/layout/useLayoutsStore";
-
 import './style.css'
-
 import {useNavigate} from "react-router-dom";
-import CameraGrid3x3 from "../../../components/cameraGrid/cameraGrid3x3";
-
+import CameraGrid3x3 from "../../../components/cameraGrid/3х3/cameraGrid3x3";
 import LocationMap2 from "../../../components/locationMap2/LocationMap2";
 import {useSelectedLayout} from "../../../store/useSelectedLayout";
-
 import ButtonLayoutViewStyle from "../../../components/buttons/buttonLayout/buttonLayoutViewStyle";
-import CameraGrid1x5 from "../../../components/cameraGrid/cameraGrid1x5";
-import CameraGrid3x4 from "../../../components/cameraGrid/cameraGrid3x4";
-import CameraGrid4x4 from "../../../components/cameraGrid/cameraGrid4x4";
+import CameraGrid1x5 from "../../../components/cameraGrid/1x5/cameraGrid1x5";
+import CameraGrid3x4 from "../../../components/cameraGrid/3x4/cameraGrid3x4";
+import CameraGrid4x4 from "../../../components/cameraGrid/4x4/cameraGrid4x4";
 import CameraGrid2x2 from "../../../components/cameraGrid/2x2/cameraGrid2x2";
-import CameraGrid1x12 from "../../../components/cameraGrid/cameraGrid1x12";
-import CameraGrid2x8 from "../../../components/cameraGrid/cameraGrid2x8";
-
-import {useIsLayoutFormChanged} from "../../../store/layout/getLayoutChange";
-
+import CameraGrid1x12 from "../../../components/cameraGrid/1x12/cameraGrid1x12";
+import CameraGrid2x8 from "../../../components/cameraGrid/2х8/cameraGrid2x8";
+import {useIsLayoutFormChanged} from "../../../store/layout/useIsLayoutFormChanged";
 import ButtonLayoutSave from "../../../components/buttons/buttonLayout/LayoutEdit/ButtonLayoutSave";
+import {useAuthStore} from "../../../store/auth/auth";
+import {UpdateLayouts} from "../../../api/layout/UpdateLayout";
+import {useStateNameDevice} from "../../../store/layout/useStateNameDevice";
+
+import  {LayoutType} from "../../../types/LayoutType";
+
 
 const {Header, Content, Footer} = Layout;
 
@@ -36,125 +33,104 @@ const EditLayout: React.FC = () => {
     const [formLeft] = Form.useForm();
     const [formRight] = Form.useForm();
     const [currentMenuItem, setCurrentMenuItem] = useState('layouts');
-    const [searchText, setSearchText] = useState('');
-    const {allLayouts, fetchLayouts}=useLayoutsStore();
-    const [showAddLayoutModal, setShowAddLayoutModal]=useState(false);
-    const [activeDeviceSize, setActiveDeviceSize] = useState<'small' | 'medium' | 'big'>('small');
     const { selectedLayout, setSelectedLayout } = useSelectedLayout();
     const [isMapVisible, setIsMapVisible] = useState(false);
-    const [selectedType, setSelectedType] = useState<string>('Show'); // Установка начального значения "Show"
-
-
+    const { SmartDVRToken, user } = useAuthStore();
+    const [messageApi, contextHolder] = message.useMessage();
+    const {isShowNameDevice, setIsShowNameDevice}=useStateNameDevice();
+    const [selectedType, setSelectedType] = useState(isShowNameDevice ? 'Show' : 'Hide');
     const {setIsLayoutFormChanged, setIsNotSavedModalVisible, isNotSavedModalVisible, layoutViewType, setLayoutViewType } = useIsLayoutFormChanged();
-    const handleFilterButtonClick = (size: 'small' | 'medium' | 'big') => {
-        setActiveDeviceSize(size);
-    };
 
-    const handleAddLayout = () => {
-        setShowAddLayoutModal(true)
-    };
 
     const handleSelectLayoutView = (size: '2x2' | '1х5' | '3х4' | '3х3' | '2х8' | '1х12' | '4х4') => {
         setLayoutViewType(size);
-    }
+    };
 
     const handleMenuClick = (key: string) => {
         setCurrentMenuItem(key);
     };
 
-    const filteredLayouts = allLayouts.filter(layout =>
-        layout.name.toLowerCase().includes(searchText.toLowerCase())
-    );
 
-    const handleTakeAPhoto = async () => {
-        /*if(device && device.online){
-            // Вызов API для начала записи аудио
-            if (SmartDVRToken && user?.login && device.UID) {
-                await PhotoRecord(SmartDVRToken, user.login, { UID: device.UID });
-                openNotificationEndFR()
-            } else {
-                console.error('Missing SmartDVRToken, user login or device UID.');
-            }} else {
-            openNotificationNotOnline();
-        }*/
+    useEffect(() => {
+        if (selectedLayout) {
+            setLayoutViewType(selectedLayout.viewType || '2x2'); // Устанавливаем вид из данных раскладки
+            formLeft.setFieldsValue({ name: selectedLayout.name });
+            formRight.setFieldsValue({ description: selectedLayout.description });
+        }
+    }, [selectedLayout, formLeft, formRight]);
 
+    const handleLayoutSave = async () => {
+        if (user?.login) {
+            try {
+                const valuesLeft = await formLeft.validateFields();
+                const valuesRight = await formRight.validateFields();
+
+
+
+                const initialValuesLeft = {
+                    name: selectedLayout?.name,
+                };
+                const initialValuesRight = {
+                    description: selectedLayout?.description,
+                };
+
+                const changedValuesLeft = getChangedFields(initialValuesLeft, valuesLeft);
+                const changedValuesRight = getChangedFields(initialValuesRight, valuesRight);
+
+
+
+                if (selectedLayout?.uid && SmartDVRToken) {  // Проверьте регистр 'uid' или 'UID'
+                    const updatedLayoutData = {
+                        ...selectedLayout,
+                        ...changedValuesLeft,
+                        ...changedValuesRight,
+                        viewType: layoutViewType,
+                    };
+
+                    console.log("Updated Layout Data:", updatedLayoutData);
+
+                    const response = await UpdateLayouts(SmartDVRToken, user.login, updatedLayoutData);
+
+                    if (response?.success) {
+                        messageApi.success('Раскладка успешно обновлена');
+                        setIsLayoutFormChanged(false);
+                        setSelectedLayout(updatedLayoutData);
+
+                        navigate('/layout/${selectedLayout.uid}', { state: { layout: updatedLayoutData } });
+                    } else {
+                        const errorMessage = response?.error || 'Неизвестная ошибка';
+                        messageApi.error('Ошибка обновления: ' + errorMessage);
+                    }
+                } else {
+                    messageApi.error('UID или SmartDVRToken отсутствует.');
+                }
+            } catch (error) {
+                console.error('Ошибка валидации или сохранения:', error);
+                messageApi.error('Ошибка валидации или сохранения');
+            }
+        } else {
+            messageApi.error('Пользователь не авторизован');
+        }
     };
-    const handleRecordAudio = async () => {
-        /* if(device && device.online){
-             setShowAudioRecord(true)
-             // Вызов API для начала записи аудио
-             if (SmartDVRToken && user?.login && device.UID) {
-                 await AudioRecordStart(SmartDVRToken, user.login, { UID: device.UID });
-                 openNotificationStartAR();
-             } else {
-                 console.error('Missing SmartDVRToken, user login or device UID.');
-             }} else {
-             setShowAudioRecord(false)
-             openNotificationNotOnline();
-         }*/
+
+    const getChangedFields = (initialValues: { [key: string]: any }, currentValues: { [key: string]: any }) => {
+        const changedFields: { [key: string]: any } = {};
+        for (const key in currentValues) {
+            if (currentValues[key] !== initialValues[key]) {
+                changedFields[key] = currentValues[key];
+            }
+        }
+        return changedFields;
     };
 
-    const handleShowMap = async () => {
-        /* if(device && device.online){
-             setShowAudioRecord(true)
-             // Вызов API для начала записи аудио
-             if (SmartDVRToken && user?.login && device.UID) {
-                 await AudioRecordStart(SmartDVRToken, user.login, { UID: device.UID });
-                 openNotificationStartAR();
-             } else {
-                 console.error('Missing SmartDVRToken, user login or device UID.');
-             }} else {
-             setShowAudioRecord(false)
-             openNotificationNotOnline();
-         }*/
-
-        setIsMapVisible(!isMapVisible);
+    const handleRadioChange = (e: any) => {
+        const value = e.target.value;
+        setSelectedType(value);
+        setIsShowNameDevice(value === 'Show');
     };
-
-    const handleSaveLayout = () => {
-
-    };
-
     const handleDeleteLayout = () => {
 
     };
-
-    const handleRecordVideo = async () => {
-        /* if(device && device.online){
-             setShowVideoRecord(true)
-             // Вызов API для начала записи видео
-             if (SmartDVRToken && user?.login && device.UID) {
-                 await VideoRecordStart(SmartDVRToken, user.login, { UID: device.UID });
-                 openNotificationStartVR();
-             } else {
-                 console.error('Missing SmartDVRToken, user login or device UID.');
-             }} else {
-             openNotificationNotOnline();
-             setShowVideoRecord(false)
-         }*/
-    };
-
-
-    const handleOkRecordAudio= async ()=>{
-        /* if (device && SmartDVRToken && user?.login && device.UID) {
-             await AudioRecordEnd(SmartDVRToken, user.login, {UID: device.UID});
-             setShowAudioRecord(false)
-             openNotificationEndAR();
-         } else {
-             console.error('Missing SmartDVRToken, user login or device UID.');
-         }*/
-    }
-
-
-    const handleOkRecordVideo = async () => {
-        /*if (device && SmartDVRToken && user?.login && device.UID) {
-            await VideoRecordEnd(SmartDVRToken, user.login, {UID: device.UID});
-            setShowVideoRecord(false)
-            openNotificationEndVR();
-        } else {
-            console.error('Missing SmartDVRToken, user login or device UID.');
-        }*/
-    }
 
     const handleBackToAllDevice = () => {
         navigate(-1);
@@ -171,22 +147,11 @@ const EditLayout: React.FC = () => {
     const checkForChanges = () => {
         const valuesLeft = formLeft.getFieldsValue();
         const valuesRight = formRight.getFieldsValue();
-
         const changedValuesLeft = getChangedFields(initialValuesLeft, valuesLeft);
         const changedValuesRight = getChangedFields(initialValuesRight, valuesRight);
-
         setIsLayoutFormChanged(Object.keys(changedValuesLeft).length > 0 || Object.keys(changedValuesRight).length > 0);
     };
 
-    const getChangedFields = (initialValues: { [key: string]: any }, currentValues: { [key: string]: any }) => {
-        const changedFields: { [key: string]: any } = {};
-        for (const key in currentValues) {
-            if (currentValues[key] !== initialValues[key]) {
-                changedFields[key] = currentValues[key];
-            }
-        }
-        return changedFields;
-    };
 
 
 
@@ -227,25 +192,16 @@ const EditLayout: React.FC = () => {
                                     <ButtonLayoutViewStyle onFilterButtonClick={handleSelectLayoutView}/>
                                 </div>
 
-
-                                {/*<div className="right_HT">
-                                    <div className="rightSideToolBar">
-                                        <ButtonRecordVideo onClick={handleRecordVideo}/>
-                                        <ButtonTakeAPhoto onClick={handleTakeAPhoto}/>
-                                        <ButtonRecordAudio onClick={handleRecordAudio}/>
-                                        <ButtonShowMap onClick={handleShowMap}/>
-                                    </div>
-                                </div>*/}
                             </div>
 
                             <div className="body_layouts">
-                                {layoutViewType === '2x2' && <CameraGrid2x2/>}
-                                {layoutViewType === '1х5' && <CameraGrid1x5/>}
-                                {layoutViewType === '3х4' && <CameraGrid3x4/>}
-                                {layoutViewType === '3х3' && <CameraGrid3x3/>}
-                                {layoutViewType === '2х8' && <CameraGrid2x8/>}
-                                {layoutViewType === '1х12' && <CameraGrid1x12/>}
-                                {layoutViewType === '4х4' && <CameraGrid4x4/>}
+                                {layoutViewType === '2x2' && <CameraGrid2x2 menuType={"edit"}/>}
+                                {layoutViewType === '1х5' && <CameraGrid1x5 menuType={"edit"} />}
+                                {layoutViewType === '3х4' && <CameraGrid3x4 menuType={"layout"}/>}
+                                {layoutViewType === '3х3' && <CameraGrid3x3 menuType={"layout"}/>}
+                                {layoutViewType === '2х8' && <CameraGrid2x8 menuType={"layout"}/>}
+                                {layoutViewType === '1х12' && <CameraGrid1x12 menuType={"layout"}/>}
+                                {layoutViewType === '4х4' && <CameraGrid4x4 menuType={"layout"}/>}
 
                                 {isMapVisible && (
                                     <LocationMap2 devices={selectedLayout.devices}/>
@@ -256,6 +212,7 @@ const EditLayout: React.FC = () => {
                                 <div className="formGroupLeft"> {/* Группа слева */}
                                     <Form
                                         form={formLeft}
+                                        initialValues={initialValuesLeft}
                                         className="form"
                                         name="basicLeft"
                                         labelCol={{span: 4}}
@@ -275,14 +232,11 @@ const EditLayout: React.FC = () => {
                                             name="nameOfDevice"
                                             rules={[{required: false, message: 'Пожалуйста, введите Название'}]}
                                         >
-                                            <Radio.Group value={selectedType} onChange={(e) => setSelectedType(e.target.value)}>
-                                                <Radio.Button value="Show" className="RadioGroupButton">
-                                                    Показать
-                                                </Radio.Button>
-                                                <Radio.Button value="Hide" className="RadioGroupButton">
-                                                    Скрыть
-                                                </Radio.Button>
+                                            <Radio.Group value={selectedType} onChange={handleRadioChange}>
+                                                <Radio.Button value="Show">Показать</Radio.Button>
+                                                <Radio.Button value="Hide">Скрыть</Radio.Button>
                                             </Radio.Group>
+
                                         </Form.Item>
                                     </Form>
                                 </div>
@@ -292,6 +246,7 @@ const EditLayout: React.FC = () => {
 
                                     <Form
                                         form={formRight}
+                                        initialValues={initialValuesRight}
                                         className="form"
                                         name="basicRight"
                                         labelCol={{span: 5}}
@@ -302,6 +257,7 @@ const EditLayout: React.FC = () => {
                                         <Form.Item
                                             label={<span className="inputLabel">Описание</span>}
                                             name="description"
+
                                             rules={[{required: true, message: 'Пожалуйста, введите описание'}]}
                                         >
                                             <Input className="input"/>
@@ -312,7 +268,7 @@ const EditLayout: React.FC = () => {
                             </div>
 
                             <div className="DescButtons_layout">
-                                <ButtonLayoutSave onClick={handleSaveLayout}/>
+                                <ButtonLayoutSave onClick={handleLayoutSave}/>
                             </div>
 
                         </div>

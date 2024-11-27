@@ -1,13 +1,13 @@
 import React, {useState} from 'react';
 import './style.css';
-import {Layout} from "../../../types/Layouts";
+import {LayoutType} from "../../../types/LayoutType";
 import DeviceCart from "../camera/DeviceCart";
 import ButtonAddPlus from "../../buttons/buttonAddPlus/ButtonAddPlus";
 import AddDeviceInLayout from "../../modals/addDeviceInLayout/AddDeviceInLayout";
 
 
 interface LayoutData{
-    layout:Layout[];
+    layout:LayoutType[];
     onLayoutUpdate: () => void;
 }
 
@@ -49,10 +49,12 @@ const LayoutCartComponent: React.FC<LayoutData> = ({layout,onLayoutUpdate}) => {
                     </div>
                     {currentLayoutUID === layoutItem.uid && (
                         <AddDeviceInLayout
-                            layoutUID={layoutItem.uid}
+                            key={layoutItem.uid}
+                            layout={layoutItem}
                             visible={showAddDeviceModal}
                             onOk={handleOkLayoutModal}
                             onCancel={handleCancelLayoutModal}
+                            existingDevices={layoutItem.devices.map((device) => device.UID)}
                         />
                     )}
                 </div>

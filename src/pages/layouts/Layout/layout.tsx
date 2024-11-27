@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import MainMenu from "../../../components/menu/Menu";
 import {Button, Form, Input, Layout} from "antd";
 import {ArrowLeftOutlined} from "@ant-design/icons";
@@ -9,24 +9,28 @@ import ButtonRecordAudio from "../../../components/buttons/buttonForToolBarDevic
 import './style.css'
 import ButtonShowMap from "../../../components/buttons/buttonForToolBarDeviceOne/ButtonShowMap";
 import {useNavigate} from "react-router-dom";
-import CameraGrid3x3 from "../../../components/cameraGrid/cameraGrid3x3";
+import CameraGrid3x3 from "../../../components/cameraGrid/3х3/cameraGrid3x3";
 import LocationMap2 from "../../../components/locationMap2/LocationMap2";
 import {useSelectedLayout} from "../../../store/useSelectedLayout";
-import CameraGrid1x5 from "../../../components/cameraGrid/cameraGrid1x5";
-import CameraGrid3x4 from "../../../components/cameraGrid/cameraGrid3x4";
-import CameraGrid4x4 from "../../../components/cameraGrid/cameraGrid4x4";
+import CameraGrid1x5 from "../../../components/cameraGrid/1x5/cameraGrid1x5";
+import CameraGrid3x4 from "../../../components/cameraGrid/3x4/cameraGrid3x4";
+import CameraGrid4x4 from "../../../components/cameraGrid/4x4/cameraGrid4x4";
 import CameraGrid2x2 from "../../../components/cameraGrid/2x2/cameraGrid2x2";
-import CameraGrid1x12 from "../../../components/cameraGrid/cameraGrid1x12";
-import CameraGrid2x8 from "../../../components/cameraGrid/cameraGrid2x8";
-import {useIsLayoutFormChanged} from "../../../store/layout/getLayoutChange";
+import CameraGrid1x12 from "../../../components/cameraGrid/1x12/cameraGrid1x12";
+import CameraGrid2x8 from "../../../components/cameraGrid/2х8/cameraGrid2x8";
+import {useIsLayoutFormChanged} from "../../../store/layout/useIsLayoutFormChanged";
 import ButtonLayoutEdit from "../../../components/buttons/buttonLayout/LayoutEdit/ButtonLayoutEdit";
 import ButtonLayoutDelete from "../../../components/buttons/buttonLayout/LayoutEdit/ButtonLayoutDelete";
+import { useLocation } from 'react-router-dom';
+import {useStateNameDevice} from "../../../store/layout/useStateNameDevice";
+import ModalSelectDevice from "../../../components/modals/videoRecord/ModalSelectDevice/ModalSelectDevice";
 
 const {Header, Content, Footer} = Layout;
 
 
 const LayoutOne: React.FC = () => {
-
+    const location = useLocation();
+    const { state } = location;
     const navigate = useNavigate();
     const [formLeft] = Form.useForm();
     const [formRight] = Form.useForm();
@@ -37,11 +41,35 @@ const LayoutOne: React.FC = () => {
     const [activeDeviceSize, setActiveDeviceSize] = useState<'small' | 'medium' | 'big'>('big');
     const { selectedLayout, setSelectedLayout } = useSelectedLayout();
     const [isMapVisible, setIsMapVisible] = useState(false);
-
+    const {isShowNameDevice, setIsShowNameDevice}=useStateNameDevice();
+    const [showModalSelectDevice, setShowModalSelectDevice] = useState(false);
     const {setIsLayoutFormChanged, setIsNotSavedModalVisible, isNotSavedModalVisible, layoutViewType, setLayoutViewType} = useIsLayoutFormChanged();
     const handleFilterButtonClick = (size: 'small' | 'medium' | 'big') => {
         setActiveDeviceSize(size);
     };
+
+    useEffect(() => {
+        if (state?.layout) {
+            setSelectedLayout(state.layout); // Обновляем состояние
+        }
+    }, [state, setSelectedLayout]);
+
+    useEffect(() => {
+        if (selectedLayout) {
+            formLeft.setFieldsValue({ name: selectedLayout.name });
+            formRight.setFieldsValue({ description: selectedLayout.description });
+        }
+    }, [selectedLayout, formLeft, formRight]);
+
+
+
+    useEffect(() => {
+        if (!selectedLayout) {
+            // Fetch or set default layout if necessary
+            fetchLayouts(); // or any relevant function to initialize selectedLayout
+        }
+    }, [selectedLayout, fetchLayouts]);
+
 
     const handleAddLayout = () => {
         setShowAddLayoutModal(true)
@@ -113,6 +141,9 @@ const LayoutOne: React.FC = () => {
     };
 
     const handleRecordVideo = async () => {
+        setShowModalSelectDevice(true)
+
+
        /* if(device && device.online){
             setShowVideoRecord(true)
             // Вызов API для начала записи видео
@@ -128,29 +159,10 @@ const LayoutOne: React.FC = () => {
     };
 
 
-    const handleOkRecordAudio= async ()=>{
-       /* if (device && SmartDVRToken && user?.login && device.UID) {
-            await AudioRecordEnd(SmartDVRToken, user.login, {UID: device.UID});
-            setShowAudioRecord(false)
-            openNotificationEndAR();
-        } else {
-            console.error('Missing SmartDVRToken, user login or device UID.');
-        }*/
-    }
 
-
-    const handleOkRecordVideo = async () => {
-        /*if (device && SmartDVRToken && user?.login && device.UID) {
-            await VideoRecordEnd(SmartDVRToken, user.login, {UID: device.UID});
-            setShowVideoRecord(false)
-            openNotificationEndVR();
-        } else {
-            console.error('Missing SmartDVRToken, user login or device UID.');
-        }*/
-    }
 
     const handleBackToAllDevice = () => {
-        navigate(-1);
+        navigate('/layouts');
     };
 
     const initialValuesLeft = {
@@ -161,24 +173,13 @@ const LayoutOne: React.FC = () => {
         description: selectedLayout.description
     };
 
-    const checkForChanges = () => {
-        const valuesLeft = formLeft.getFieldsValue();
-        const valuesRight = formRight.getFieldsValue();
+    const handleOkModalSelectDevice = () => {
+        setShowModalSelectDevice(false);
 
-        const changedValuesLeft = getChangedFields(initialValuesLeft, valuesLeft);
-        const changedValuesRight = getChangedFields(initialValuesRight, valuesRight);
-
-        setIsLayoutFormChanged(Object.keys(changedValuesLeft).length > 0 || Object.keys(changedValuesRight).length > 0);
     };
 
-    const getChangedFields = (initialValues: { [key: string]: any }, currentValues: { [key: string]: any }) => {
-        const changedFields: { [key: string]: any } = {};
-        for (const key in currentValues) {
-            if (currentValues[key] !== initialValues[key]) {
-                changedFields[key] = currentValues[key];
-            }
-        }
-        return changedFields;
+    const handleCancelModalSelectDevice = () => {
+        setShowModalSelectDevice(false)
     };
 
 
@@ -234,13 +235,13 @@ const LayoutOne: React.FC = () => {
                             </div>
 
                             <div className="body_layouts">
-                                {layoutViewType === '2x2' && <CameraGrid2x2/>}
-                                {layoutViewType === '1х5' && <CameraGrid1x5/>}
-                                {layoutViewType === '3х4' && <CameraGrid3x4/>}
-                                {layoutViewType === '3х3' && <CameraGrid3x3/>}
-                                {layoutViewType === '2х8' && <CameraGrid2x8/>}
-                                {layoutViewType === '1х12' && <CameraGrid1x12/>}
-                                {layoutViewType === '4х4' && <CameraGrid4x4/>}
+                                {layoutViewType === '2x2' && <CameraGrid2x2 menuType={"layout"}/>}
+                                {layoutViewType === '1х5' && <CameraGrid1x5 menuType={"layout"}/>}
+                                {layoutViewType === '3х4' && <CameraGrid3x4 menuType={"layout"}/>}
+                                {layoutViewType === '3х3' && <CameraGrid3x3 menuType={"layout"}/>}
+                                {layoutViewType === '2х8' && <CameraGrid2x8 menuType={"layout"}/>}
+                                {layoutViewType === '1х12' && <CameraGrid1x12 menuType={"layout"}/>}
+                                {layoutViewType === '4х4' && <CameraGrid4x4  menuType={"layout"}/>}
 
                                 {isMapVisible && (
                                     <LocationMap2 devices={selectedLayout.devices}/>
@@ -256,14 +257,14 @@ const LayoutOne: React.FC = () => {
                                         labelCol={{span: 5}}
                                         wrapperCol={{span: 18}}
                                         style={{maxWidth: '100%'}}
-                                        onValuesChange={checkForChanges}
+                                        initialValues={{ name: selectedLayout?.name || '' }}
                                     >
                                         <Form.Item
                                             label={<span className="inputLabel">Название</span>}
                                             name="name"
                                             rules={[{required: true, message: 'Пожалуйста, введите Название'}]}
                                         >
-                                            <Input className="input"/>
+                                            <Input className="input" disabled />
                                         </Form.Item>
                                     </Form>
                                 </div>
@@ -278,14 +279,14 @@ const LayoutOne: React.FC = () => {
                                         labelCol={{span: 5}}
                                         wrapperCol={{span: 19}}
                                         style={{maxWidth: '100%'}}
-                                        onValuesChange={checkForChanges}
+                                        initialValues={{ description: selectedLayout?.description || '' }}
                                     >
                                         <Form.Item
                                             label={<span className="inputLabel">Описание</span>}
                                             name="description"
                                             rules={[{required: true, message: 'Пожалуйста, введите описание'}]}
                                         >
-                                            <Input className="input"/>
+                                            <Input className="input" disabled />
                                         </Form.Item>
 
                                     </Form>
@@ -316,6 +317,8 @@ const LayoutOne: React.FC = () => {
                 </Layout>
             </Layout>
             {/* Модальные окна */}
+            <ModalSelectDevice onOk={handleOkModalSelectDevice} onCancel={handleCancelModalSelectDevice} visible={showModalSelectDevice} layoutViewType={layoutViewType}/>
+
         </Layout>
     );
 };

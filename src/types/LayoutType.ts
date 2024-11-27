@@ -1,7 +1,7 @@
 
 import {Device} from "./Device";
 
-export interface Layout {
+export interface LayoutType {
     id: number,
     uid: string,
     name: string,

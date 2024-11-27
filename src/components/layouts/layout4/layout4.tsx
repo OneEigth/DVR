@@ -3,16 +3,16 @@ import { DownOutlined } from '@ant-design/icons';
 import { Badge, Dropdown, Space, Table } from 'antd';
 import type { TableColumnsType } from 'antd';
 import {Device} from '../../../types/Device'; // Импортируйте свои типы
-import {Layout} from "../../../types/Layouts";
+import {LayoutType} from "../../../types/LayoutType";
 
 interface LayoutTableProps {
-    layouts: Layout[];
+    layouts: LayoutType[];
     onLayoutUpdate: () => void;
 }
 
 const LayoutTable: React.FC<LayoutTableProps> = ({ layouts }) => {
 
-    const expandedRowRender = (layout: Layout) => {
+    const expandedRowRender = (layout: LayoutType) => {
         const columns: TableColumnsType<Device> = [
             { title: 'Name', dataIndex: 'name', key: 'name' },
             { title: 'Model', dataIndex: 'model', key: 'model' },
@@ -50,7 +50,7 @@ const LayoutTable: React.FC<LayoutTableProps> = ({ layouts }) => {
         return <Table columns={columns} dataSource={layout.devices} pagination={false} rowKey="UID" />;
     };
 
-    const columns: TableColumnsType<Layout> = [
+    const columns: TableColumnsType<LayoutType> = [
         { title: 'Name', dataIndex: 'name', key: 'name' },
         { title: 'Description', dataIndex: 'description', key: 'description' },
         { title: 'View Type', dataIndex: 'viewType', key: 'viewType' },

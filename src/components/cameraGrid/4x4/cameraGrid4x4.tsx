@@ -1,33 +1,29 @@
-
 import React, {useEffect, useState} from 'react';
 import styled from 'styled-components';
-import {ONLINE_PLAY_LAYOUT_URL, ONLINE_PLAY_URL} from "../../../const/const";
 import {useAuthStore} from "../../../store/auth/auth";
-import {InfoCircleFilled, MoreOutlined} from '@ant-design/icons';
-import {useSelectedLayout} from "../../../store/useSelectedLayout";
+import {ONLINE_PLAY_LAYOUT_URL, ONLINE_PLAY_URL} from "../../../const/const";
 import {Device} from "../../../types/Device";
-import {Button, Dropdown, InputNumber, Menu, message, Modal, notification} from "antd";
-import './style2x2.css'
-import AddDeviceInLayout from "../../modals/addDeviceInLayout/AddDeviceInLayout";
-import {LayoutType} from "../../../types/LayoutType";
-import {UpdateLayouts} from "../../../api/layout/UpdateLayout";
+import {useSelectedLayout} from "../../../store/useSelectedLayout";
+import './style4x4.css'
 import {useStateNameDevice} from "../../../store/layout/useStateNameDevice";
 import {useNavigate} from "react-router-dom";
-import RecordVideoModal from "../../modals/videoRecord/ModalVideoRecord";
-import RecordAudioModal from "../../modals/audioMadal/ModalAudioRecord";
-import {AudioRecordEnd} from "../../../api/audioRec/AudioRecStop";
-import {VideoRecordEnd} from "../../../api/videoRec/VideoRecStop";
+import {Button, Dropdown, InputNumber, Menu, message, Modal, notification} from "antd";
+import {LayoutType} from "../../../types/LayoutType";
+import {UpdateLayouts} from "../../../api/layout/UpdateLayout";
+import {InfoCircleFilled, MoreOutlined} from "@ant-design/icons";
+import {PhotoRecord} from "../../../api/fotoRec/PhotoRec";
 import {AudioRecordStart} from "../../../api/audioRec/AudioRecStart";
 import {VideoRecordStart} from "../../../api/videoRec/VideoRecStart";
-import {PhotoRecord} from "../../../api/fotoRec/PhotoRec";
-import DevicePositionModal from "../../devicePosition/DevicePosition";
-
-
+import {AudioRecordEnd} from "../../../api/audioRec/AudioRecStop";
+import {VideoRecordEnd} from "../../../api/videoRec/VideoRecStop";
+import AddDeviceInLayout from "../../modals/addDeviceInLayout/AddDeviceInLayout";
+import RecordVideoModal from "../../modals/videoRecord/ModalVideoRecord";
+import RecordAudioModal from "../../modals/audioMadal/ModalAudioRecord";
 
 const GridContainer = styled.div`
     display: grid;
-    grid-template-columns: 920px 920px ; /* Ширина колонок */
-    grid-template-rows: 370px 370px ;    /* Высота строк */
+    grid-template-columns: 458px 458px 458px 458px; /* Ширина колонок */
+    grid-template-rows: 180px 180px 180px 180px;    /* Высота строк */
     gap: 10px; /* Отступ между элементами */
     padding: 10px;
     width: 100%;
@@ -95,7 +91,7 @@ interface CameraGridProps {
     menuType: 'edit' | 'layout';
 }
 
-const CameraGrid2x2: React.FC<CameraGridProps>  = ({ menuType }) => {
+const CameraGrid4x4: React.FC<CameraGridProps>  = ({ menuType }) => {
 
     const { SmartDVRToken, user } = useAuthStore();
     const { selectedLayout, setSelectedLayout } = useSelectedLayout();
@@ -129,7 +125,7 @@ const CameraGrid2x2: React.FC<CameraGridProps>  = ({ menuType }) => {
         }
     }, []);
 
-    
+
 
     const handleOpenAddDeviceModal = (): void => setIsAddDeviceModalVisible(true);
 
@@ -198,31 +194,31 @@ const CameraGrid2x2: React.FC<CameraGridProps>  = ({ menuType }) => {
             handleRecordAudio();
             setSelectedDevice(device)
         } else if (key === 'takePhoto') {
-        handleTakeAPhoto();
-        setSelectedDevice(device)
-    }
+            handleTakeAPhoto();
+            setSelectedDevice(device)
+        }
     };
 
-const menu = (device: Device, idx: number) => (
-    <Menu onClick={(e) => handleMenuClick(e.key as string, device, idx)}>
-        {menuType === 'edit' ? (
-            <>
-                <Menu.Item key="edit">Изменить положение</Menu.Item>
-                <Menu.Item key="delete">
-                    <span style={{ color: 'red' }}>Удалить</span>
-                </Menu.Item>
-            </>
-        ) : (
-            <>
-                <Menu.Item key="turnOnRadioChat">Включить радиочат</Menu.Item>
-                <Menu.Item key="recVideo">Запись видео</Menu.Item>
-                <Menu.Item key="takePhoto">Сделать фото</Menu.Item>
-                <Menu.Item key="recAudio">Запись аудио</Menu.Item>
-                <Menu.Item key="goToDevice">Перейти к устройству</Menu.Item>
-            </>
-        )}
-    </Menu>
-);
+    const menu = (device: Device, idx: number) => (
+        <Menu onClick={(e) => handleMenuClick(e.key as string, device, idx)}>
+            {menuType === 'edit' ? (
+                <>
+                    <Menu.Item key="edit">Изменить положение</Menu.Item>
+                    <Menu.Item key="delete">
+                        <span style={{ color: 'red' }}>Удалить</span>
+                    </Menu.Item>
+                </>
+            ) : (
+                <>
+                    <Menu.Item key="turnOnRadioChat">Включить радиочат</Menu.Item>
+                    <Menu.Item key="recVideo">Запись видео</Menu.Item>
+                    <Menu.Item key="takePhoto">Сделать фото</Menu.Item>
+                    <Menu.Item key="recAudio">Запись аудио</Menu.Item>
+                    <Menu.Item key="goToDevice">Перейти к устройству</Menu.Item>
+                </>
+            )}
+        </Menu>
+    );
 
 
     // Закрытие модального окна
@@ -420,13 +416,13 @@ const menu = (device: Device, idx: number) => (
 
     const handleOkRecordAudio= async ()=>{
 
-         if (selectedDevice && SmartDVRToken && user?.login && selectedDevice.UID) {
-             await AudioRecordEnd(SmartDVRToken, user.login, {UID: selectedDevice.UID});
-             setShowAudioRecord(false)
-             openNotificationEndAR();
-         } else {
-             console.error('Missing SmartDVRToken, user login or device UID.');
-         }
+        if (selectedDevice && SmartDVRToken && user?.login && selectedDevice.UID) {
+            await AudioRecordEnd(SmartDVRToken, user.login, {UID: selectedDevice.UID});
+            setShowAudioRecord(false)
+            openNotificationEndAR();
+        } else {
+            console.error('Missing SmartDVRToken, user login or device UID.');
+        }
     }
 
 
@@ -443,91 +439,94 @@ const menu = (device: Device, idx: number) => (
     }
 
 
-
     return (
         <>
-            {contextHolder}
-            <GridContainer>
-                {Array.from({ length: 4 }).map((_, idx) => {
-                    const device = devices[idx] || null;
-
-                    return (
-                        <CameraTile key={device?.UID || idx}>
-                            <CameraHeader>
-                                <div style={{ display: 'flex', flexDirection: 'row' }}>
-                                    <Circle>{idx + 1}</Circle>
-                                    {isShowNameDevice && (
-                                        <DeviceName style={{ marginLeft: 8 }}>
-                                            {device ? device.name : 'Нет устройства'}
-                                        </DeviceName>
-                                    )}
-                                </div>
-                                {device && (
-                                    <Dropdown overlay={menu(device, idx)} trigger={['click']} placement="bottomRight" arrow>
-                                        <Button
-                                            icon={<MoreOutlined />}
-                                            style={{ backgroundColor: '#3E405F', color: 'white' }}
-                                        />
-                                    </Dropdown>
-                                )}
-                            </CameraHeader>
-                            {device ? (
-                                device.online ? (
-                                    <iframe
-                                        width="920"
-                                        height="370"
-                                        src={`${ONLINE_PLAY_LAYOUT_URL}${device.UID}/${SmartDVRToken}`}
-                                        scrolling="no"
-                                        frameBorder="0"
-                                        style={{ borderWidth: '0px' }}
-                                    />
-                                ) : (
-                                    <div>Устройство оффлайн</div>
-                                )
-                            ) : (
-                                <div onClick={handleOpenAddDeviceModal} style={{ cursor: 'pointer' }}>
-                                    +
-                                </div>
+        <GridContainer>
+            {Array.from({ length: 16 }).map((_, idx) => {
+                const device = devices[idx] || null;
+                return (
+                <CameraTile key={idx}>
+                    <CameraHeader>
+                        <div style={{ display: 'flex', flexDirection: 'row' }}>
+                            <Circle>{idx + 1}</Circle>
+                            {isShowNameDevice && (
+                                <DeviceName style={{ marginLeft: 8 }}>
+                                    {device ? device.name : 'Нет устройства'}
+                                </DeviceName>
                             )}
-                        </CameraTile>
-                    );
-                })}
-            </GridContainer>
+                        </div>
+                        {device && (
+                            <Dropdown overlay={menu(device, idx)} trigger={['click']} placement="bottomRight" arrow>
+                                <Button
+                                    icon={<MoreOutlined />}
+                                    style={{ backgroundColor: '#3E405F', color: 'white' }}
+                                />
+                            </Dropdown>
+                        )}
+                    </CameraHeader>
+                    {device ? (
+                        device.online ? (
+                            <iframe
+                                width="458"
+                                height="180"
+                                src={`${ONLINE_PLAY_LAYOUT_URL}${device.UID}/${SmartDVRToken}`}
+                                scrolling="no"
+                                frameBorder="0"
+                                style={{ borderWidth: '0px' }}
+                            />
 
-            <DevicePositionModal
-                visible={isModalVisible}
-                onOk={handleOk}
-                onCancel={handleCancel}
-                currentPosition={newPosition}
-                maxPosition={devices.length || 1}
-                onPositionChange={(value) => setNewPosition(value)}
-            />
-            <AddDeviceInLayout
-                visible={isAddDeviceModalVisible}
-                onOk={handleCloseAddDeviceModal}
-                onCancel={handleCloseAddDeviceModal}
-                layout={selectedLayout!}
-                existingDevices={devices.map((device: Device) => device.UID) || []}
-            />
-            {selectedDevice && (
-                <RecordVideoModal
-                    visible={showVideoRecord}
-                    onOk={handleOkRecordVideo}
-                    device={selectedDevice}
-                    onCancel={handleCancelRecordVideo}
-                />
-            )}
+                        ) : (
+                            <div>Устройство оффлайн</div>
+                        )
+                    ) : (
+                        <div>+</div>
+                    )}
+                </CameraTile>
+            );
+            })}
+        </GridContainer>
+    <Modal
+        title="Изменить положение устройства"
+        visible={isModalVisible}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        okText="Применить"
+        cancelText="Отмена"
+    >
+        <p>Выберите новую позицию для устройства:</p>
+        <InputNumber
+            min={1}
+            max={devices.length || 1}
+            value={newPosition ?? undefined}
+            onChange={(value) => setNewPosition(value as number)}
+        />
+    </Modal>
+    <AddDeviceInLayout
+        visible={isAddDeviceModalVisible}
+        onOk={handleCloseAddDeviceModal}
+        onCancel={handleCloseAddDeviceModal}
+        layout={selectedLayout!}
+        existingDevices={devices.map((device: Device) => device.UID) || []}
+    />
+    {selectedDevice && (
+        <RecordVideoModal
+            visible={showVideoRecord}
+            onOk={handleOkRecordVideo}
+            device={selectedDevice}
+            onCancel={handleCancelRecordVideo}
+        />
+    )}
 
-            {selectedDevice && (
-                <RecordAudioModal
-                    visible={showAudioRecord}
-                    onOk={handleOkRecordAudio}
-                    device={selectedDevice}
-                    onCancel={handleCancelRecordVideo}
-                />
-            )}
+    {selectedDevice && (
+        <RecordAudioModal
+            visible={showAudioRecord}
+            onOk={handleOkRecordAudio}
+            device={selectedDevice}
+            onCancel={handleCancelRecordVideo}
+        />
+    )}
         </>
     );
 };
 
-export default CameraGrid2x2;
+export default CameraGrid4x4;
