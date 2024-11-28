@@ -10,14 +10,15 @@ import IconView3x3 from "../../icons/iconFilterButton/iconFilterButton3x3";
 import IconView2x8 from "../../icons/iconFilterButton/iconFilterButton2x8";
 import IconView1x12 from "../../icons/iconFilterButton/iconFilterButton1x12";
 import IconView4x4 from "../../icons/iconFilterButton/iconFilterButton4x4";
+import {useSelectedLayout} from "../../../store/useSelectedLayout";
 
 interface ButtonLayoutViewStylerProps {
     onFilterButtonClick: (size: '2x2' | '1х5' | '3х4' | '3х3' | '2х8' | '1х12' | '4х4') => void;
 }
 
 const ButtonLayoutViewStyle: React.FC<ButtonLayoutViewStylerProps> = ({ onFilterButtonClick }) => {
-
-    const [activeButton, setActiveButton] = useState<'2x2' | '1х5' | '3х4' | '3х3' | '2х8' | '1х12' | '4х4'>('2x2');
+    const { selectedLayout, setSelectedLayout } = useSelectedLayout();
+    const [activeButton, setActiveButton] = useState<'2x2' | '1х5' | '3х4' | '3х3' | '2х8' | '1х12' | '4х4'>(selectedLayout.viewType);
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
     useEffect(() => {

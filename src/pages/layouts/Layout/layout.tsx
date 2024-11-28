@@ -193,13 +193,13 @@ const LayoutOne: React.FC = () => {
                             </div>
 
                             <div className="body_layouts">
-                                {layoutViewType === '2x2' && <CameraGrid2x2 menuType={"layout"}/>}
-                                {layoutViewType === '1х5' && <CameraGrid1x5 menuType={"layout"}/>}
-                                {layoutViewType === '3х4' && <CameraGrid3x4 menuType={"layout"}/>}
-                                {layoutViewType === '3х3' && <CameraGrid3x3 menuType={"layout"}/>}
-                                {layoutViewType === '2х8' && <CameraGrid2x8 menuType={"layout"}/>}
-                                {layoutViewType === '1х12' && <CameraGrid1x12 menuType={"layout"}/>}
-                                {layoutViewType === '4х4' && <CameraGrid4x4  menuType={"layout"}/>}
+                                {selectedLayout.viewType === '2x2' && <CameraGrid2x2 menuType={"layout"}/>}
+                                {selectedLayout.viewType === '1х5' && <CameraGrid1x5 menuType={"layout"}/>}
+                                {selectedLayout.viewType === '3х4' && <CameraGrid3x4 menuType={"layout"}/>}
+                                {selectedLayout.viewType === '3х3' && <CameraGrid3x3 menuType={"layout"}/>}
+                                {selectedLayout.viewType === '2х8' && <CameraGrid2x8 menuType={"layout"}/>}
+                                {selectedLayout.viewType === '1х12' && <CameraGrid1x12 menuType={"layout"}/>}
+                                {selectedLayout.viewType === '4х4' && <CameraGrid4x4  menuType={"layout"}/>}
 
                                 {isMapVisible && (
                                     <LocationMap2 devices={selectedLayout.devices}/>
