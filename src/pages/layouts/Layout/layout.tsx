@@ -24,6 +24,10 @@ import ButtonLayoutDelete from "../../../components/buttons/buttonLayout/LayoutE
 import { useLocation } from 'react-router-dom';
 import {useStateNameDevice} from "../../../store/layout/useStateNameDevice";
 import ModalSelectDevice from "../../../components/modals/videoRecord/ModalSelectDevice/ModalSelectDevice";
+import ModalSelectDeviceAudio
+    from "../../../components/modals/audioMadal/ModalSelectDeviceAudio/ModalSelectDeviceAudio";
+import ModalSelectDevicePhoto
+    from "../../../components/modals/photoRecord/ModalSelectDevicePhoto/ModalSelectDevicePhoto";
 
 const {Header, Content, Footer} = Layout;
 
@@ -43,6 +47,8 @@ const LayoutOne: React.FC = () => {
     const [isMapVisible, setIsMapVisible] = useState(false);
     const {isShowNameDevice, setIsShowNameDevice}=useStateNameDevice();
     const [showModalSelectDevice, setShowModalSelectDevice] = useState(false);
+    const [showModalSelectDeviceAudio, setShowModalSelectDeviceAudio] = useState(false);
+    const [showModalSelectDevicePhoto, setShowModalSelectDevicePhoto] = useState(false);
     const {setIsLayoutFormChanged, setIsNotSavedModalVisible, isNotSavedModalVisible, layoutViewType, setLayoutViewType} = useIsLayoutFormChanged();
     const handleFilterButtonClick = (size: 'small' | 'medium' | 'big') => {
         setActiveDeviceSize(size);
@@ -71,62 +77,11 @@ const LayoutOne: React.FC = () => {
     }, [selectedLayout, fetchLayouts]);
 
 
-    const handleAddLayout = () => {
-        setShowAddLayoutModal(true)
-    };
-
-
-
     const handleMenuClick = (key: string) => {
         setCurrentMenuItem(key);
     };
 
-    const filteredLayouts = allLayouts.filter(layout =>
-        layout.name.toLowerCase().includes(searchText.toLowerCase())
-    );
-
-    const handleTakeAPhoto = async () => {
-        /*if(device && device.online){
-            // Вызов API для начала записи аудио
-            if (SmartDVRToken && user?.login && device.UID) {
-                await PhotoRecord(SmartDVRToken, user.login, { UID: device.UID });
-                openNotificationEndFR()
-            } else {
-                console.error('Missing SmartDVRToken, user login or device UID.');
-            }} else {
-            openNotificationNotOnline();
-        }*/
-
-    };
-    const handleRecordAudio = async () => {
-       /* if(device && device.online){
-            setShowAudioRecord(true)
-            // Вызов API для начала записи аудио
-            if (SmartDVRToken && user?.login && device.UID) {
-                await AudioRecordStart(SmartDVRToken, user.login, { UID: device.UID });
-                openNotificationStartAR();
-            } else {
-                console.error('Missing SmartDVRToken, user login or device UID.');
-            }} else {
-            setShowAudioRecord(false)
-            openNotificationNotOnline();
-        }*/
-    };
-
     const handleShowMap = async () => {
-        /* if(device && device.online){
-             setShowAudioRecord(true)
-             // Вызов API для начала записи аудио
-             if (SmartDVRToken && user?.login && device.UID) {
-                 await AudioRecordStart(SmartDVRToken, user.login, { UID: device.UID });
-                 openNotificationStartAR();
-             } else {
-                 console.error('Missing SmartDVRToken, user login or device UID.');
-             }} else {
-             setShowAudioRecord(false)
-             openNotificationNotOnline();
-         }*/
-
         setIsMapVisible(!isMapVisible);
     };
 
@@ -142,22 +97,15 @@ const LayoutOne: React.FC = () => {
 
     const handleRecordVideo = async () => {
         setShowModalSelectDevice(true)
-
-
-       /* if(device && device.online){
-            setShowVideoRecord(true)
-            // Вызов API для начала записи видео
-            if (SmartDVRToken && user?.login && device.UID) {
-                await VideoRecordStart(SmartDVRToken, user.login, { UID: device.UID });
-                openNotificationStartVR();
-            } else {
-                console.error('Missing SmartDVRToken, user login or device UID.');
-            }} else {
-            openNotificationNotOnline();
-            setShowVideoRecord(false)
-        }*/
     };
 
+    const handleRecordAudio = async () => {
+        setShowModalSelectDeviceAudio(true)
+    };
+
+    const handleTakeAPhoto = async () => {
+        setShowModalSelectDevicePhoto(true)
+    };
 
 
 
@@ -165,13 +113,6 @@ const LayoutOne: React.FC = () => {
         navigate('/layouts');
     };
 
-    const initialValuesLeft = {
-        name: selectedLayout?.name,
-    };
-
-    const initialValuesRight = {
-        description: selectedLayout.description
-    };
 
     const handleOkModalSelectDevice = () => {
         setShowModalSelectDevice(false);
@@ -180,6 +121,23 @@ const LayoutOne: React.FC = () => {
 
     const handleCancelModalSelectDevice = () => {
         setShowModalSelectDevice(false)
+    };
+    const handleOkModalSelectDevicePhoto = () => {
+        setShowModalSelectDevicePhoto(false);
+
+    };
+    const handleCancelModalSelectDevicePhoto = () => {
+        setShowModalSelectDevicePhoto(false);
+
+    };
+
+    const handleOkModalSelectDeviceAudio = () => {
+        setShowModalSelectDeviceAudio(false);
+
+    };
+
+    const handleCancelModalSelectDeviceAudio = () => {
+        setShowModalSelectDeviceAudio(false)
     };
 
 
@@ -318,6 +276,8 @@ const LayoutOne: React.FC = () => {
             </Layout>
             {/* Модальные окна */}
             <ModalSelectDevice onOk={handleOkModalSelectDevice} onCancel={handleCancelModalSelectDevice} visible={showModalSelectDevice} layoutViewType={layoutViewType}/>
+            <ModalSelectDeviceAudio onOk={handleOkModalSelectDeviceAudio} onCancel={handleCancelModalSelectDeviceAudio} visible={showModalSelectDeviceAudio} layoutViewType={layoutViewType}/>
+            <ModalSelectDevicePhoto onOk={handleOkModalSelectDevicePhoto} onCancel={handleCancelModalSelectDevicePhoto} visible={showModalSelectDevicePhoto} layoutViewType={layoutViewType}/>
 
         </Layout>
     );

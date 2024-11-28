@@ -101,9 +101,15 @@ export const VIDEO_ARRAY_RECORD_END_DEVICE_API_URL = `${URL_A}/device/stop_recor
 export const AUDIO_RECORD_START_DEVICE_API_URL = `${URL_A}/device/start_audio_record`;
 export const AUDIO_RECORD_END_DEVICE_API_URL = `${URL_A}/device/stop_audio_record`;
 
+//Audio Record Device Array
+export const AUDIO_ARRAY_RECORD_START_DEVICE_API_URL = `${URL_A}/device/start_audio_record_array`;
+export const AUDIO_ARRAY_RECORD_END_DEVICE_API_URL = `${URL_A}/device/stop_audio_record_array`;
+
 //Photo Record Device
 
 export const PHOTO_RECORD_START_DEVICE_API_URL = `${URL_A}/device/get_photo`;
+
+export const PHOTO_ARRAY_RECORD_START_DEVICE_API_URL = `${URL_A}/device/get_photo_array`;
 
 //GET_PREVIEW_PICTURES
 export const VIDEO_PREVIEW_URL = (fileUID: string, token:any) => `${URL_A}/play/file/${fileUID}/preview/${token}`;
