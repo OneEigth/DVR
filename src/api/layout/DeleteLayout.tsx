@@ -4,7 +4,7 @@ import axios, {AxiosError} from 'axios';
 import {DELETE_LAYOUT_URL, GET_ALL_LAYOUTS_URL} from '../../const/const';
 
 interface DeleteLayoutData {
-    UID: string ;
+    uid: string ;
 }
 export const DeleteLayouts = async ( SmartDVRToken: string, userLogin: string, data:DeleteLayoutData) => {
 

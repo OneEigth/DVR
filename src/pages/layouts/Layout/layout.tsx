@@ -28,11 +28,14 @@ import ModalSelectDeviceAudio
     from "../../../components/modals/audioMadal/ModalSelectDeviceAudio/ModalSelectDeviceAudio";
 import ModalSelectDevicePhoto
     from "../../../components/modals/photoRecord/ModalSelectDevicePhoto/ModalSelectDevicePhoto";
+import {DeleteLayouts} from "../../../api/layout/DeleteLayout";
+import {useAuthStore} from "../../../store/auth/auth";
+
 
 const {Header, Content, Footer} = Layout;
 
-
 const LayoutOne: React.FC = () => {
+    const { SmartDVRToken, user } = useAuthStore();
     const location = useLocation();
     const { state } = location;
     const navigate = useNavigate();
@@ -53,6 +56,25 @@ const LayoutOne: React.FC = () => {
     const handleFilterButtonClick = (size: 'small' | 'medium' | 'big') => {
         setActiveDeviceSize(size);
     };
+
+    useEffect(() => {
+        if (selectedLayout) {
+            localStorage.setItem('selectedLayout', JSON.stringify(selectedLayout));
+        }
+    }, [selectedLayout]);
+
+
+
+    useEffect(() => {
+        if (!selectedLayout) {
+            const savedLayout = localStorage.getItem('selectedLayout');
+            if (savedLayout) {
+                setSelectedLayout(JSON.parse(savedLayout));
+            } else {
+                fetchLayouts(); // Если данных нет в localStorage, загрузить из API
+            }
+        }
+    }, [selectedLayout, fetchLayouts, setSelectedLayout]);
 
     useEffect(() => {
         if (state?.layout) {
@@ -91,8 +113,37 @@ const LayoutOne: React.FC = () => {
     };
 
 
-    const handleDeleteLayout = () => {
+    const handleDeleteLayout = async () => {
+        if (!selectedLayout?.uid) {
+            console.error("No layout selected for deletion.");
+            return;
+        }
 
+        try {
+
+
+            if (!SmartDVRToken || !user) {
+                console.error("Missing authentication data.");
+                return;
+            }
+
+            const deleteData = { uid: selectedLayout.uid };
+
+            const response = await DeleteLayouts(SmartDVRToken, user.login, deleteData);
+
+            if (response) {
+                console.log("Layout deleted successfully:", response);
+                // Обновляем список раскладок
+                fetchLayouts();
+                // Сбрасываем выбранную раскладку
+                setSelectedLayout(null);
+                navigate('/layouts')
+            } else {
+                console.error("Failed to delete layout.");
+            }
+        } catch (error) {
+            console.error("Error during layout deletion:", error);
+        }
     };
 
     const handleRecordVideo = async () => {
@@ -143,6 +194,7 @@ const LayoutOne: React.FC = () => {
 
 
     return (
+        <>
         <Layout style={{minHeight: '100vh'}}>
             <Header style={{
                 position: 'sticky',
@@ -168,8 +220,11 @@ const LayoutOne: React.FC = () => {
                         flex: 1,
                         padding: '16px'
                     }}>
-                        <div className="layouts">
-                            <div className="header_layout">
+                        <div className="layouts" style={{ display: "flex", height: "100%" }}>
+                            <div className="header_layout" style={{
+                                flex: isMapVisible ? 2 : 3, // Левый блок занимает больше пространства при скрытой карте
+                                transition: "flex 0.3s ease", // Плавное изменение ширины
+                            }}>
 
                                 <div className="left_HT">
                                     <Button className="buttonLeft" icon={<ArrowLeftOutlined/>} style={{border: 'none'}}
@@ -186,23 +241,31 @@ const LayoutOne: React.FC = () => {
                                         <ButtonRecordVideo onClick={handleRecordVideo}/>
                                         <ButtonTakeAPhoto onClick={handleTakeAPhoto}/>
                                         <ButtonRecordAudio onClick={handleRecordAudio}/>
-                                        <ButtonShowMap onClick={handleShowMap}/>
+                                        <ButtonShowMap onClick={handleShowMap} isMapVisible={isMapVisible}/>
                                     </div>
                                 </div>
 
                             </div>
 
-                            <div className="body_layouts">
-                                {selectedLayout.viewType === '2x2' && <CameraGrid2x2 menuType={"layout"}/>}
-                                {selectedLayout.viewType === '1х5' && <CameraGrid1x5 menuType={"layout"}/>}
-                                {selectedLayout.viewType === '3х4' && <CameraGrid3x4 menuType={"layout"}/>}
-                                {selectedLayout.viewType === '3х3' && <CameraGrid3x3 menuType={"layout"}/>}
-                                {selectedLayout.viewType === '2х8' && <CameraGrid2x8 menuType={"layout"}/>}
-                                {selectedLayout.viewType === '1х12' && <CameraGrid1x12 menuType={"layout"}/>}
-                                {selectedLayout.viewType === '4х4' && <CameraGrid4x4  menuType={"layout"}/>}
-
-                                {isMapVisible && (
-                                    <LocationMap2 devices={selectedLayout.devices}/>
+                            <div className="body_layouts" style={{
+                                flex: 1,
+                                overflow: 'hidden',
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            }}>
+                                {selectedLayout ? (
+                                    <>
+                                        {selectedLayout.viewType === '2x2' && <CameraGrid2x2 menuType={"layout"} isMapVisible={isMapVisible} />}
+                                        {selectedLayout.viewType === '1х5' && <CameraGrid1x5 menuType={"layout"} isMapVisible={isMapVisible} />}
+                                        {selectedLayout.viewType === '3х4' && <CameraGrid3x4 menuType={"layout"} isMapVisible={isMapVisible} />}
+                                        {selectedLayout.viewType === '3х3' && <CameraGrid3x3 menuType={"layout"} isMapVisible={isMapVisible} />}
+                                        {selectedLayout.viewType === '2х8' && <CameraGrid2x8 menuType={"layout"} isMapVisible={isMapVisible} />}
+                                        {selectedLayout.viewType === '1х12' && <CameraGrid1x12 menuType={"layout"} isMapVisible={isMapVisible} />}
+                                        {selectedLayout.viewType === '4х4' && <CameraGrid4x4 menuType={"layout"} isMapVisible={isMapVisible} />}
+                                    </>
+                                ) : (
+                                    <p>Раскладка не выбрана</p>
                                 )}
                             </div>
 
@@ -280,6 +343,8 @@ const LayoutOne: React.FC = () => {
             <ModalSelectDevicePhoto onOk={handleOkModalSelectDevicePhoto} onCancel={handleCancelModalSelectDevicePhoto} visible={showModalSelectDevicePhoto} layoutViewType={layoutViewType}/>
 
         </Layout>
+
+    </>
     );
 };
 

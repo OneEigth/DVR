@@ -19,15 +19,22 @@ import {VideoRecordEnd} from "../../../api/videoRec/VideoRecStop";
 import AddDeviceInLayout from "../../modals/addDeviceInLayout/AddDeviceInLayout";
 import RecordVideoModal from "../../modals/videoRecord/ModalVideoRecord";
 import RecordAudioModal from "../../modals/audioMadal/ModalAudioRecord";
+import DevicePositionModal1x5 from "../../devicePosition/1x5/DevicePosition1x5";
+import DevicePositionModal3x4 from "../../devicePosition/3x4/DevicePosition3x4";
+import LocationMap2 from "../../locationMap2/LocationMap2";
 
-const GridContainer = styled.div`
+const GridContainer = styled.div<{ isMapVisible: boolean }>`
     display: grid;
-    grid-template-columns: 458px 458px 458px 458px; /* Ширина колонок */
-    grid-template-rows: 180px 180px 180px 180px;    /* Высота строк */
+    /*grid-template-columns: repeat(5, minmax(320px, 458px)); !* Ширина колонок *!
+    grid-template-rows: repeat(auto-fill, minmax(180px, 368px));    !* Высота строк *!*/
+    grid-template-columns: ${({ isMapVisible }) => 
+    isMapVisible ? "repeat(5, 1fr) auto" : "repeat(5, 458px )"};
+    grid-template-rows: repeat(4, ${({ isMapVisible }) =>
+    isMapVisible ? "180px" : "180px"});
     gap: 10px; /* Отступ между элементами */
     padding: 10px;
     width: 100%;
-    height: 100vh; /* Высота контейнера */
+    height: 87vh; /* Высота контейнера */
 `;
 
 
@@ -96,11 +103,20 @@ const AddDeviceButton = styled.div`
     text-align: center; /* Центрирование текста */
 `;
 
+const MapContainer = styled.div`
+    grid-column: 5; /* Карта занимает последнюю колонку */
+    grid-row: 1 / span 3; /* Карта занимает все строки */
+    height: 87vh;
+    border-radius: 8px;
+    overflow: hidden;
+`;
+
 interface CameraGridProps {
     menuType: 'edit' | 'layout';
+    isMapVisible:boolean;
 }
 
-const CameraGrid3x4: React.FC <CameraGridProps> = ({  menuType }) => {
+const CameraGrid3x4: React.FC <CameraGridProps> = ({  menuType, isMapVisible }) => {
 
     const { SmartDVRToken, user } = useAuthStore();
     const { selectedLayout, setSelectedLayout } = useSelectedLayout();
@@ -450,7 +466,7 @@ const CameraGrid3x4: React.FC <CameraGridProps> = ({  menuType }) => {
 
     return (
         <>
-        <GridContainer>
+        <GridContainer isMapVisible={isMapVisible}>
             {/* Камера 1 - 648px x 368px */}
             <CameraTile style={{ gridColumn: '1 / 3', gridRow: '1 / 3' }}>
                 <CameraHeader>
@@ -723,23 +739,25 @@ const CameraGrid3x4: React.FC <CameraGridProps> = ({  menuType }) => {
                     <AddDeviceButton onClick={handleOpenAddDeviceModal}>+</AddDeviceButton>
                 )}
             </CameraTile>
+            {isMapVisible && (
+                <MapContainer>
+                    <LocationMap2 devices={selectedLayout.devices} />
+                </MapContainer>
+            )}
         </GridContainer>
-            <Modal
-                title="Изменить положение устройства"
+            <DevicePositionModal3x4
                 visible={isModalVisible}
-                onOk={handleOk}
-                onCancel={handleCancel}
-                okText="Применить"
-                cancelText="Отмена"
-            >
-                <p>Выберите новую позицию для устройства:</p>
-                <InputNumber
-                    min={1}
-                    max={devices.length || 1}
-                    value={newPosition ?? undefined}
-                    onChange={(value) => setNewPosition(value as number)}
-                />
-            </Modal>
+                onOk={() => {
+                    if (newPosition) {
+                        handleOk(); // Подтвердить выбор позиции
+                    }
+                    setIsModalVisible(false);
+                }}
+                onCancel={() => setIsModalVisible(false)}
+                currentPosition={newPosition}
+                onPositionChange={(value) => setNewPosition(value)} // Обновляем состояние позиции
+                selectedDevices={devices.map((device) => device.UID)} // Передаем список UID устройств
+            />
             <AddDeviceInLayout
                 visible={isAddDeviceModalVisible}
                 onOk={handleCloseAddDeviceModal}

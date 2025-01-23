@@ -8,6 +8,6 @@ export interface LayoutType {
     description:string,
     userUID: string,
     userName: string,
-    viewType: string,
+    viewType?: string,
     devices: Device[]
 }

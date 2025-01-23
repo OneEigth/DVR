@@ -30,7 +30,8 @@ const LocationMap2: React.FC<LocationMapProps> = ({ devices }) => {
                 <MapContainer
                     ref={mapRef}
                     center={[devices[0].latitude, devices[0].longitude]} // Центр на первом устройстве
-                    zoom={15} style={{ height: '80vh', width: '450px', borderRadius:'5px'}}
+                    zoom={15} style={{ height: '81vh', width: '450px', borderRadius:'5px', zIndex: 0, /* Подправлено значение */
+                    position: 'relative',}}
                     scrollWheelZoom={false}>
                 <TileLayer
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

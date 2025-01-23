@@ -20,15 +20,35 @@ import './style1x5.css'
 import AddDeviceInLayout from "../../modals/addDeviceInLayout/AddDeviceInLayout";
 import RecordVideoModal from "../../modals/videoRecord/ModalVideoRecord";
 import RecordAudioModal from "../../modals/audioMadal/ModalAudioRecord";
+import DevicePositionModal from "../../devicePosition/2x2/DevicePosition";
+import DevicePositionModal1x5 from "../../devicePosition/1x5/DevicePosition1x5";
+import LocationMap2 from "../../locationMap2/LocationMap2";
 
+/*
 const GridContainer = styled.div`
     display: grid;
-    grid-template-columns: 614px 614px 614px 614px; /* Ширина колонок */
-    grid-template-rows: 248px 248px 248px 248px;    /* Высота строк */
-    gap: 10px; /* Отступ между элементами */
+    /!*grid-template-columns: 614px 614px 614px 614px; !* Ширина колонок *!*!/
+    grid-template-columns: repeat(4, minmax(320px, 614px));
+    /!*grid-template-rows: 248px 248px 248px 248px;    !* Высота строк *!*!/
+    grid-template-rows: repeat(4, minmax(140px, 248px));
+    gap: 10px; /!* Отступ между элементами *!/
     padding: 10px;
     width: 100%;
-    height: 80vh; /* Высота контейнера */
+    height: 87vh; /!* Высота контейнера *!/
+`;
+*/
+
+const GridContainer = styled.div<{ isMapVisible: boolean }>`
+    display: grid;
+    grid-template-columns: ${({ isMapVisible }) =>
+    isMapVisible ? "repeat(3, 1fr) auto" : "repeat(3, 614px )"};
+    grid-template-rows: repeat(3, ${({ isMapVisible }) =>
+    isMapVisible ? "248px" : "248px"});
+    gap: 10px;
+    padding: 10px;
+    width: 100%;
+    height: 87vh;
+    transition: all 0.3s ease-in-out; /* Плавное изменение размеров */
 `;
 
 const CameraTile = styled.div`
@@ -87,11 +107,20 @@ const DeviceName = styled.span`
     margin-top: 6px;
 `;
 
+const MapContainer = styled.div`
+    grid-column: 4; /* Карта занимает последнюю колонку */
+    grid-row: 1 / span 3; /* Карта занимает все строки */
+    height: 87vh;
+    border-radius: 8px;
+    overflow: hidden;
+`;
+
 interface CameraGridProps {
     menuType: 'edit' | 'layout';
+    isMapVisible:boolean;
 }
 
-const CameraGrid1x5: React.FC<CameraGridProps> = ({ menuType }) => {
+const CameraGrid1x5: React.FC<CameraGridProps> = ({ menuType , isMapVisible}) => {
 
     const { SmartDVRToken, user } = useAuthStore();
     const { selectedLayout, setSelectedLayout } = useSelectedLayout();
@@ -102,10 +131,10 @@ const CameraGrid1x5: React.FC<CameraGridProps> = ({ menuType }) => {
     const [devices, setDevices] = useState<Device[]>(selectedLayout?.devices || []);
     const {isShowNameDevice, setIsShowNameDevice}=useStateNameDevice();
     const navigate = useNavigate();
-    const [isNotSavedModalVisible, setIsNotSavedModalVisible] = useState(false);
     const [showVideoRecord, setShowVideoRecord]=useState(false);
     const [showAudioRecord, setShowAudioRecord]=useState(false);
     const [api, contextHolder] = notification.useNotification();
+
 
         // Сохранение устройств в localStorage при изменении раскладки
     useEffect(() => {
@@ -441,7 +470,7 @@ const CameraGrid1x5: React.FC<CameraGridProps> = ({ menuType }) => {
 
     return (
         <>
-        <GridContainer>
+        <GridContainer isMapVisible={isMapVisible}>
             {/* Камера 1 - занимает большую область */}
             <CameraTile style={{ gridColumn: '1 / 3', gridRow: '1 / 3' }}>
                 <CameraHeader>
@@ -457,7 +486,7 @@ const CameraGrid1x5: React.FC<CameraGridProps> = ({ menuType }) => {
                         <Dropdown overlay={menu(devices[0], 0)} trigger={['click']} placement="bottomRight" arrow>
                             <Button
                                 icon={<MoreOutlined />}
-                                style={{ backgroundColor: '#3E405F', color: 'white' }}
+                                style={{ backgroundColor: '#3E405F', color: 'white' ,borderColor: '#3E405F'}}
                             />
                         </Dropdown>
                     )}
@@ -497,7 +526,7 @@ const CameraGrid1x5: React.FC<CameraGridProps> = ({ menuType }) => {
                         <Dropdown overlay={menu(devices[1], 1)} trigger={['click']} placement="bottomRight" arrow>
                             <Button
                                 icon={<MoreOutlined />}
-                                style={{ backgroundColor: '#3E405F', color: 'white' }}
+                                style={{ backgroundColor: '#3E405F', color: 'white',borderColor: '#3E405F' }}
                             />
                         </Dropdown>
                     )}
@@ -537,7 +566,7 @@ const CameraGrid1x5: React.FC<CameraGridProps> = ({ menuType }) => {
                         <Dropdown overlay={menu(devices[2], 2)} trigger={['click']} placement="bottomRight" arrow>
                             <Button
                                 icon={<MoreOutlined />}
-                                style={{ backgroundColor: '#3E405F', color: 'white' }}
+                                style={{ backgroundColor: '#3E405F', color: 'white' ,borderColor: '#3E405F'}}
                             />
                         </Dropdown>
                     )}
@@ -577,7 +606,7 @@ const CameraGrid1x5: React.FC<CameraGridProps> = ({ menuType }) => {
                         <Dropdown overlay={menu(devices[3], 3)} trigger={['click']} placement="bottomRight" arrow>
                             <Button
                                 icon={<MoreOutlined />}
-                                style={{ backgroundColor: '#3E405F', color: 'white' }}
+                                style={{ backgroundColor: '#3E405F', color: 'white',borderColor: '#3E405F' }}
                             />
                         </Dropdown>
                     )}
@@ -617,7 +646,7 @@ const CameraGrid1x5: React.FC<CameraGridProps> = ({ menuType }) => {
                         <Dropdown overlay={menu(devices[4], 4)} trigger={['click']} placement="bottomRight" arrow>
                             <Button
                                 icon={<MoreOutlined />}
-                                style={{ backgroundColor: '#3E405F', color: 'white' }}
+                                style={{ backgroundColor: '#3E405F', color: 'white' ,borderColor: '#3E405F'}}
                             />
                         </Dropdown>
                     )}
@@ -657,7 +686,7 @@ const CameraGrid1x5: React.FC<CameraGridProps> = ({ menuType }) => {
                         <Dropdown overlay={menu(devices[5], 5)} trigger={['click']} placement="bottomRight" arrow>
                             <Button
                                 icon={<MoreOutlined />}
-                                style={{ backgroundColor: '#3E405F', color: 'white' }}
+                                style={{ backgroundColor: '#3E405F', color: 'white',borderColor: '#3E405F' }}
                             />
                         </Dropdown>
                     )}
@@ -667,6 +696,7 @@ const CameraGrid1x5: React.FC<CameraGridProps> = ({ menuType }) => {
                         <iframe
                             width="100%"
                             height="100%"
+
                             src={`${ONLINE_PLAY_URL}${devices[5].UID}/${SmartDVRToken}`}
                             scrolling="no"
                             frameBorder="0"
@@ -681,23 +711,26 @@ const CameraGrid1x5: React.FC<CameraGridProps> = ({ menuType }) => {
                     </div>
                 )}
             </CameraTile>
+            {isMapVisible && (
+                <MapContainer>
+                <LocationMap2 devices={selectedLayout.devices} />
+                </MapContainer>
+            )}
         </GridContainer>
-            <Modal
-                title="Изменить положение устройства"
+            <DevicePositionModal1x5
                 visible={isModalVisible}
-                onOk={handleOk}
-                onCancel={handleCancel}
-                okText="Применить"
-                cancelText="Отмена"
-            >
-                <p>Выберите новую позицию для устройства:</p>
-                <InputNumber
-                    min={1}
-                    max={devices.length || 1}
-                    value={newPosition ?? undefined}
-                    onChange={(value) => setNewPosition(value as number)}
+                onOk={() => {
+                if (newPosition) {
+                    handleOk(); // Подтвердить выбор позиции
+                }
+                setIsModalVisible(false);
+            }}
+                onCancel={() => setIsModalVisible(false)}
+                currentPosition={newPosition}
+                onPositionChange={(value) => setNewPosition(value)} // Обновляем состояние позиции
+                selectedDevices={devices.map((device) => device.UID)} // Передаем список UID устройств
                 />
-            </Modal>
+
             <AddDeviceInLayout
                 visible={isAddDeviceModalVisible}
                 onOk={handleCloseAddDeviceModal}

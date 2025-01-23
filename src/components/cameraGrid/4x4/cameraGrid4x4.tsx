@@ -19,15 +19,21 @@ import {VideoRecordEnd} from "../../../api/videoRec/VideoRecStop";
 import AddDeviceInLayout from "../../modals/addDeviceInLayout/AddDeviceInLayout";
 import RecordVideoModal from "../../modals/videoRecord/ModalVideoRecord";
 import RecordAudioModal from "../../modals/audioMadal/ModalAudioRecord";
+import DevicePositionModal4x4 from "../../devicePosition/4x4/DevicePosition4x4";
+import LocationMap2 from "../../locationMap2/LocationMap2";
 
-const GridContainer = styled.div`
+const GridContainer = styled.div<{ isMapVisible: boolean }>`
     display: grid;
-    grid-template-columns: 458px 458px 458px 458px; /* Ширина колонок */
-    grid-template-rows: 180px 180px 180px 180px;    /* Высота строк */
+    /*grid-template-columns: 458px 458px 458px 458px; !* Ширина колонок *!
+    grid-template-rows: 180px 180px 180px 180px;    !* Высота строк *!*/
+    grid-template-columns: ${({ isMapVisible }) =>
+            isMapVisible ? "repeat(4, 365px) auto" : "repeat(4, 1fr )"};
+    grid-template-rows: repeat(4, ${({ isMapVisible }) =>
+            isMapVisible ? "180px" : "180px"});
     gap: 10px; /* Отступ между элементами */
     padding: 10px;
     width: 100%;
-    height: 100vh; /* Высота контейнера */
+    height: 87vh; /* Высота контейнера */
 `;
 
 
@@ -87,11 +93,20 @@ const DeviceName = styled.span`
     
     margin-top: 6px;
 `;
+const MapContainer = styled.div`
+    grid-column: 5; /* Карта занимает последнюю колонку */
+    grid-row: 1 / span 3; /* Карта занимает все строки */
+    height: 87vh;
+    border-radius: 8px;
+    overflow: hidden;
+`;
 interface CameraGridProps {
     menuType: 'edit' | 'layout';
+    isMapVisible:boolean;
 }
 
-const CameraGrid4x4: React.FC<CameraGridProps>  = ({ menuType }) => {
+
+const CameraGrid4x4: React.FC<CameraGridProps>  = ({ menuType,isMapVisible }) => {
 
     const { SmartDVRToken, user } = useAuthStore();
     const { selectedLayout, setSelectedLayout } = useSelectedLayout();
@@ -441,7 +456,7 @@ const CameraGrid4x4: React.FC<CameraGridProps>  = ({ menuType }) => {
 
     return (
         <>
-        <GridContainer>
+            <GridContainer isMapVisible={isMapVisible} >
             {Array.from({ length: 16 }).map((_, idx) => {
                 const device = devices[idx] || null;
                 return (
@@ -459,7 +474,7 @@ const CameraGrid4x4: React.FC<CameraGridProps>  = ({ menuType }) => {
                             <Dropdown overlay={menu(device, idx)} trigger={['click']} placement="bottomRight" arrow>
                                 <Button
                                     icon={<MoreOutlined />}
-                                    style={{ backgroundColor: '#3E405F', color: 'white' }}
+                                    style={{ backgroundColor: '#3E405F', color: 'white' ,borderColor: '#3E405F'}}
                                 />
                             </Dropdown>
                         )}
@@ -467,7 +482,8 @@ const CameraGrid4x4: React.FC<CameraGridProps>  = ({ menuType }) => {
                     {device ? (
                         device.online ? (
                             <iframe
-                                width="458"
+
+                                width={isMapVisible ? "365" : "458"}
                                 height="180"
                                 src={`${ONLINE_PLAY_LAYOUT_URL}${device.UID}/${SmartDVRToken}`}
                                 scrolling="no"
@@ -484,23 +500,25 @@ const CameraGrid4x4: React.FC<CameraGridProps>  = ({ menuType }) => {
                 </CameraTile>
             );
             })}
+                {isMapVisible && (
+                    <MapContainer>
+                        <LocationMap2 devices={selectedLayout.devices} />
+                    </MapContainer>
+                )}
         </GridContainer>
-    <Modal
-        title="Изменить положение устройства"
-        visible={isModalVisible}
-        onOk={handleOk}
-        onCancel={handleCancel}
-        okText="Применить"
-        cancelText="Отмена"
-    >
-        <p>Выберите новую позицию для устройства:</p>
-        <InputNumber
-            min={1}
-            max={devices.length || 1}
-            value={newPosition ?? undefined}
-            onChange={(value) => setNewPosition(value as number)}
-        />
-    </Modal>
+            <DevicePositionModal4x4
+                visible={isModalVisible}
+                onOk={() => {
+                    if (newPosition) {
+                        handleOk(); // Подтвердить выбор позиции
+                    }
+                    setIsModalVisible(false);
+                }}
+                onCancel={() => setIsModalVisible(false)}
+                currentPosition={newPosition}
+                onPositionChange={(value) => setNewPosition(value)} // Обновляем состояние позиции
+                selectedDevices={devices.map((device) => device.UID)} // Передаем список UID устройств
+            />
     <AddDeviceInLayout
         visible={isAddDeviceModalVisible}
         onOk={handleCloseAddDeviceModal}

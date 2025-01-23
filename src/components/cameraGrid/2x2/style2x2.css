@@ -1,3 +1,4 @@
+/*
 .custom-dropdown .ant-dropdown {
     position: relative;
 }
@@ -5,12 +6,32 @@
 .custom-dropdown .ant-dropdown:before {
     content: "";
     position: absolute;
-    top: -10px!important; /* Расположение треугольника относительно меню */
-    right: 12px; /* Расположение треугольника относительно правого края */
+    top: -10px!important; !* Расположение треугольника относительно меню *!
+    right: 12px; !* Расположение треугольника относительно правого края *!
     border-width: 0 8px 8px 8px;
     border-style: solid;
     border-color: transparent transparent white transparent;
     display: block;
     width: 0;
     z-index: 1;
+}*/
+.custom-dropdown .ant-dropdown {
+    position: relative;
+    border-radius: 4px; /* Скругление углов */
+}
+
+.custom-dropdown .ant-dropdown:before {
+    content: "";
+    position: absolute;
+    top: -8px; /* Положение треугольника над меню */
+    right: 16px; /* Смещение треугольника */
+    border-width: 0 8px 8px 8px;
+    border-style: solid;
+    border-color: transparent transparent #ffffff transparent; /* Треугольник белого цвета */
+    z-index: 1; /* Уровень отображения треугольника */
+}
+
+.custom-dropdown .ant-dropdown-menu {
+    background-color: #fff; /* Белый фон для выпадающего меню */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Лёгкая тень */
 }

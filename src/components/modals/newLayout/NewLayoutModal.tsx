@@ -44,7 +44,7 @@ const NewLayoutModal: React.FC<NewLayoutModalProps> = ({ visible, onOk, onCancel
                 name: LayoutName,
                 userUID: user.uid,
                 description: LayoutDescription,
-                viewType: "", // Укажите нужный тип отображения
+                viewType: "2x2", // Укажите нужный тип отображения
             };
 
             const response = await CreateLayout(SmartDVRToken, user.login, data);

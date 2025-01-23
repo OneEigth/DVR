@@ -6,7 +6,7 @@ import { notification } from "antd";
 
 const GridContainer = styled.div`
     display: grid;
-    grid-template-columns: 315px 315px; /* Ширина колонок */
+    grid-template-columns: 326px 326px; /* Ширина колонок */
     grid-template-rows: 190px 190px; /* Высота строк */
     gap: 10px; /* Отступ между элементами */
     padding: 5px;

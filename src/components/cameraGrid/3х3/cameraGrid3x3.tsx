@@ -19,15 +19,29 @@ import {VideoRecordEnd} from "../../../api/videoRec/VideoRecStop";
 import AddDeviceInLayout from "../../modals/addDeviceInLayout/AddDeviceInLayout";
 import RecordVideoModal from "../../modals/videoRecord/ModalVideoRecord";
 import RecordAudioModal from "../../modals/audioMadal/ModalAudioRecord";
+import DevicePositionModal3x4 from "../../devicePosition/3x4/DevicePosition3x4";
+import DevicePositionModal3x3 from "../../devicePosition/3x3/DevicePosition3x3";
+import LocationMap2 from "../../locationMap2/LocationMap2";
 
-const GridContainer = styled.div`
+const GridContainer = styled.div<{ isMapVisible: boolean }>`
     display: grid;
-    grid-template-columns: 615px 615px 615px ; /* Ширина колонок */
-    grid-template-rows: 242px 242px 242px ;    /* Высота строк */
+    /*grid-template-columns: 615px 615px 615px ; !* Ширина колонок *!
+    grid-template-rows: 242px 242px 242px ;    !* Высота строк *!*/
+    grid-template-columns: ${({ isMapVisible }) =>
+            isMapVisible ? "repeat(3, 490px) auto" : "repeat(3, 1fr )"};
+    grid-template-rows: repeat(3, ${({ isMapVisible }) =>
+            isMapVisible ? "242px" : "242px"});
     gap: 10px; /* Отступ между элементами */
     padding: 10px;
     width: 100%;
-    height: 100vh; /* Высота контейнера */
+    height: 87vh; /* Высота контейнера */
+`;
+const MapContainer = styled.div`
+    grid-column: 4; /* Карта занимает последнюю колонку */
+    grid-row: 1 / span 3; /* Карта занимает все строки */
+    height: 87vh;
+    border-radius: 8px;
+    overflow: hidden;
 `;
 
 const CameraTile = styled.div`
@@ -88,22 +102,20 @@ const DeviceName = styled.span`
 `;
 interface CameraGridProps {
     menuType: 'edit' | 'layout';
+    isMapVisible:boolean;
 }
 
-
-const CameraGrid3x3: React.FC<CameraGridProps>  = ({ menuType }) => {
+const CameraGrid3x3: React.FC<CameraGridProps>  = ({ menuType,isMapVisible }) => {
 
     const { SmartDVRToken, user } = useAuthStore();
     const { selectedLayout, setSelectedLayout } = useSelectedLayout();
     const [isModalVisible, setIsModalVisible] = useState(false);
-
     const [selectedDevice, setSelectedDevice] = useState<Device | null>(null);
     const [newPosition, setNewPosition] = useState<number | null>(null);
     const [isAddDeviceModalVisible, setIsAddDeviceModalVisible] = useState(false);
     const [devices, setDevices] = useState<Device[]>(selectedLayout?.devices || []);
     const {isShowNameDevice, setIsShowNameDevice}=useStateNameDevice();
     const navigate = useNavigate();
-    const [isNotSavedModalVisible, setIsNotSavedModalVisible] = useState(false);
     const [showVideoRecord, setShowVideoRecord]=useState(false);
     const [showAudioRecord, setShowAudioRecord]=useState(false);
     const [api, contextHolder] = notification.useNotification();
@@ -441,7 +453,7 @@ const CameraGrid3x3: React.FC<CameraGridProps>  = ({ menuType }) => {
     return (
         <>
         {contextHolder}
-        <GridContainer>
+        <GridContainer isMapVisible={isMapVisible} >
             {Array.from({ length: 9 }).map((_, idx) => {
                 const device = devices[idx] || null;
 
@@ -460,7 +472,7 @@ const CameraGrid3x3: React.FC<CameraGridProps>  = ({ menuType }) => {
                                 <Dropdown overlay={menu(device, idx)} trigger={['click']} placement="bottomRight" arrow>
                                     <Button
                                         icon={<MoreOutlined />}
-                                        style={{ backgroundColor: '#3E405F', color: 'white' }}
+                                        style={{ backgroundColor: '#3E405F', color: 'white', borderColor: '#3E405F'}}
                                     />
                                 </Dropdown>
                             )}
@@ -468,12 +480,12 @@ const CameraGrid3x3: React.FC<CameraGridProps>  = ({ menuType }) => {
                         {device ? (
                             device.online ? (
                                 <iframe
-                                    width="615"
+                                    width={isMapVisible ? "495" : "615"} // Условие для ширины
                                     height="242"
                                     src={`${ONLINE_PLAY_LAYOUT_URL}${device.UID}/${SmartDVRToken}`}
                                     scrolling="no"
                                     frameBorder="0"
-                                    style={{ borderWidth: '0px' }}
+                                    style={{borderWidth: '0px'}}
                                 />
 
                             ) : (
@@ -485,23 +497,25 @@ const CameraGrid3x3: React.FC<CameraGridProps>  = ({ menuType }) => {
                     </CameraTile>
                 );
             })}
+            {isMapVisible && (
+                <MapContainer>
+                    <LocationMap2 devices={selectedLayout.devices} />
+                </MapContainer>
+            )}
         </GridContainer>
-            <Modal
-                title="Изменить положение устройства"
+            <DevicePositionModal3x3
                 visible={isModalVisible}
-                onOk={handleOk}
-                onCancel={handleCancel}
-                okText="Применить"
-                cancelText="Отмена"
-            >
-                <p>Выберите новую позицию для устройства:</p>
-                <InputNumber
-                    min={1}
-                    max={devices.length || 1}
-                    value={newPosition ?? undefined}
-                    onChange={(value) => setNewPosition(value as number)}
-                />
-            </Modal>
+                onOk={() => {
+                    if (newPosition) {
+                        handleOk(); // Подтвердить выбор позиции
+                    }
+                    setIsModalVisible(false);
+                }}
+                onCancel={() => setIsModalVisible(false)}
+                currentPosition={newPosition}
+                onPositionChange={(value) => setNewPosition(value)} // Обновляем состояние позиции
+                selectedDevices={devices.map((device) => device.UID)} // Передаем список UID устройств
+            />
             <AddDeviceInLayout
                 visible={isAddDeviceModalVisible}
                 onOk={handleCloseAddDeviceModal}

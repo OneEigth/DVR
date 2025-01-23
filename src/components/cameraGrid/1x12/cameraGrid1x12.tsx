@@ -7,7 +7,7 @@ import './style1x12.css'
 import {Device} from "../../../types/Device";
 import {useStateNameDevice} from "../../../store/layout/useStateNameDevice";
 import {useNavigate} from "react-router-dom";
-import {Button, Dropdown, InputNumber, Menu, message, Modal, notification} from "antd";
+import {Button, Dropdown,  Menu, message,  notification} from "antd";
 import {LayoutType} from "../../../types/LayoutType";
 import {UpdateLayouts} from "../../../api/layout/UpdateLayout";
 import {InfoCircleFilled, MoreOutlined} from "@ant-design/icons";
@@ -19,15 +19,21 @@ import {VideoRecordEnd} from "../../../api/videoRec/VideoRecStop";
 import AddDeviceInLayout from "../../modals/addDeviceInLayout/AddDeviceInLayout";
 import RecordVideoModal from "../../modals/videoRecord/ModalVideoRecord";
 import RecordAudioModal from "../../modals/audioMadal/ModalAudioRecord";
+import DevicePositionModal1x12 from "../../devicePosition/1x12/DevicePosition1x12";
+import LocationMap2 from "../../locationMap2/LocationMap2";
 
-const GridContainer = styled.div`
+const GridContainer = styled.div<{ isMapVisible: boolean }>`
     display: grid;
-    grid-template-columns: 458px 458px 458px 458px; /* Ширина колонок */
-    grid-template-rows: 180px 180px 180px 180px;    /* Высота строк */
+    /*grid-template-columns: 458px 458px 458px 458px; !* Ширина колонок *!
+    grid-template-rows: 180px 180px 180px 180px;    !* Высота строк *!*/
+    grid-template-columns: ${({ isMapVisible }) =>
+            isMapVisible ? "repeat(4, 1fr) auto" : "repeat(4, 458px )"};
+    grid-template-rows: repeat(4, ${({ isMapVisible }) =>
+            isMapVisible ? "180px" : "180px"});
     gap: 10px; /* Отступ между элементами */
     padding: 10px;
     width: 100%;
-    height: 100vh; /* Высота контейнера */
+    height: 87vh; /* Высота контейнера */
 `;
 
 const CameraTile = styled.div`
@@ -95,12 +101,20 @@ const AddDeviceButton = styled.div`
     text-align: center; /* Центрирование текста */
 `;
 
+const MapContainer = styled.div`
+    grid-column: 5; /* Карта занимает последнюю колонку */
+    grid-row: 1 / span 3; /* Карта занимает все строки */
+    height: 87vh;
+    border-radius: 8px;
+    overflow: hidden;
+`;
+
 interface CameraGridProps {
     menuType: 'edit' | 'layout';
+    isMapVisible:boolean;
 }
 
-
-const CameraGrid1x12: React.FC<CameraGridProps> = ({ menuType }) => {
+const CameraGrid1x12: React.FC<CameraGridProps> = ({ menuType ,isMapVisible}) => {
 
     const { SmartDVRToken, user } = useAuthStore();
     const { selectedLayout, setSelectedLayout } = useSelectedLayout();
@@ -450,7 +464,7 @@ const CameraGrid1x12: React.FC<CameraGridProps> = ({ menuType }) => {
 
     return (
         <>
-        <GridContainer>
+            <GridContainer isMapVisible={isMapVisible}>
             {/* Камера 1 - занимает большую область */}
                 <CameraTile style={{gridColumn: '1 / 3', gridRow: '1 / 3'}}>
                     <CameraHeader>
@@ -956,24 +970,25 @@ const CameraGrid1x12: React.FC<CameraGridProps> = ({ menuType }) => {
                         <AddDeviceButton onClick={handleOpenAddDeviceModal}>+</AddDeviceButton>
                     )}
                 </CameraTile>
-
+                {isMapVisible && (
+                    <MapContainer>
+                        <LocationMap2 devices={selectedLayout.devices} />
+                    </MapContainer>
+                )}
         </GridContainer>
-            <Modal
-                title="Изменить положение устройства"
+            <DevicePositionModal1x12
                 visible={isModalVisible}
-                onOk={handleOk}
-                onCancel={handleCancel}
-                okText="Применить"
-                cancelText="Отмена"
-            >
-                <p>Выберите новую позицию для устройства:</p>
-                <InputNumber
-                    min={1}
-                    max={devices.length || 1}
-                    value={newPosition ?? undefined}
-                    onChange={(value) => setNewPosition(value as number)}
-                />
-            </Modal>
+                onOk={() => {
+                    if (newPosition) {
+                        handleOk(); // Подтвердить выбор позиции
+                    }
+                    setIsModalVisible(false);
+                }}
+                onCancel={() => setIsModalVisible(false)}
+                currentPosition={newPosition}
+                onPositionChange={(value) => setNewPosition(value)} // Обновляем состояние позиции
+                selectedDevices={devices.map((device) => device.UID)} // Передаем список UID устройств
+            />
             <AddDeviceInLayout
                 visible={isAddDeviceModalVisible}
                 onOk={handleCloseAddDeviceModal}

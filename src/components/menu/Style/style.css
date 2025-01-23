@@ -70,3 +70,113 @@
 .menu-item.ant-menu-item-selected .icon-main-menu {
     fill: #4D4E65;
 }
+
+.user-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Стили для выпадающего меню */
+.custom-user-menu {
+    width: 200px;
+    padding: 10px;
+    background-color: #21201F1A; /* Ваш фон меню */
+    border-radius: 8px; /* Сглаженные углы */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Тень */
+    color: #ffffff; /* Белый текст */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+/* Стили для текста внутри меню */
+.custom-user-menu .user-name {
+    font-size: 16px;
+    font-weight: bold;
+    color: #ffffff; /* Белый цвет текста */
+    text-align: center;
+}
+
+/* Стили для переключателя языка */
+.custom-user-menu .language-switch {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+/* Стили для кнопки выхода */
+.custom-user-menu .logout-section {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.custom-user-menu .logout-section button {
+    font-size: 14px;
+    color: #ff4d4f; /* Красный цвет для кнопки выхода */
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.custom-user-menu .logout-section button:hover {
+    color: #ff7875; /* Светлее красный при наведении */
+}
+
+
+.user-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.user-initials {
+    width: 30px;
+    height: 30px;
+    background-color: #FFFFFF;
+    color: #4D4E65;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.user-name {
+    font-size: 14px;
+    color: #FFFFFF;
+    font-weight: 500;
+}
+
+/* Убираем выделение при наведении */
+.user-button:hover,
+.custom-user-menu:hover {
+    /*background-color: transparent !important; !* Отменяем фон при наведении *!*/
+    box-shadow: none !important; /* Отменяем тень при наведении */
+    cursor: default; /* Если нужно убрать изменение курсора */
+}
+
+/* Если элемент имеет border при наведении, уберите его */
+.user-button,
+.custom-user-menu {
+    border: none !important;
+}
+
+/* Убираем эффект нажатия (active) */
+.user-button:active,
+.custom-user-menu:active {
+    background-color: transparent !important;
+    box-shadow: none !important;
+}
+
+.microphone-button {
+    background: #4D4E65;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}

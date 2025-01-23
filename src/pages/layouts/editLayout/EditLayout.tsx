@@ -1,6 +1,8 @@
+
 import React, {useEffect, useState} from 'react';
+import styled from "styled-components";
 import MainMenu from "../../../components/menu/Menu";
-import {Button, Form, Input, Layout, message, Radio} from "antd";
+import {Button, Form, Input, Layout, message, Radio, RadioChangeEvent} from "antd";
 import {ArrowLeftOutlined} from "@ant-design/icons";
 import './style.css'
 import {useNavigate} from "react-router-dom";
@@ -19,11 +21,54 @@ import ButtonLayoutSave from "../../../components/buttons/buttonLayout/LayoutEdi
 import {useAuthStore} from "../../../store/auth/auth";
 import {UpdateLayouts} from "../../../api/layout/UpdateLayout";
 import {useStateNameDevice} from "../../../store/layout/useStateNameDevice";
-
-import  {LayoutType} from "../../../types/LayoutType";
-
-
 const {Header, Content, Footer} = Layout;
+
+
+// Стилизация Radio.Group
+const StyledRadioGroup = styled(Radio.Group)`
+  display: flex;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+  width: 100%;
+`;
+
+// Стилизация Radio.Button
+const StyledRadioButton = styled(Radio.Button)`
+    flex: 1;
+    text-align: center;
+    border: none;
+    padding: 8px 16px;
+    font-size: 14px;
+    line-height: 1.5;
+    cursor: pointer;
+
+    &.ant-radio-button-wrapper {
+        border-radius: 0;
+        border: none;
+        box-shadow: none;
+    }
+
+    &.ant-radio-button-wrapper-checked {
+        background-color: #4D4E65; /* Цвет для выделенной кнопки */
+        color: white;
+
+        &:hover {
+            background-color: #4D4E65; /* Цвет при наведении на выделенную кнопку */
+            color: white; /* Текст остается белым */
+        }
+    }
+
+    &:not(.ant-radio-button-wrapper-checked) {
+        background-color: #CDD0D2; /* Цвет для невыделенных кнопок */
+        color: #333;
+
+        &:hover {
+            background-color: #4D4E65; /* Цвет при наведении на невыделенную кнопку */
+            color: white; /* Текст становится белым */
+        }
+    }
+`;
 
 
 const EditLayout: React.FC = () => {
@@ -40,6 +85,8 @@ const EditLayout: React.FC = () => {
     const {isShowNameDevice, setIsShowNameDevice}=useStateNameDevice();
     const [selectedType, setSelectedType] = useState(isShowNameDevice ? 'Show' : 'Hide');
     const {setIsLayoutFormChanged, setIsNotSavedModalVisible, isNotSavedModalVisible, layoutViewType, setLayoutViewType } = useIsLayoutFormChanged();
+
+
 
 
     const handleSelectLayoutView = (size: '2x2' | '1х5' | '3х4' | '3х3' | '2х8' | '1х12' | '4х4') => {
@@ -123,11 +170,11 @@ const EditLayout: React.FC = () => {
         return changedFields;
     };
 
-    const handleRadioChange = (e: any) => {
+   /* const handleRadioChange = (e: any) => {
         const value = e.target.value;
         setSelectedType(value);
         setIsShowNameDevice(value === 'Show');
-    };
+    };*/
     const handleDeleteLayout = () => {
 
     };
@@ -153,9 +200,14 @@ const EditLayout: React.FC = () => {
     };
 
 
+    const handleRadioChange = (e: RadioChangeEvent) => {
 
-
+        const value = e.target.value;
+        setSelectedType(value);
+        setIsShowNameDevice(value === 'Show');
+    };
     return (
+        <>
         <Layout style={{minHeight: '100vh'}}>
             <Header style={{
                 position: 'sticky',
@@ -195,17 +247,15 @@ const EditLayout: React.FC = () => {
                             </div>
 
                             <div className="body_layouts">
-                                {layoutViewType === '2x2' && <CameraGrid2x2 menuType={"edit"}/>}
-                                {layoutViewType === '1х5' && <CameraGrid1x5 menuType={"edit"} />}
-                                {layoutViewType === '3х4' && <CameraGrid3x4 menuType={"layout"}/>}
-                                {layoutViewType === '3х3' && <CameraGrid3x3 menuType={"layout"}/>}
-                                {layoutViewType === '2х8' && <CameraGrid2x8 menuType={"layout"}/>}
-                                {layoutViewType === '1х12' && <CameraGrid1x12 menuType={"layout"}/>}
-                                {layoutViewType === '4х4' && <CameraGrid4x4 menuType={"layout"}/>}
+                                {layoutViewType === '2x2' && <CameraGrid2x2 menuType={"edit"} isMapVisible={isMapVisible}/>}
+                                {layoutViewType === '1х5' && <CameraGrid1x5 menuType={"edit"}  isMapVisible={isMapVisible}/>}
+                                {layoutViewType === '3х4' && <CameraGrid3x4 menuType={"edit"} isMapVisible={isMapVisible}/>}
+                                {layoutViewType === '3х3' && <CameraGrid3x3 menuType={"edit"} isMapVisible={isMapVisible}/>}
+                                {layoutViewType === '2х8' && <CameraGrid2x8 menuType={"edit"} isMapVisible={isMapVisible}/>}
+                                {layoutViewType === '1х12' && <CameraGrid1x12 menuType={"edit"} isMapVisible={isMapVisible}/>}
+                                {layoutViewType === '4х4' && <CameraGrid4x4 menuType={"edit"} isMapVisible={isMapVisible}/>}
 
-                                {isMapVisible && (
-                                    <LocationMap2 devices={selectedLayout.devices}/>
-                                )}
+                                {!selectedLayout && <p>Раскладка не выбрана</p>}
                             </div>
 
                             <div className="description_layout">
@@ -232,10 +282,12 @@ const EditLayout: React.FC = () => {
                                             name="nameOfDevice"
                                             rules={[{required: false, message: 'Пожалуйста, введите Название'}]}
                                         >
-                                            <Radio.Group value={selectedType} onChange={handleRadioChange}>
-                                                <Radio.Button value="Show">Показать</Radio.Button>
-                                                <Radio.Button value="Hide">Скрыть</Radio.Button>
-                                            </Radio.Group>
+                                            <div style={{width: "100%"}}>
+                                                <StyledRadioGroup value={selectedType} onChange={handleRadioChange}>
+                                                    <StyledRadioButton value="Show">Показать</StyledRadioButton>
+                                                    <StyledRadioButton value="Hide">Скрыть</StyledRadioButton>
+                                                </StyledRadioGroup>
+                                            </div>
 
                                         </Form.Item>
                                     </Form>
@@ -274,6 +326,7 @@ const EditLayout: React.FC = () => {
                         </div>
                     </Content>
 
+
                     <Footer style={{
                         width: '100%',
                         display: 'flex',
@@ -289,8 +342,10 @@ const EditLayout: React.FC = () => {
                     </Footer>
                 </Layout>
             </Layout>
+
             {/* Модальные окна */}
         </Layout>
+       </>
     );
 };
 

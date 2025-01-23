@@ -20,18 +20,19 @@ import {VideoRecordEnd} from "../../../api/videoRec/VideoRecStop";
 import {AudioRecordStart} from "../../../api/audioRec/AudioRecStart";
 import {VideoRecordStart} from "../../../api/videoRec/VideoRecStart";
 import {PhotoRecord} from "../../../api/fotoRec/PhotoRec";
-import DevicePositionModal from "../../devicePosition/DevicePosition";
+import DevicePositionModal from "../../devicePosition/2x2/DevicePosition";
+import LocationMap2 from "../../locationMap2/LocationMap2";
 
 
 
-const GridContainer = styled.div`
+const GridContainer = styled.div<{ isMapVisible: boolean }>`
     display: grid;
-    grid-template-columns: 920px 920px ; /* Ширина колонок */
-    grid-template-rows: 370px 370px ;    /* Высота строк */
+    grid-template-columns: repeat(2, minmax(720px, 920px)); /* Минимальная и максимальная ширина колонок */
+    grid-template-rows: repeat(2, 370px); /* Сохраняем 2 строки */
     gap: 10px; /* Отступ между элементами */
     padding: 10px;
     width: 100%;
-    height: 100vh; /* Высота контейнера */
+    height: 84vh; /* Высота контейнера */
 `;
 
 
@@ -93,9 +94,10 @@ const DeviceName = styled.span`
 `;
 interface CameraGridProps {
     menuType: 'edit' | 'layout';
+    isMapVisible:boolean;
 }
 
-const CameraGrid2x2: React.FC<CameraGridProps>  = ({ menuType }) => {
+const CameraGrid2x2: React.FC<CameraGridProps>  = ({ menuType,isMapVisible }) => {
 
     const { SmartDVRToken, user } = useAuthStore();
     const { selectedLayout, setSelectedLayout } = useSelectedLayout();
@@ -447,7 +449,7 @@ const menu = (device: Device, idx: number) => (
     return (
         <>
             {contextHolder}
-            <GridContainer>
+            <GridContainer isMapVisible>
                 {Array.from({ length: 4 }).map((_, idx) => {
                     const device = devices[idx] || null;
 
@@ -466,7 +468,7 @@ const menu = (device: Device, idx: number) => (
                                     <Dropdown overlay={menu(device, idx)} trigger={['click']} placement="bottomRight" arrow>
                                         <Button
                                             icon={<MoreOutlined />}
-                                            style={{ backgroundColor: '#3E405F', color: 'white' }}
+                                            style={{ backgroundColor: '#3E405F', color: 'white',borderColor:'#3E405F' }}
                                         />
                                     </Dropdown>
                                 )}
@@ -474,12 +476,18 @@ const menu = (device: Device, idx: number) => (
                             {device ? (
                                 device.online ? (
                                     <iframe
-                                        width="920"
-                                        height="370"
+                                        width={isMapVisible ? "720" : "920"} // Используем min и max ширину в зависимости от isMapVisible
+                                        height={isMapVisible ? "170" : "370"} // Аналогично для высоты
                                         src={`${ONLINE_PLAY_LAYOUT_URL}${device.UID}/${SmartDVRToken}`}
                                         scrolling="no"
                                         frameBorder="0"
-                                        style={{ borderWidth: '0px' }}
+                                        style={{
+                                            borderWidth: '0px',
+                                            maxWidth: "920px", // Максимальная ширина
+                                            minWidth: "720px", // Минимальная ширина
+                                            maxHeight: "370px", // Максимальная высота
+                                            minHeight: "170px", // Минимальная высота
+                                        }}
                                     />
                                 ) : (
                                     <div>Устройство оффлайн</div>
@@ -492,15 +500,31 @@ const menu = (device: Device, idx: number) => (
                         </CameraTile>
                     );
                 })}
+                {isMapVisible && (
+                    <div
+                        style={{
+                            gridColumn: "3 / span 1", // Карта занимает третью колонку
+                            gridRow: "1 / span 2", // Карта занимает обе строки
+                            height: "100%",
+                        }}
+                    >
+                        <LocationMap2 devices={selectedLayout.devices} />
+                    </div>
+                )}
             </GridContainer>
 
             <DevicePositionModal
                 visible={isModalVisible}
-                onOk={handleOk}
-                onCancel={handleCancel}
+                onOk={() => {
+                    if (newPosition) {
+                        handleOk(); // Подтвердить выбор позиции
+                    }
+                    setIsModalVisible(false);
+                }}
+                onCancel={() => setIsModalVisible(false)}
                 currentPosition={newPosition}
-                maxPosition={devices.length || 1}
-                onPositionChange={(value) => setNewPosition(value)}
+                onPositionChange={(value) => setNewPosition(value)} // Обновляем состояние позиции
+                selectedDevices={devices.map((device) => device.UID)} // Передаем список UID устройств
             />
             <AddDeviceInLayout
                 visible={isAddDeviceModalVisible}
