@@ -1,9 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
 .page {
-    background-color: #AFBBC3;
+    background-image: url('../img/BackGround.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
     display: flex;
-    justify-content: flex-start;
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
     height: 100vh; /* Высота 100% видимой области (viewport height) */
     overflow: hidden; /* Избавляется от скроллинга */
@@ -23,24 +28,23 @@
 .cart {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    flex-flow: column;
-    width: 30%; /* Ширина 80% видимой области */
-    height: 90vh; /* Высота 90% видимой области */
-    padding: 6vh 9.6vw; /* Отступы в процентах от высоты и ширины .cart */
+
+
+    width: 480px; /* Ширина 80% видимой области */
+    height: 468px; /* Высота 90% видимой области */
+  /*  padding: 6vh 9.6vw; !* Отступы в процентах от высоты и ширины .cart *!*/
     border-radius: 16px;
-    gap: 32px;
+
     background-color: white;
-    justify-content: space-between; /* Распределяет свободное пространство */
+    justify-content: start; /* Распределяет свободное пространство */
     overflow: hidden; /* Избавляется от скроллинга */
 }
 
 .first {
-    margin-top: 60px;
-}
-
-.thirdLine {
-    margin-bottom: 60px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between!important;
+    margin: 48px;
 }
 
 .loginInput{
@@ -53,16 +57,17 @@
 
 .inputLabel {
     font-family: 'Roboto', sans-serif;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 500;
-    line-height: 24px;
+    line-height: 20px;
     letter-spacing: 0.15000000596046448px;
     text-align: left;
-    width: 144px
+    width: 144px;
+    margin-top: 24px;
 }
 
 .input {
-    width: 316px;
+    width: 384px!important;
 
 }
 .input:hover {
@@ -95,11 +100,11 @@
     font-weight: 400;
     line-height: 44px;
     text-align: center!important;
-    margin-bottom: 32px;
+    margin-bottom: 0;
 }
 
 .ButtonLogIn {
-    width: 479px;
+    width: 384px;
     height: 32px;
     font-family: 'Roboto', sans-serif;
     font-size: 14px;
@@ -110,28 +115,32 @@
     background-color: #4D4E65;
     color: white;
     transition: background-color 0.3s ease;
+    margin-top: 24px;
 }
 
 .ButtonLogIn:hover {
     background-color: #58596F !important;
 }
 
-.thirdLine {
-    width: 468px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
 
 .h3 {
     font-family: 'Roboto', sans-serif;
-    font-size: 16px;
     font-weight: 400;
-    line-height: 24px;
-    letter-spacing: 0.5px;
-    text-align: right;
-    color: #575655;
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: 0.4px;
+    text-align: center;
+
+    color: #FFFFFF;
+    margin-top: 8px;
 }
 
 
+.RadioGroup{
+    display: flex;
+    flex-direction: row!important;
+}
 
+.RadioGroupButton{
+    width: 42px!important;
+}

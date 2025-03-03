@@ -16,6 +16,8 @@ import Archive from "./pages/archive/Archive";
 import Map from "./pages/map/Map";
 import LayoutOne from "./pages/layouts/Layout/layout";
 import EditLayout from "./pages/layouts/editLayout/EditLayout";
+import PttDispatcher from "./components/pttDispatcher/PttDispatcher";
+import AdminPage from "./components/pttDispatcher/adminPanelPttDispatch/AdminPage";
 
 
 const router = createBrowserRouter([
@@ -67,6 +69,15 @@ const router = createBrowserRouter([
         path: '/settings',
         element: <ProtectedRoute element={<Settings />} />,
     },
+    {
+        path: '/pttDispatch',
+        element: <ProtectedRoute element={<PttDispatcher/>} />,
+    },
+    {
+        path: '/adminPtt',
+        element: <ProtectedRoute element={<AdminPage/>} />,
+    },
+
     {
         path: '*',
         element: <Navigate to="/" replace />,

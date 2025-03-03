@@ -4,7 +4,14 @@
     --sizeXS: 8px;
 }
 
+.RadioGroup{
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    width: 120px;
+}
 .RadioGroupButton {
+
     border: 1px solid #CDD0D2; /* Первичный цвет границы кнопки */
     color: #21201F; /* Цвет текста кнопки */
 }

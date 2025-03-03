@@ -1,6 +1,6 @@
 
-const PORT = ':8172'
-export const URL_A = `http://45.141.76.30${PORT}`
+const PORT = ':8181'
+export const URL_A = `https://89.218.134.252${PORT}/api/v1`
 
 
 //Groups
@@ -123,8 +123,14 @@ export const ONLINE_PLAY_LAYOUT_URL = `${URL_A}/play/stream/`;
 export const FILE_PLAY_URL = `${URL_A}/play/file/`;
 
 
-
-
+//GET_PTT_GROUPS
+export const GET_PTT_GROUPS_URL = `${URL_A}/pttgroup/get_by/all`;
+//POST_PTT_INSERT_GROUP
+export const POST_PTT_INSERT_GROUP_URL = `${URL_A}/pttgroup/insert`;
+//POST_PTT_UPDATE_GROUP
+export const POST_PTT_UPDATE_GROUP_URL = `${URL_A}/pttgroup/update`;
+//POST_PTT_DELETE_GROUP
+export const POST_PTT_DELETE_GROUP_URL = `${URL_A}/pttgroup/delete`;
 
 
 
