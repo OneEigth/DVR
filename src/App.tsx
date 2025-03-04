@@ -18,6 +18,9 @@ import LayoutOne from "./pages/layouts/Layout/layout";
 import EditLayout from "./pages/layouts/editLayout/EditLayout";
 import PttDispatcher from "./components/pttDispatcher/PttDispatcher";
 import AdminPage from "./components/pttDispatcher/adminPanelPttDispatch/AdminPage";
+import LayoutsV2 from "./pages/pagesV2/layouts/LayoutsV2";
+import 'app/styles/root.css';
+import 'app/styles/antd.css';
 
 
 const router = createBrowserRouter([
@@ -39,7 +42,7 @@ const router = createBrowserRouter([
     },
     {
         path: '/layouts',
-        element: <ProtectedRoute element={<Layouts />} />,
+        element: <ProtectedRoute element={<LayoutsV2 />} />,
     },
     {
         path: '/layout/:id',
