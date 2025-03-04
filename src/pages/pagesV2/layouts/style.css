@@ -1,0 +1,76 @@
+.layouts_page{
+   padding: 24px;
+}
+
+.body_layouts{
+    display: flex;
+    flex-direction: column;
+    height: auto;
+}
+
+.body_layouts-container{
+    padding: 16px 12px;
+    background-color: #F1F1F1;
+    margin-bottom: 20px;
+}
+
+.body_layouts-container_items{
+    display: flex;
+    gap: 16px;
+    overflow: auto;
+    padding-bottom: 8px;
+}
+
+.body_layouts-container_items::-webkit-scrollbar {
+    width: 8px; /* Ширина скроллбара */
+    height: 8px; /* Высота скроллбара */
+    z-index: 10;
+}
+
+.body_layouts-container_items::-webkit-scrollbar-track {
+    background: #CDD0D2; /* Цвет фона трека */
+    border-radius: 4px; /* Скругление углов трека */
+}
+
+.body_layouts-container_items::-webkit-scrollbar-thumb {
+    background-color: #4D4E65; /* Цвет ползунка */
+    border-radius: 4px; /* Скругление углов ползунка */
+    /*border: 3px solid var(--gray-05); !* Обводка ползунка *!*/
+}
+
+.header_layouts{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    border-bottom: 1px solid #CDD0D2;
+    height: 48px;
+    margin-bottom: 16px;
+}
+
+.body_layouts-container_header{
+    display: flex;
+    border-bottom: 1px solid #CDD0D2;
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+}
+
+.name{
+    margin-right: 8px;
+}
+
+.right_HT_input{
+    width: 240px;
+}
+
+.title.large{
+    color: #21201F;
+    font-family: Roboto;
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 28px;
+}
+
+.title.large.gray{
+    margin-left: 8px;
+    color: #999C9E;
+}

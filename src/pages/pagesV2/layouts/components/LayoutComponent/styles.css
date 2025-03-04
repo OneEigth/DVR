@@ -1,0 +1,15 @@
+.nameDeviceLayout{
+    height: 44px;
+    display: flex;
+    align-items: center;
+}
+
+.iconDeviceLayout{
+    height: 14px;
+    margin-right: 13px;
+    margin-left: 13px;
+}
+
+.deviceName_Layout.title.large{
+    color: white;
+}
