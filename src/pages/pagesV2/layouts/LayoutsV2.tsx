@@ -101,8 +101,8 @@ const LayoutsV2: React.FC = () => {
                                 <div className={'body_layouts-container'}>
                                     <div>
                                         <div className="body_layouts-container_header">
-                                            <span className={'title large'}>{layoutItem.description}</span>
-                                            <span className={'title large gray'}>({layoutItem.devices.length})</span>
+                                            <span className={'title large'} style={{ color: 'var(--gray-black)' }}>{layoutItem.description}</span>
+                                            <span className={'title large'} style={{ color: 'var(--gray-02)', marginLeft: 8 }}>({layoutItem.devices.length})</span>
                                             <ButtonAddPlus onClick={handleAddLayout}/>
                                         </div>
                                         <div className={'body_layouts-container_items'}>
