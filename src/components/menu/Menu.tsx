@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import { Button, ConfigProvider, Menu, Switch, Divider, Dropdown } from "antd";
+import {Button, ConfigProvider, Menu, Switch, Divider, Dropdown, MenuProps} from "antd";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../store/auth/auth"; // Стор для управления авторизацией
 import IconMainMenu from "../icons/iconMainMenu/iconMainMenu";
@@ -13,7 +13,9 @@ import IconReportsMenu from "../icons/iconMainMenu/IconReportsMenu";
 import IconSettingMenu from "../icons/iconMainMenu/IconSettingMenu";
 import { AudioOutlined } from "@ant-design/icons";
 import logo from "./Logo placeholder.png"; // Логотип приложения
-import "./Style/style.css"; // Стили
+import "./Style/style.css";
+import LangSwitcher from "../../modules/language/components/LangSwitcher/LangSwitcher"; // Стили
+import { ReactComponent as ExitIcon } from 'app/assets/icons/exit.svg';
 
 // Интерфейс для описания пунктов меню
 interface MenuItem {
@@ -71,6 +73,52 @@ const MainMenu: React.FC<MainMenuProps> = ({ onClick, currentMenuItem }) => {
         logout(); // Очистка состояния авторизации
         window.location.href = "/"; // Перенаправление на главную страницу
     };
+
+    const dropdownMenuItems: MenuProps['items'] = [
+        {
+            key: '1',
+            className: 'dropdown-menu-item-settings--info',
+            label: (
+                // <div className={'dropdown-menu-item-settings--info'}>
+                //     <span className="dropdown-menu-item-settings title medium">
+                //         {user.name.split(' ')[1]}
+                //     </span>
+                // </div>
+                <span className="dropdown-menu-item-settings title medium">
+                    {user?.name}
+                </span>
+            ),
+            // onClick: () => setEditable(user, 0),
+
+            // disabled: true,
+        },
+        {key: '2', type: 'divider' },
+        {
+            key: '3',
+            className: 'dropdown-menu-item-settings--lang-switcher',
+            label: (
+                <div className="dropdown-menu-item-settings ">
+                    <LangSwitcher className={'lang_switcher_btn lang_switcher_btn-menu'} />
+                </div>
+            ),
+            // disabled: true,
+        },
+        // {
+        //     key: '4',
+        //     label: <ThemeSwitcher />,
+        // },
+        {
+            key: '4',
+            className: 'dropdown-menu-item-settings--logout',
+            label: (
+                <Button className="button-base button-size-large button-type-text button-state-danger dropdown-menu-item-settings--logout-btn body medium-bold">
+                    <ExitIcon width={14} height={10} className={'dropdown-menu-icon'} />
+                    <span onClick={() => logout()}>Выйти</span>
+                </Button>
+            ),
+            // danger: true,
+        },
+    ];
 
     // Меню пользователя
     const userMenu = (
@@ -131,7 +179,7 @@ const MainMenu: React.FC<MainMenuProps> = ({ onClick, currentMenuItem }) => {
                                   fill="white"/>
                         </svg>
                     </button>
-                    <Dropdown overlay={userMenu} placement="bottomRight" trigger={["click"]}>
+                    <Dropdown menu={{items: dropdownMenuItems}} overlayClassName={'dropdown-menu-overlay-settings'} placement="bottomRight" trigger={["click"]} className={'menu-dropdown'}>
                         <Button className="user-button">
                             <span className="user-initials">
                                 {user?.login.charAt(0).toUpperCase()}

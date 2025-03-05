@@ -13,3 +13,7 @@
 .deviceName_Layout.title.large{
     color: white;
 }
+
+.containerDeviceLayout{
+    cursor: pointer;
+}

@@ -21,6 +21,8 @@ import AdminPage from "./components/pttDispatcher/adminPanelPttDispatch/AdminPag
 import LayoutsV2 from "./pages/pagesV2/layouts/LayoutsV2";
 import 'app/styles/root.css';
 import 'app/styles/antd.css';
+import 'app/styles/Text/Text.css';
+import 'app/styles/Buttons/Button.css';
 
 
 const router = createBrowserRouter([
