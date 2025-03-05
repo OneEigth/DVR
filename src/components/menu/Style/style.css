@@ -124,6 +124,13 @@
     color: #ff7875; /* Светлее красный при наведении */
 }
 
+.menu-dropdown{
+    cursor: pointer !important;
+}
+
+.menu-dropdown:hover{
+    background-color: inherit !important;
+}
 
 .user-button {
     display: flex;
@@ -140,7 +147,7 @@
     background-color: #FFFFFF;
     color: #4D4E65;
     border-radius: 50%;
-    display: flex;
+    display: flex !important;
     justify-content: center;
     align-items: center;
     font-size: 14px;
@@ -179,4 +186,163 @@
     border: none;
     padding: 0;
     cursor: pointer;
+}
+
+.navigation_account {
+    display: flex;
+    align-items: center;
+    gap: var(--sizeXS);
+
+    .navigation_header-right-settings {
+        display: flex;
+        align-items: center;
+        gap: var(--sizeXS);
+        color: var(--gray-white);
+        cursor: pointer;
+
+        .navigation_header-right-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            line-height: 19px !important;
+            /*background-color: var(--button-menu-select);*/
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /*color: var(--button-menu-text);*/
+        }
+    }
+}
+
+/*.ant-dropdown-menu-item-disabled {*/
+/*    cursor: auto !important;*/
+/*}*/
+
+.status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    border: 1px solid #fff;
+    display: inline-block;
+}
+
+.status-dot.active {
+    background-color: var(--alarm-acception);
+}
+
+.status-dot.inactive {
+    background-color: red;
+}
+
+.dropdown-menu-item-settings {
+    color: var(--gray-black);
+    margin-bottom: 8px;
+}
+
+/*.dropdown-menu-overlay-settings .ant-dropdown-menu-item.dropdown-menu-item-settings--logout {*/
+/*    width: 100%;*/
+/*    background-color: var(--button-alarm-primary);*/
+/*    padding: 6px 0 6px 12px !important;*/
+/*    border-radius: 8px;*/
+/*}*/
+
+.dropdown-menu-item-settings--logout-btn {
+    width: 184px;
+    justify-content: start;
+}
+
+.dropdown-menu-overlay-settings .ant-dropdown-menu {
+    /*background-color: var(--bg-background-light) !important;*/
+    /*box-shadow: 0 0 8px 0 var(--base-shadow) !important;*/
+}
+
+.dropdown-menu-item-settings_logout-btn > span {
+    margin-left: 8px;
+}
+
+.dropdown-menu-item-settings_logout-btn {
+    color: #FFFFFF;
+}
+
+.ant-dropdown-menu-item-divider {
+    background-color: var(--divider-2) !important;
+    margin: 12px 0 !important;
+    height: 2px !important;
+}
+
+.ant-dropdown-menu-title-content {
+    flex: none !important;
+}
+
+.lang_switcher_btn.select-checker-light .ant-radio-button-wrapper.ant-radio-button-wrapper-checked {
+    /*background-color: var(--button-primary-select) !important;*/
+    /*border-color: var(--button-primary-select) !important;*/
+    color: var(--gray-white);
+}
+
+.lang_switcher_btn.select-checker-light .ant-radio-button-wrapper {
+    /*background-color: var(--button-secondary) !important;*/
+    /*border-color: var(--primary) !important;*/
+    color: var(--gray-black);
+}
+
+.lang_switcher_btn.select-checker-light .ant-radio-button-wrapper::before {
+    /*background-color: var(--button-primary-select) !important;*/
+}
+
+.dropdown-menu-overlay-settings .ant-dropdown-menu-item {
+    padding: 0 !important;
+}
+
+.ant-dropdown-menu-item:hover {
+    background-color: inherit !important;
+}
+
+.dropdown-menu-icon {
+    fill: var(--button-alarm);
+    width: 16px;
+    height: 16px;
+    bottom: 1px;
+    position: relative;
+}
+
+.dropdown-menu-item-settings--logout-btn:hover > .dropdown-menu-icon{
+    fill: var(--button-alarm-hover) !important;
+}
+
+.dropdown-menu-item-settings--logout-btn:active > .dropdown-menu-icon{
+    fill: var(--button-alarm-select) !important;
+}
+
+    /*.ant-dropdown-menu-item-danger:hover .dropdown-menu-icon {*/
+/*    fill: white;*/
+/*}*/
+
+.dropdown-menu-item-settings--lang-switcher {
+    width: 96px;
+}
+
+.dropdown-menu-item-settings--info {
+    display: flex;
+    /*align-items: center;*/
+    justify-content: space-between;
+    width: 184px;
+    height: 24px;
+}
+
+.dropdown-menu-item-settings--info-icon {
+    /*fill: var(--button-menu);*/
+    width: var(--sizeL);
+    height: var(--sizeL);
+    position: relative;
+    top: 1px;
+    pointer-events: auto;
+}
+
+.dropdown-menu-item-settings--info {
+    pointer-events: none;
+}
+
+.logout-section > .ant-btn{
+    height: 40px !important;
 }

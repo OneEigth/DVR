@@ -1,0 +1,76 @@
+.lang_switcher_btn  .ant-radio-button-wrapper {
+  border-color: var(--divider-2) !important;
+  /*background-color: var(--button-secondary);*/
+  /*background-color: red;*/
+}
+
+.lang_switcher_btn .ant-radio-button-wrapper:hover {
+  /*color: var(--primary); !* Цвет текста при наведении *!*/
+  border-color: var(--primary) !important;
+}
+
+.lang_switcher_btn  .ant-radio-button-checked {
+  background-color: var(--primary); /* Цвет текста при наведении */
+  border-color: var(--primary) !important;
+}
+
+/*.ant-radio-group-solid :where(.css-dev-only-do-not-override-5wsri9).ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled){*/
+/*  background-color: var(--primary); !* Цвет текста при наведении *!*/
+/*  border-color: var(--primary);*/
+/*}*/
+
+/*:where(.css-dev-only-do-not-override-5wsri9).ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled)::before{*/
+/*  background-color: var(--primary);*/
+
+/*}*/
+
+/*:where(.css-dev-only-do-not-override-5wsri9).ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):hover::before{*/
+/*  background-color: var(--primary);*/
+/*}*/
+
+/*:where(.css-dev-only-do-not-override-m8sjxi).ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled)::before {*/
+/*  background-color: var(--primary);*/
+/*}*/
+
+/*.ant-radio-group-solid :where(.css-dev-only-do-not-override-5wsri9).ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):hover{*/
+/*  background-color: var(--primary); !* Цвет текста при наведении *!*/
+/*  border-color: var(--primary);*/
+/*}*/
+
+/*.lang_switcher_btn .ant-radio-button-wrapper :where(.css-dev-only-do-not-override-5wsri9).ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):first-child {*/
+/*  background-color: var(--primary); !* Цвет текста при наведении *!*/
+/*  border-color: var(--primary) ;*/
+/*}*/
+
+.lang_switcher_btn .ant-radio-button-wrapper-checked {
+  border-color: var(--primary) !important;
+  background-color: var(--primary) !important;
+}
+
+.lang_switcher_btn .ant-radio-button-wrapper-checked:hover {
+  background-color: var(--primary) !important;
+  border-color: var(--primary) !important;
+}
+
+/*:where(.css-dev-only-do-not-override-m8sjxi).ant-radio-button-wrapper:hover {*/
+/*  color: var(--primary);*/
+/*}*/
+
+/*.ant-radio-group-solid :where(.css-dev-only-do-not-override-m8sjxi).ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):hover{*/
+/*  background: var(--primary) !important;*/
+/*  border-color: var(--primary) !important;*/
+/*}*/
+
+/*:where(.css-dev-only-do-not-override-m8sjxi).ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):hover::before {*/
+/*  background-color: var(--primary) !important;*/
+
+/*}*/
+
+.lang_switcher_btn-menu .ant-radio-group {
+  display: flex;
+}
+
+.lang_switcher_btn-menu .ant-radio-button-wrapper > span{
+  padding: 0 19px;
+}
+
