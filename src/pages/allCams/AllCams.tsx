@@ -16,7 +16,7 @@ const { Header, Sider, Content, Footer } = Layout;
 const AllCams: React.FC = () => {
     const [currentMenuItem, setCurrentMenuItem] = useState('allCams');
     const {selectedRowKeys}=useSelectedRowKeys();
-    const {isDeleteDeviceModal,isEditDeviceGroupModal,setIsDeleteDeviceModal, setIsEditDeviceGroupModal}=useButtonsFromAllcams();
+    const {setIsDeleteDeviceModal, setIsEditDeviceGroupModal}=useButtonsFromAllcams();
 
     const handleMenuClick = (key: string) => {
         setCurrentMenuItem(key);
@@ -31,7 +31,7 @@ const AllCams: React.FC = () => {
 
     return (
 
-    <Layout >
+    <Layout style={{ height: '100vh' }}>
 
         <Header style={{
             position: 'sticky',
@@ -48,15 +48,19 @@ const AllCams: React.FC = () => {
             </div>
         </Header>
 
-        <Layout>
+        <Layout style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
              <Sider width="264px" style={{ width:'264px', height: '100vh', position: 'sticky', left: 0, top: 0, bottom: 0, backgroundColor:'#F1F1F1'}}>
                 <div className="SideMenu">
                     <SideMenu/>
                 </div>
             </Sider>
-            <Layout>
+            <Layout style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
 
-                <Content  style={{ overflowX: 'auto', background:'#ffffff' }}>
+                <Content  style={{
+                    flex: 1,
+                    overflowY: 'auto',
+                    background: '#ffffff'
+                }}>
                 <div className="table">
                     <TableDevices />
                 </div>
@@ -83,12 +87,8 @@ const AllCams: React.FC = () => {
                     </div>
                 </Footer>
             </Layout>
-
         </Layout>
-
-
     </Layout>
-
     );
 };
 

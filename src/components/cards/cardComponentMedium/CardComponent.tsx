@@ -52,7 +52,7 @@ const CardComponent: React.FC<CardComponentProps> = ({file, handleViewVideo}) =>
                     <h3 className="property">Группа {file.groupName}</h3>
                     <h3 className="property">Модель {file.model}</h3>
                     <h3 className="property">Серийный номер {file.DID}</h3>
-                    <h3 className="property">Сотрудник {file.ownerUID}</h3>
+                    <h3 className="property">Сотрудник {file.ownerName}</h3>
                 </div>
             </div>
         </div>
