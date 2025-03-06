@@ -278,7 +278,7 @@
 .ant-dropdown-menu {
     padding: 12px 24px !important;
     background-color: var(--gray-white) !important;
-    box-shadow: var(--shadow-base) !important;
+    /*box-shadow: var(--shadow-base) !important;*/
 }
 
 .ant-dropdown{
