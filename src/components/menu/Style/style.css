@@ -74,7 +74,7 @@
 .user-actions {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
 }
 
 /* Стили для выпадающего меню */
@@ -126,6 +126,7 @@
 
 .menu-dropdown{
     cursor: pointer !important;
+    padding-left: 0;
 }
 
 .menu-dropdown:hover{
@@ -219,11 +220,12 @@
 /*}*/
 
 .status-dot {
-    width: 6px;
-    height: 6px;
+    width: 7px;
+    height: 7px;
     border-radius: 50%;
     border: 1px solid #fff;
     display: inline-block;
+    margin-left: 10px;
 }
 
 .status-dot.active {

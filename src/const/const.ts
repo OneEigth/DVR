@@ -1,6 +1,12 @@
 
 const PORT = ':8181'
-export const URL_A = `https://89.218.134.252${PORT}/api/v1`
+// export const URL_A = `https://89.218.134.252${PORT}/api/v1`
+// export const URL_A = `/api/v1`
+const isDevelopment = process.env.NODE_ENV === 'development';
+
+export const URL_A = isDevelopment
+    ? '/api/v1' // Для разработки
+    : `https://89.218.134.252${PORT}/api/v1`; // Для продакшена
 
 
 //Groups

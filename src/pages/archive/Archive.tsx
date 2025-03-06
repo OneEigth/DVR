@@ -14,7 +14,7 @@ const Archive: React.FC = () => {
     };
 
     return (
-        <Layout>
+        <Layout style={{minHeight: '100vh'}}>
             <Header style={{
                 position: 'sticky',
                 top: 0,
@@ -29,11 +29,11 @@ const Archive: React.FC = () => {
                     <MainMenu onClick={handleMenuClick} currentMenuItem={currentMenuItem}/>
                 </div>
             </Header>
-            <Layout>
-                <Content  style={{ overflowX: 'auto', background:'#ffffff' }}>
+            {/*<Layout>*/}
+            {/*    <Content  style={{ overflowX: 'auto', background:'#ffffff' }}>*/}
 
-                </Content >
-            </Layout>
+            {/*    </Content >*/}
+            {/*</Layout>*/}
         </Layout>
     );};
 

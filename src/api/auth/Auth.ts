@@ -18,6 +18,7 @@ export const loginRequest = async (username: string, password: string): Promise<
             login: username,
             password: password
         });
+        console.log(response)
         return response.data;
     } catch (error) {
         console.error('Error during login request:', error);
