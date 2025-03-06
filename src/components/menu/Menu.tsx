@@ -29,6 +29,7 @@ interface MenuItem {
 interface MainMenuProps {
     onClick: (key: string) => void; // Коллбэк для обработки клика по меню
     currentMenuItem: string; // Текущий выбранный пункт меню
+    serverStatus?: boolean;
 }
 
 // Элементы меню
@@ -43,7 +44,7 @@ const items: MenuItem[] = [
     { label: "Настройка", key: "settings", icon: <IconSettingMenu />, className: "menu-item" },
 ];
 
-const MainMenu: React.FC<MainMenuProps> = ({ onClick, currentMenuItem }) => {
+const MainMenu: React.FC<MainMenuProps> = ({ onClick, currentMenuItem, serverStatus=true }) => {
     const navigate = useNavigate(); // Навигация
     const { logout, user } = useAuthStore(); // Получение данных из состояния авторизации
     const [isModalOpen, setModalOpen] = useState(false); // Состояние модального окна
@@ -179,7 +180,9 @@ const MainMenu: React.FC<MainMenuProps> = ({ onClick, currentMenuItem }) => {
                                   fill="white"/>
                         </svg>
                     </button>
-                    <Dropdown menu={{items: dropdownMenuItems}} overlayClassName={'dropdown-menu-overlay-settings'} placement="bottomRight" trigger={["click"]} className={'menu-dropdown'}>
+                    <span className={`status-dot ${serverStatus ? 'active' : 'inactive'}`}></span>
+                    <Dropdown menu={{items: dropdownMenuItems}} overlayClassName={'dropdown-menu-overlay-settings'}
+                              placement="bottomRight" trigger={["click"]} className={'menu-dropdown'}>
                         <Button className="user-button">
                             <span className="user-initials">
                                 {user?.login.charAt(0).toUpperCase()}

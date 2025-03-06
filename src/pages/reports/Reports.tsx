@@ -16,7 +16,7 @@ const Reports: React.FC = () => {
     };
 
     return (
-        <Layout>
+        <Layout style={{minHeight: '100vh'}}>
             <Header style={{
                 position: 'sticky',
                 top: 0,
