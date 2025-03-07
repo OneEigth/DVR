@@ -1,0 +1,26 @@
+.buttonTakeAPhoto {
+    width: 148px;
+    height: 32px;
+    padding: 0 15px 0 15px;
+    border: 1px solid #4D4E65;
+    font-family: Roboto;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 20px;
+    letter-spacing: 0.25px;
+    text-align: left;
+    color:#4D4E65;
+}
+
+.PictureOutlined{
+    margin-right: 8px;
+}
+
+
+.buttonTakeAPhoto:hover,
+.buttonTakeAPhoto:focus,
+.buttonTakeAPhoto:active{
+    border: 1px solid #4D4E65!important;
+    color: #4D4E65!important;
+    box-shadow: none!important;
+}
