@@ -1,0 +1,29 @@
+
+    .ButtonRecordAudio {
+        display: flex; /* Use flexbox */
+        justify-content: center; /* Center content horizontally */
+        align-items: center; /* Center content vertically */
+        width: 148px;
+        height: 32px;
+        padding: 0 15px; /* Removed right padding */
+        border: 1px solid #4D4E65;
+        font-family: Roboto;
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 20px;
+        letter-spacing: 0.25px;
+        text-align: left;
+        color: #4D4E65;
+    }
+    .PictureOutlined{
+        margin-left: 8px!important;
+    }
+
+
+    .ButtonRecordAudio:hover,
+    .ButtonRecordAudio:focus,
+    .ButtonRecordAudio:active{
+        border: 1px solid #4D4E65!important;
+        color: #4D4E65!important;
+        box-shadow: none!important;
+    }

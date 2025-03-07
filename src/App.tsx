@@ -23,6 +23,7 @@ import 'app/styles/root.css';
 import 'app/styles/antd.css';
 import 'app/styles/Text/Text.css';
 import 'app/styles/Buttons/Button.css';
+import LayoutV2 from "./pages/pagesV2/layouts/pages/layout/LayoutV2";
 
 
 const router = createBrowserRouter([
@@ -48,7 +49,7 @@ const router = createBrowserRouter([
     },
     {
         path: '/layout/:id',
-        element: <ProtectedRoute element={<LayoutOne />} />,
+        element: <ProtectedRoute element={<LayoutV2 />} />,
     },
     {
         path: '/editLayout/:id',
