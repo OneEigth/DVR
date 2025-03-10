@@ -44,7 +44,9 @@ const Buttonsfilter: React.FC<ButtonsfilterProps> = ({ onFilterButtonClick }) =>
                     border: '1px solid #4D4E65',
                     display: 'flex',
                     alignItems: 'center',
+                    alignContent:'center',
                     justifyContent: 'center',
+                    paddingTop:'10px'
                 }}
                 onClick={() => handleButtonClick('small')}
             />
@@ -60,6 +62,7 @@ const Buttonsfilter: React.FC<ButtonsfilterProps> = ({ onFilterButtonClick }) =>
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
+                        paddingTop:'8px'
                     }}
                     onClick={() => handleButtonClick('medium')}
                 />
@@ -76,6 +79,7 @@ const Buttonsfilter: React.FC<ButtonsfilterProps> = ({ onFilterButtonClick }) =>
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
+                        paddingTop:'8px'
                     }}
                     onClick={() => handleButtonClick('big')}
                 />

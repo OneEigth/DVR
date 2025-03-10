@@ -122,8 +122,8 @@ export const VIDEO_PREVIEW_URL = (fileUID: string, token:any) => `${URL_A}/play/
 export const VIDEO_FILE_PREVIEW_URL = (fileUID: string)=>`${URL_A}/media_file/preview/${fileUID}`;
 
 //GET_PLAY_ONLINE
-export const ONLINE_PLAY_URL = `${URL_A}/play/hls-stream/`;
-export const ONLINE_PLAY_LAYOUT_URL = `${URL_A}/play/stream/`;
+export const ONLINE_PLAY_URL = `${URL_A}/play/hls-stream/`; // со звуком
+export const ONLINE_PLAY_LAYOUT_URL = `${URL_A}/play/stream/`; // в расскладке.
 
 //GET_PLAY_FILE
 export const FILE_PLAY_URL = `${URL_A}/play/file/`;
