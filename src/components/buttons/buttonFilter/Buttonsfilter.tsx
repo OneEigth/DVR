@@ -1,16 +1,16 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Flex } from 'antd';
-import IconFilterButtonSmall from "../../icons/iconFilterButton/iconFilterButtonSmall";
-import IconFilterButtonMedium from "../../icons/iconFilterButton/iconFilterButtonMedium";
-import IconFilterButtonBig from "../../icons/iconFilterButton/iconFilterButtonBig";
-import "./style/style.css";
+import IconFilterButtonSmall from '../../icons/iconFilterButton/iconFilterButtonSmall';
+import IconFilterButtonMedium from '../../icons/iconFilterButton/iconFilterButtonMedium';
+import IconFilterButtonBig from '../../icons/iconFilterButton/iconFilterButtonBig';
+import './style/style.css';
 
 interface ButtonsfilterProps {
     onFilterButtonClick: (size: 'small' | 'medium' | 'big') => void;
 }
 
 const Buttonsfilter: React.FC<ButtonsfilterProps> = ({ onFilterButtonClick }) => {
-    const [activeButton, setActiveButton] = useState<'small' | 'medium' | 'big'>('small');
+    const [activeButton, setActiveButton] = useState<'small' | 'medium' | 'big'>('big');
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
     useEffect(() => {
@@ -22,7 +22,6 @@ const Buttonsfilter: React.FC<ButtonsfilterProps> = ({ onFilterButtonClick }) =>
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-
     const handleButtonClick = (size: 'small' | 'medium' | 'big') => {
         setActiveButton(size);
         onFilterButtonClick(size);
@@ -32,41 +31,7 @@ const Buttonsfilter: React.FC<ButtonsfilterProps> = ({ onFilterButtonClick }) =>
     const isBigVisible = windowWidth > 1024;
 
     return (
-
         <Flex gap="small" wrap="wrap" className="flex">
-            <Button
-                className="FilterButtonSmall"
-                type="primary"
-                icon={<IconFilterButtonSmall active={activeButton === 'small'} />}
-                style={{
-                    backgroundColor: activeButton === 'small' ? '#4D4E65' : '#FFFFFF',
-                    color: activeButton === 'small' ? '#FFFFFF' : '#4D4E65',
-                    border: '1px solid #4D4E65',
-                    display: 'flex',
-                    alignItems: 'center',
-                    alignContent:'center',
-                    justifyContent: 'center',
-                    paddingTop:'10px'
-                }}
-                onClick={() => handleButtonClick('small')}
-            />
-            {isMediumVisible && (
-                <Button
-                    className="FilterButtonMedium"
-                    type="primary"
-                    icon={<IconFilterButtonMedium active={activeButton === 'medium'} />}
-                    style={{
-                        backgroundColor: activeButton === 'medium' ? '#4D4E65' : '#FFFFFF',
-                        color: activeButton === 'medium' ? '#FFFFFF' : '#4D4E65',
-                        border: '1px solid #4D4E65',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        paddingTop:'8px'
-                    }}
-                    onClick={() => handleButtonClick('medium')}
-                />
-            )}
             {isBigVisible && (
                 <Button
                     className="FilterButtonBig"
@@ -79,11 +44,45 @@ const Buttonsfilter: React.FC<ButtonsfilterProps> = ({ onFilterButtonClick }) =>
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        paddingTop:'8px'
+                        paddingTop: '8px',
                     }}
                     onClick={() => handleButtonClick('big')}
                 />
             )}
+            {isMediumVisible && (
+                <Button
+                    className="FilterButtonMedium"
+                    type="primary"
+                    icon={<IconFilterButtonMedium active={activeButton === 'medium'} />}
+                    style={{
+                        backgroundColor: activeButton === 'medium' ? '#4D4E65' : '#FFFFFF',
+                        color: activeButton === 'medium' ? '#FFFFFF' : '#4D4E65',
+                        border: '1px solid #4D4E65',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        paddingTop: '8px',
+                    }}
+                    onClick={() => handleButtonClick('medium')}
+                />
+            )}
+
+            <Button
+                className="FilterButtonSmall"
+                type="primary"
+                icon={<IconFilterButtonSmall active={activeButton === 'small'} />}
+                style={{
+                    backgroundColor: activeButton === 'small' ? '#4D4E65' : '#FFFFFF',
+                    color: activeButton === 'small' ? '#FFFFFF' : '#4D4E65',
+                    border: '1px solid #4D4E65',
+                    display: 'flex',
+                    alignItems: 'center',
+                    alignContent: 'center',
+                    justifyContent: 'center',
+                    paddingTop: '10px',
+                }}
+                onClick={() => handleButtonClick('small')}
+            />
         </Flex>
     );
 };

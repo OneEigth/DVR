@@ -7,29 +7,30 @@ import Device from './pages/device/Device';
 import AllCams from './pages/allCams/AllCams';
 import Settings from './pages/settings/Settings';
 import 'leaflet/dist/leaflet.css';
-import ProtectedRoute from "./components/protectedRoute/ProtectedRoute";
-import PublicRoute from "./components/publicRoute/publicRoute";
-import Layouts from "./pages/layouts/Layouts";
-import Users from "./pages/users/users";
-import Reports from "./pages/reports/Reports";
-import Archive from "./pages/archive/Archive";
-import Map from "./pages/map/Map";
-import LayoutOne from "./pages/layouts/Layout/layout";
-import EditLayout from "./pages/layouts/editLayout/EditLayout";
-import PttDispatcher from "./components/pttDispatcher/PttDispatcher";
-import AdminPage from "./components/pttDispatcher/adminPanelPttDispatch/AdminPage";
-import LayoutsV2 from "./pages/pagesV2/layouts/LayoutsV2";
-import 'app/styles/root.css';
-import 'app/styles/antd.css';
-import 'app/styles/Text/Text.css';
-import 'app/styles/Buttons/Button.css';
-import LayoutV2 from "./pages/pagesV2/layouts/pages/layout/LayoutV2";
+import ProtectedRoute from './components/protectedRoute/ProtectedRoute';
+import PublicRoute from './components/publicRoute/publicRoute';
+import Layouts from './pages/layouts/Layouts';
+import Users from './pages/users/users';
+import Reports from './pages/reports/Reports';
+import Archive from './pages/archive/Archive';
+import Map from './pages/map/Map';
+import LayoutOne from './pages/layouts/Layout/layout';
+import EditLayout from './pages/layouts/editLayout/EditLayout';
+import PttDispatcher from './components/pttDispatcher/PttDispatcher';
+import AdminPage from './components/pttDispatcher/adminPanelPttDispatch/AdminPage';
+import LayoutsV2 from './pages/pagesV2/layouts/LayoutsV2';
+import 'utils/app/styles/root.css';
+import 'utils/app/styles/antd.css';
+import 'utils/app/styles/Text/Text.css';
+import 'utils/app/styles/Buttons/Button.css';
+import 'utils/app/styles/Tags/Tag.css';
 
+import LayoutV2 from './pages/pagesV2/layouts/pages/layout/LayoutV2';
 
 const router = createBrowserRouter([
     {
         path: '/',
-        element: <PublicRoute element={<LoginPage/>}/>,
+        element: <PublicRoute element={<LoginPage />} />,
     },
     {
         path: '/main',
@@ -77,11 +78,11 @@ const router = createBrowserRouter([
     },
     {
         path: '/pttDispatch',
-        element: <ProtectedRoute element={<PttDispatcher/>} />,
+        element: <ProtectedRoute element={<PttDispatcher />} />,
     },
     {
         path: '/adminPtt',
-        element: <ProtectedRoute element={<AdminPage/>} />,
+        element: <ProtectedRoute element={<AdminPage />} />,
     },
 
     {
@@ -91,7 +92,6 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-
     return <RouterProvider router={router} />;
 }
 
