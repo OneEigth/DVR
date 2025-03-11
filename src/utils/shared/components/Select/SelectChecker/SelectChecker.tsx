@@ -2,8 +2,8 @@ import { Radio, RadioChangeEvent } from 'antd';
 import { FC } from 'react';
 
 import './styles.css';
-import { useTheme } from '../../../../modules/theme/ThemeProvider';
 import { SizeType } from 'antd/lib/config-provider/SizeContext';
+import { useTheme } from '../../../../modules/theme/ThemeProvider';
 
 interface SelectCheckerProps {
     options: { label: string; value: any }[];

@@ -68,15 +68,15 @@
 }
 
 .ant-picker-ok > button {
-    /*color: var(--primary)*/
+    color: var(--primary)
 }
 
 .ant-picker-ok > button:hover {
-    /*color: var(--button-primary-hover) !important;*/
+    color: var(--button-primary-hover) !important;
 }
 
 .ant-picker-ok > button:active {
-    /*background-color: var(--primary) !important;*/
+    background-color: var(--primary) !important;
     color: #FFFFFF !important;
 }
 
@@ -85,19 +85,19 @@
 }
 
 .ant-picker-now-btn {
-    /*color: var(--primary)*/
+    color: var(--primary)
 }
 
 .ant-picker-now-btn:hover {
-    /*color: var(--button-primary-hover) !important;*/
+    color: var(--button-primary-hover) !important;
 }
 
 .ant-picker-now-btn:active {
-    /*color: var(--button-primary-select) !important;*/
+    color: var(--button-primary-select) !important;
 }
 
 .ant-picker-time-panel-cell-selected > .ant-picker-time-panel-cell-inner {
-    /*background-color: var(--primary) !important;*/
+    background-color: var(--primary) !important;
     color: #FFFFFF !important;
 }
 
@@ -114,59 +114,64 @@
 
 
 .ant-picker-focused {
-    /*border: 2px solid var(--button-primary-select) !important;*/
+    border: 2px solid var(--button-primary-select) !important;
     box-shadow: 0 0 0 2px rgba(71, 142, 208, 0.25) !important;
 }
 
 .ant-select-selector:focus-within {
-    /*border: 2px solid var(--button-primary-select) !important;*/
+    border: 2px solid var(--button-primary-select) !important;
     box-shadow: 0 0 0 2px rgba(71, 142, 208, 0.25) !important;
 }
 
 .ant-pagination > li {
-    /*border-color: var(--button-primary-select) !important;*/
+    border-color: var(--button-primary-select) !important;
 }
 
 .ant-pagination > li > a {
-    /*color: var(--button-primary-select) !important;*/
+    color: var(--button-primary-select) !important;
 }
 
 .ant-checkbox-wrapper:hover .ant-checkbox-inner {
-    /*border-color: var(--primary) !important;*/
+    border-color: var(--primary) !important;
 }
 
 .ant-checkbox-wrapper-checked .ant-checkbox-inner {
-    /*border-color: var(--primary) !important;*/
-    /*background-color: var(--primary) !important;*/
+    border-color: var(--primary) !important;
+    background-color: var(--primary) !important;
 }
 
 .ant-checkbox-checked .ant-checkbox-inner {
-    /*border-color: var(--primary) !important;*/
-    /*background-color: var(--primary) !important;*/
+    border-color: var(--primary) !important;
+    background-color: var(--primary) !important;
 }
 
 .ant-checkbox-inner:after {
-    /*background-color: var(--primary) !important;*/
+    background-color: var(--primary) !important;
 }
 
 .ant-picker-dropdown .ant-picker-cell-in-view.ant-picker-cell-selected:not(.ant-picker-cell-disabled) .ant-picker-cell-inner {
-    /*background-color: var(--primary) !important;*/
+    background-color: var(--primary) !important;
 }
 
 .ant-table-row-selected > .ant-table-cell {
-    /*background-color: var(--table-select) !important;*/
+    background-color: var(--gray-04) !important;
 }
 
+.ant-table-row:has(.ant-table-row-expand-icon-expanded){
+    background-color: var(--gray-04);
+}
+
+
 .ant-picker-dropdown .ant-picker-cell-in-view.ant-picker-cell-today .ant-picker-cell-inner::before {
-    /*border-color: var(--primary) !important;*/
+    border-color: var(--primary) !important;
 }
 
 .ant-picker-dropdown .ant-picker-header-view > button:hover {
-    /*color: var(--primary) !important;*/
+    color: var(--primary) !important;
 }
 
 .ant-picker-outlined:hover {
-    /*border-color: var(--primary);*/
+    border-color: var(--primary);
 }
 
 .ant-table {
@@ -174,11 +179,11 @@
 }
 
 .ant-select-item-option-active:hover {
-    /*background-color: var(--button-secondary-hover) !important;*/
+    background-color: var(--button-secondary-hover) !important;
 }
 
 .ant-select-item-option-active:active {
-    /*background-color: var(--button-secondary-select) !important;*/
+    background-color: var(--button-secondary-select) !important;
 }
 
 .ant-select-dropdown .ant-select-item-option-active:not(.ant-select-item-option-disabled) {
@@ -186,7 +191,7 @@
 }
 
 .ant-select-dropdown .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
-    /*background-color: var(--button-secondary-select);*/
+    background-color: var(--button-secondary-select);
 }
 
 

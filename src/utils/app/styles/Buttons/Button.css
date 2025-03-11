@@ -32,6 +32,8 @@
 .button-size-small {
     height: var(--button-small-size);
     padding: 2px 7px;
+    border-radius: var(--size2XS);
+
 }
 
 .button-size-small_icon {
@@ -218,13 +220,13 @@
 }
 
 .button-type-secondary:hover {
-    background-color: var(--button-secondary-hover) !important;
+    background-color: var(--gray-white) !important;
     border-color: var(--button-secondary-hover) !important;
 }
 
 .button-type-secondary:active {
-    background-color: var(--button-alarm-select) !important;
-    border-color: var(--button-alarm-select) !important;
+    background-color: var(--gray-white) !important;
+    border-color: var(--button-secondary-select) !important;
 }
 
 .button-type-secondary:disabled {
@@ -282,14 +284,17 @@
 .button-type-primary.button-state-danger {
     background-color: var(--button-alarm) !important;
     color: var(--alarm-text) !important;
+    border: none
 }
 
 .button-type-primary.button-state-danger:hover {
     background-color: var(--button-alarm-hover) !important;
+    border: none;
 }
 
 .button-type-primary.button-state-danger:active {
     background-color: var(--button-alarm-select) !important;
+    border: none;
 }
 
 .button-type-primary.button-state-danger:disabled {

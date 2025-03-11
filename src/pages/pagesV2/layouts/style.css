@@ -8,6 +8,19 @@
     height: auto;
 }
 
+.body_layouts-container.body_layouts-container--medium{
+    display: inline-flex;
+    padding: 0;
+    margin-bottom: 0;
+}
+
+.body_layouts--medium{
+    flex-direction: row !important;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+
 .body_layouts-container{
     padding: 16px 12px;
     background-color: #F1F1F1;

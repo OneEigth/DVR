@@ -1,6 +1,6 @@
 import { LanguageModel } from '../types/LanguageModel';
 
-export const LanguageKz: LanguageModel = {
+export const LanguageRu: LanguageModel = {
     login: 'Логин',
     password: 'Пароль',
     enter: 'Войти',
@@ -228,8 +228,8 @@ export const LanguageKz: LanguageModel = {
     fireStationWasAdd: 'Пожарная станция успешно создана',
     fireStationWasChange: 'Пожарная станция успешно обновлена',
     fireStationWasDelete: 'Пожарная станция удалена',
-    addFireStation: 'Добавить пожарную станцию',
-    editFireStation: 'Редактировать пожарную станцию',
+    addFireStation: 'Добавить пожарная станцию',
+    editFireStation: 'Редактировать пожарная станцию',
     fireStations: 'Пожарные станции',
     fireStation: 'Пожарная станция',
 
@@ -315,4 +315,7 @@ export const LanguageKz: LanguageModel = {
     coordinatesCity: 'Координаты города',
     applyFilters: 'Применить фильтры',
     clearFilters: 'Очистить фильтры',
+
+    // DVR
+    appearance: 'Внешний вид',
 };
