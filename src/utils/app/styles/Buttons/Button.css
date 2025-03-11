@@ -32,6 +32,8 @@
 .button-size-small {
     height: var(--button-small-size);
     padding: 2px 7px;
+    border-radius: var(--size2XS);
+
 }
 
 .button-size-small_icon {

@@ -1,0 +1,15 @@
+.body_layouts{
+    align-items: normal !important;
+}
+
+#description-layout-form .input{
+    width: 100% !important;
+}
+
+#description-layout-form .inputLabel{
+    margin-top: 0;
+}
+
+.DescButtons_layout{
+    display: flex;
+}

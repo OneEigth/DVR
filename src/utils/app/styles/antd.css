@@ -157,6 +157,11 @@
     background-color: var(--gray-04) !important;
 }
 
+.ant-table-row:has(.ant-table-row-expand-icon-expanded){
+    background-color: var(--gray-04);
+}
+
+
 .ant-picker-dropdown .ant-picker-cell-in-view.ant-picker-cell-today .ant-picker-cell-inner::before {
     border-color: var(--primary) !important;
 }

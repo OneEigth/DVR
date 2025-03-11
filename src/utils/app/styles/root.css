@@ -25,6 +25,23 @@ html::-webkit-scrollbar-thumb {
     /*border: 3px solid var(--gray-05); !* Обводка ползунка *!*/
 }
 
+#root::-webkit-scrollbar {
+    width: 8px; /* Ширина скроллбара */
+    height: 8px; /* Высота скроллбара */
+    z-index: 10;
+}
+
+#root::-webkit-scrollbar-track {
+    background: #CDD0D2; /* Цвет фона трека */
+    /*border-radius: 4px; !* Скругление углов трека *!*/
+}
+
+#root::-webkit-scrollbar-thumb {
+    background-color: #4D4E65; /* Цвет ползунка */
+    /*border-radius: 4px; !* Скругление углов ползунка *!*/
+    /*border: 3px solid var(--gray-05); !* Обводка ползунка *!*/
+}
+
 
 a {
     all: unset;

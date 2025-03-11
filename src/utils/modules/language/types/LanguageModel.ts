@@ -313,4 +313,6 @@ export interface LanguageModel {
     coordinatesCity: string;
     applyFilters: string;
     clearFilters: string;
+
+    appearance: string;
 }

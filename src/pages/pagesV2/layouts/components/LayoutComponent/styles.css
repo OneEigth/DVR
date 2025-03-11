@@ -12,11 +12,11 @@
 .containerLayout {
     width: 600px;
     margin-bottom: 0;
-    height: 208px;
+    height: 200px;
 }
 
 .image.imageSmall{
-    height: 208px !important;
+    height: 200px !important;
 }
 
 .coverLayout {

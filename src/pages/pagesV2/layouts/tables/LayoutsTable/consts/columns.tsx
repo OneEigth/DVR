@@ -5,6 +5,7 @@ import { ReactComponent as SvgEdit } from 'app/assets/icons/edit.svg';
 import { LanguageModel } from '../../../../../../utils/modules/language/types/LanguageModel';
 import { LayoutType } from '../../../../../../types/LayoutType';
 import Tag from '../../../../../../utils/shared/components/Tags/Tag';
+import { Button } from 'antd';
 
 export const getLayoutsColumns = (
     language: LanguageModel,
@@ -13,35 +14,29 @@ export const getLayoutsColumns = (
 ) => {
     return [
         {
-            title: `${language.employee}`,
+            title: `${language.name}`,
             dataIndex: 'name',
             key: 'name',
-            width: 565.33,
-            render: (text: string, record: any) => {
-                return (
-                    <div>ret</div>
-                    // <div className={'users-table_fio-container'}>
-                    //     <div className={'avatar title medium'}>
-                    //         {text.split(' ').length > 1
-                    //             ? `${getInitials(text.split(' ')[0])}${getInitials(text.split(' ')[1])}`
-                    //             : getInitials(text.split(' ')[0])}
-                    //     </div>
-                    //     <span>{text}</span>
-                    // </div>
-                );
-            },
+            width: 480,
+            // render: (text: string, record: any) => {
+            //     return (
+            //         <div>ret</div>
+            //         // <div className={'users-table_fio-container'}>
+            //         //     <div className={'avatar title medium'}>
+            //         //         {text.split(' ').length > 1
+            //         //             ? `${getInitials(text.split(' ')[0])}${getInitials(text.split(' ')[1])}`
+            //         //             : getInitials(text.split(' ')[0])}
+            //         //     </div>
+            //         //     <span>{text}</span>
+            //         // </div>
+            //     );
+            // },
         },
         {
-            title: `${language.description}`,
-            dataIndex: 'description',
-            key: 'description',
-            width: 565.33,
-        },
-        {
-            title: `${language.role}Внешний вид`,
+            title: `${language.appearance}`,
             dataIndex: 'viewType',
             key: 'viewType',
-            width: 565.33,
+            width: 240,
             render: (text: string, record: LayoutType) => {
                 return (
                     <Tag state={'default'} border={true}>
@@ -51,10 +46,17 @@ export const getLayoutsColumns = (
             },
         },
         {
-            title: `${language.actions}`,
+            title: `${language.description}`,
+            dataIndex: 'description',
+            key: 'description',
+            width: 142,
+        },
+
+        {
+            title: `${language.operator}`,
             dataIndex: 'userName',
             key: 'userName',
-            width: 96,
+            width: 172,
             // render: (text: string, record: LayoutType) => {
             //     return (
             //         <div style={{ marginLeft: 5 }}>
@@ -69,6 +71,26 @@ export const getLayoutsColumns = (
             //         </div>
             //     );
             // },
+        },
+        {
+            title: `${language.actions}`,
+            dataIndex: 'actions',
+            key: 'actions',
+            width: 196,
+            render: (text: string, record: LayoutType) => {
+                return (
+                    <div style={{ marginLeft: 5 }}>
+                        <Button
+                            className={
+                                'users-table-icon--edit button-base button-type-primary button-size-small body medium-bold'
+                            }
+                            onClick={() => setEditable(record)}
+                        >
+                            Добавить устройство
+                        </Button>
+                    </div>
+                );
+            },
         },
     ];
 };

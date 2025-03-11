@@ -2,7 +2,7 @@ import React, { FC, Key, useEffect, useState } from 'react';
 
 import './styles.css';
 
-import { Button } from 'antd';
+import { Button, Table } from 'antd';
 import { ReactComponent as SvgDelete } from 'utils/app/assets/icons/Delete.svg';
 import { ReactComponent as SvgClose } from 'utils/app/assets/icons/Close.svg';
 import { useLanguageStore } from '../../../../../utils/modules/language/api/store';
@@ -57,11 +57,37 @@ const LayoutsTable: FC<UsersTableProps> = (props) => {
             <TableLayout<LayoutType>
                 columns={getLayoutsColumns(language, () => {}, handleEdit)}
                 data={layouts}
-                rowSelection={rowSelection}
+                // rowSelection={rowSelection}
                 rowKey="id"
                 paginationBool={true}
                 rowClassName={(record) => (record.id === selectedRowKey ? 'selected-row' : '')}
                 classNameTable={'layouts-table'}
+                expandable={{
+                    expandedRowRender: (record: LayoutType) => (
+                        <Table
+                            columns={[
+                                {
+                                    title: 'ID устройства',
+                                    dataIndex: 'ID',
+                                    key: 'ID',
+                                    width: 200,
+                                },
+                                {
+                                    title: 'Название устройства',
+                                    dataIndex: 'name',
+                                    key: 'name',
+                                    width: 300,
+                                },
+                                // Добавьте другие колонки для устройств
+                            ]}
+                            dataSource={record.devices}
+                            // rowKey="ID"
+                            pagination={false}
+                            className="nested-table"
+                        />
+                    ),
+                    rowExpandable: (record: LayoutType) => record.devices?.length > 0,
+                }}
             />
 
             {selectedRowKeys.length != 0 && (

@@ -13,6 +13,7 @@ interface TableLayoutProps<T> extends TableProps<T> {
     divBottom?: boolean;
     classNameTable?: string;
     paginationBool?: boolean;
+    expandable?: any;
     paginationPosition?:
         | 'topLeft'
         | 'topCenter'
@@ -42,6 +43,7 @@ const TableLayout = <T extends {}>(props: TableLayoutProps<T>): ReactElement => 
         divBottom,
         classNameTable,
         paginationBool = false,
+        expandable,
         paginationPosition = 'topRight',
         ...restProps
     } = props;
@@ -58,7 +60,7 @@ const TableLayout = <T extends {}>(props: TableLayoutProps<T>): ReactElement => 
                     sticky
                     // scroll={{ x: 0, y: 1000 }}
                     // scroll={{ y: 'calc(100vh - 290px)' }}
-
+                    expandable={expandable}
                     columns={columns}
                     dataSource={data}
                     rowKey={rowKey}

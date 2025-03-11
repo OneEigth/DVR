@@ -315,4 +315,7 @@ export const LanguageKz: LanguageModel = {
     coordinatesCity: 'Координаты города',
     applyFilters: 'Применить фильтры',
     clearFilters: 'Очистить фильтры',
+
+    // DVR
+    appearance: 'Внешний вид',
 };

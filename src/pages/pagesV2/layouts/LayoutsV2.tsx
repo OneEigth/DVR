@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import './style.css';
-import { AutoComplete, Form, Input, Layout, Menu } from 'antd';
+import { AutoComplete, Form, Input, Layout, Menu, Pagination } from 'antd';
 import { useLayoutsStore } from '../../../store/layout/useLayoutsStore';
 import { useFindLayoutsStore } from '../../../store/layout/useFindLayoutStore';
 import MainMenu from '../../../components/menu/Menu';
@@ -61,6 +61,12 @@ const LayoutsV2: React.FC = () => {
         }));
 
     console.log(filteredLayouts);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pageSize, setPageSize] = useState(10); // Количество элементов на странице
+
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page);
+    };
 
     return (
         <Layout style={{ minHeight: '100vh' }}>
@@ -90,6 +96,15 @@ const LayoutsV2: React.FC = () => {
                             <h1 className="count">({filteredLayouts.length})</h1>
                             <ButtonAddPlus onClick={handleAddLayout} />
                         </div>
+                    </div>
+                    <div className="pagination-container">
+                        <Pagination
+                            current={currentPage}
+                            pageSize={pageSize}
+                            total={filteredLayouts.length}
+                            onChange={handlePageChange}
+                            showSizeChanger={false}
+                        />
                     </div>
                     <div className="right_HT">
                         {/*<Input*/}

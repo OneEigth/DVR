@@ -13,9 +13,16 @@
 }
 
 .ant-table-container {
-    border: 1px solid var(--button-disable-text);
-    border-end-end-radius: 8px;
-    border-end-start-radius: 8px;
+    border-bottom: 1px solid var(--button-disable-text);
+    border-top: 1px solid var(--button-disable-text);
+
+    /*border-end-end-radius: 8px;*/
+    /*border-end-start-radius: 8px;*/
+}
+
+.ant-table-expanded-row .ant-table-container{
+    border-bottom: none;
+    border-top: 1px solid var(--button-disable-text);
 }
 
 .table-scroll .ant-table-body::-webkit-scrollbar {
@@ -46,7 +53,7 @@
 
 
 .custom-table .ant-table-thead th {
-    background-color: var(--gray-04) !important; /* Фон таблицы */
+    background-color: var(--gray-05) !important; /* Фон таблицы */
 }
 
 .custom-table .ant-table-thead th::before {
@@ -235,4 +242,18 @@
 
 .ant-table-row-selected {
     border-left: 4px solid var(--primary);
+}
+
+.nested-table .ant-table-tbody > tr > td {
+    background-color: var(--bg-surface) !important; /* Цвет фона для вложенных строк */
+    /*border-bottom: 1px solid var(--button-disable-text) !important; !* Границы *!*/
+    cursor: pointer;
+}
+
+.nested-table .ant-table-tbody > tr:hover > td {
+    background-color: var(--bg-surface-hover)  !important; /* Цвет фона при наведении */
+}
+
+.ant-table-row{
+    cursor: pointer;
 }
