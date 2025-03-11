@@ -1,0 +1,259 @@
+.custom-table {
+    width: 100%;
+    /*border-radius: 15px;*/
+    /*overflow-x: auto;*/
+    border-collapse: collapse;
+    /*border: 1px solid var(--divider-2); !* Цвет и толщина границы таблицы *!*/
+    /*max-height: calc(100vh - 360px);*/
+    /*overflow-y: auto;*/
+    /*scrollbar-width: thin;*/
+    flex: 1;
+    /*margin-bottom: 20px;*/
+    overflow: hidden;
+}
+
+.ant-table-container {
+    border-bottom: 1px solid var(--button-disable-text);
+    border-top: 1px solid var(--button-disable-text);
+
+    /*border-end-end-radius: 8px;*/
+    /*border-end-start-radius: 8px;*/
+}
+
+.ant-table-expanded-row .ant-table-container{
+    border-bottom: none;
+    border-top: 1px solid var(--button-disable-text);
+}
+
+.table-scroll .ant-table-body::-webkit-scrollbar {
+    width: 8px; /* Ширина скроллбара */
+    height: 8px; /* Высота скроллбара */
+}
+
+.table-scroll .ant-table-body::-webkit-scrollbar-track {
+    background: var(--gray-03); /* Цвет фона трека */
+    border-radius: 4px; /* Скругление углов трека */
+}
+
+.table-scroll .ant-table-body::-webkit-scrollbar-thumb {
+    background-color: var(--primary); /* Цвет ползунка */
+    border-radius: 4px; /* Скругление углов ползунка */
+    /*border: 3px solid var(--gray-05); !* Обводка ползунка *!*/
+}
+
+/*.custom-table .ant-table-body {*/
+/*    overflow-y: auto !important;*/
+/*}*/
+
+/*.ant-table-body,*/
+/*.ant-table-content {*/
+/*    scrollbar-width: thin;*/
+/*    scrollbar-gutter: stable;*/
+/*}*/
+
+
+.custom-table .ant-table-thead th {
+    background-color: var(--gray-05) !important; /* Фон таблицы */
+}
+
+.custom-table .ant-table-thead th::before {
+    background-color: inherit !important; /* Фон таблицы */
+}
+
+.custom-table .ant-table-thead > tr > th {
+    border-bottom: 1px solid var(--button-disable-text); /* Цвет и толщина разделяющей линии */
+    font-weight: 700;
+    line-height: 20px;
+    letter-spacing: 0.25px;
+    color: var(--gray-black);
+    /*font-size: 14px;*/
+}
+
+.custom-table .ant-table-tbody > tr > td {
+    border-bottom: 1px solid var(--button-disable-text); /* Цвет и толщина разделяющей линии */
+    font-weight: 400;
+    line-height: 20px;
+    letter-spacing: 0.25px;
+    color: var(--gray-black);
+}
+
+.custom-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+
+.custom-table th,
+.custom-table td {
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+}
+
+.custom-table th {
+    background-color: var(--bg-surface);
+    text-align: left;
+}
+
+.has-div.pagination .ant-table-tbody::after {
+    display: none; /* Псевдоэлемент скрыт, если есть пагинация */
+}
+
+.has-div:not(.pagination) .ant-table-tbody::after {
+    content: '';
+    position: absolute;
+    bottom: -20px;
+    left: -1px;
+    width: calc(100% + 2px);
+    height: 20px;
+    border: 1px solid var(--divider-2);
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+.pagination .ant-table-tbody > tr:last-child > td {
+    border-bottom: 1px solid var(--button-disable-text) !important; /* Отображаем нижнюю границу */
+}
+
+.custom-table .ant-table-tbody > tr:last-child > td {
+    border-bottom: none !important; /* Убираем нижнюю границу */
+}
+
+.custom-table .ant-pagination {
+    /*display: none;*/
+}
+
+
+/*.pagination .ant-table-tbody > tr:last-child > td {*/
+/*    border-bottom: 1px solid var(--button-disable-text) !important; !* Отображаем нижнюю границу *!*/
+/*}*/
+
+.ant-pagination-item {
+    border: none !important;
+}
+
+.ant-pagination-item:hover {
+    background-color: var(--gray-04) !important;
+}
+
+.ant-pagination-item-ellipsis {
+    color: var(--gray-01) !important;
+}
+
+.ant-pagination-jump-next > a > div > span > svg {
+    fill: var(--button-primary) !important;
+}
+
+.ant-pagination-jump-next:hover {
+    background-color: var(--gray-04) !important;
+}
+
+.ant-pagination-jump-next:disabled {
+    color: var(--button-disable-text) !important;
+}
+
+.ant-pagination-jump-prev > a > div > span > svg {
+    fill: var(--button-primary) !important;
+}
+
+.ant-pagination-jump-prev:hover {
+    background-color: var(--gray-04) !important;
+}
+
+.ant-pagination-jump-prev:disabled {
+    color: var(--button-disable-text) !important;
+}
+
+.ant-pagination-next {
+    color: var(--gray-black) !important;
+}
+
+.ant-pagination-next:hover {
+    background-color: var(--gray-04) !important;
+}
+
+.ant-pagination-next:disabled {
+    color: var(--button-disable-text) !important;
+}
+
+.ant-pagination-prev {
+    color: var(--gray-black) !important;
+}
+
+.ant-pagination-prev:hover {
+    background-color: var(--gray-04) !important;
+}
+
+.ant-pagination-prev:disabled {
+    color: var(--button-disable-text) !important;
+}
+
+.ant-pagination-item-active {
+    border: 1px solid var(--button-primary) !important;
+    color: var(--button-primary) !important;
+}
+
+.custom-table:not(.pagination) .ant-table-tbody > tr:last-child > td {
+    border-bottom: none !important; /* Убираем нижнюю границу */
+}
+
+
+/*.custom-table .ant-table-tbody > tr:last-child > td:first-child {*/
+/*    border-bottom-left-radius: 15px !important; !* Закругляем нижний левый угол *!*/
+/*}*/
+
+/*.custom-table .ant-table-tbody > tr:last-child > td:last-child {*/
+/*    border-bottom-right-radius: 15px !important; !* Закругляем нижний правый угол *!*/
+/*}*/
+
+
+/*.ant-table-cell{*/
+/*    width: 200px;*/
+/*}*/
+/*.actions_column_btns{*/
+/*    display: flex;*/
+/*}*/
+
+/*:where(.css-dev-only-do-not-override-5wsri9).ant-table-wrapper .ant-table-container table > thead > tr:first-child > *:first-child {*/
+/*    border-top-left-radius: 0 !important;*/
+/*}*/
+
+/*:where(.css-dev-only-do-not-override-5wsri9).ant-table-wrapper .ant-table-container table > thead > tr:first-child > *:last-child {*/
+/*    border-top-right-radius: 0 !important;*/
+
+/*}*/
+
+/*:where(.css-dev-only-do-not-override-5wsri9).ant-table-wrapper .ant-table-container table > tbody > tr:last-child > *:first-child {*/
+/*    border-bottom-left-radius: 0 !important;*/
+
+/*}*/
+
+/*:where(.css-dev-only-do-not-override-5wsri9).ant-table-wrapper .ant-table-container table > tbody > tr:last-child > *:last-child {*/
+/*    border-bottom-right-radius: 0 !important;*/
+
+/*}*/
+
+.custom-table .ant-table-tbody > tr.selected-row > td {
+    background-color: var(--gray-04) !important; /* Цвет фона при выборе */
+}
+
+.custom-table .ant-table-tbody > tr.selected-row {
+    border-left: 4px solid var(--primary);
+}
+
+.ant-table-row-selected {
+    border-left: 4px solid var(--primary);
+}
+
+.nested-table .ant-table-tbody > tr > td {
+    background-color: var(--bg-surface) !important; /* Цвет фона для вложенных строк */
+    /*border-bottom: 1px solid var(--button-disable-text) !important; !* Границы *!*/
+    cursor: pointer;
+}
+
+.nested-table .ant-table-tbody > tr:hover > td {
+    background-color: var(--bg-surface-hover)  !important; /* Цвет фона при наведении */
+}
+
+.ant-table-row{
+    cursor: pointer;
+}

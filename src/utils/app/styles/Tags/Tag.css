@@ -1,0 +1,197 @@
+/* Базовые стили для тегов */
+.tag-base {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 8px;
+    border-radius: var(--sizeXS);
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 400;
+    letter-spacing: 0.4px;
+    transition: all 0.3s;
+}
+
+/* Стили для различных состояний тегов */
+.tag-state-default {
+    background-color: var(--gray-04);
+    color: var(--gray-black);
+}
+
+.tag-state-error {
+    background-color: var(--alarm-bg);
+    color: var(--alarm);
+}
+
+.tag-state-processing {
+    background-color: var(--gray-03);
+    color: var(--button-primary);
+}
+
+.tag-state-success {
+    background-color: var(--alarm-bg-acception);
+    color: var(--alarm-acception);
+}
+
+.tag-state-warning {
+    background-color: var(--alarm-bg-attention);
+    color: var(--alarm-attention);
+}
+
+.tag-state-add_new {
+    background-color: #FFFFFF;
+    color: var(--gray-black);
+}
+
+/* Border стили */
+.tag-state-default.border {
+    background-color: var(--gray-04);
+    color: var(--gray-black);
+    border: 1px solid var(--divider-2);
+}
+
+.tag-state-error.border {
+    background-color: var(--alarm-bg);
+    color: var(--alarm);
+    border: 1px solid var(--alarm);
+}
+
+.tag-state-processing.border {
+    background-color: var(--gray-03);
+    color: var(--button-primary);
+    border: 1px solid var(--button-primary);
+}
+
+.tag-state-success.border {
+    background-color: var(--alarm-bg-acception);
+    color: var(--alarm-acception);
+    border: 1px solid var(--alarm-acception);
+}
+
+.tag-state-warning.border {
+    background-color: var(--alarm-bg-attention);
+    color: var(--alarm-attention);
+    border: 1px solid var(--alarm-bg-attention);
+}
+
+.tag-state-add_new.border {
+    border: 1px dashed var(--divider-2);
+}
+
+/* Цвет иконки */
+.tag-state-default > svg {
+    fill: var(--gray-black);
+    width: 12px;
+    height: 12px;
+    margin-left: 4px;
+}
+
+.tag-with-icon.tag-state-default > svg {
+    fill: var(--gray-black);
+}
+
+.tag-with-icon.tag-state-error > svg {
+    fill: var(--alarm);
+}
+
+.tag-with-icon.tag-state-processing > svg {
+    fill: var(--button-primary);
+}
+
+.tag-with-icon.tag-state-success > svg {
+    fill: var(--alarm-acception);
+}
+
+.tag-with-icon.tag-state-warning > svg {
+    fill: var(--alarm-attention);
+}
+
+.tag-with-icon.tag-state-add_new > svg {
+    fill: var(--gray-black);
+}
+
+/* Стили для тегов с иконками */
+/*.tag-with-icon {*/
+/*    padding-left: 4px;*/
+/*}*/
+
+.tag-with-icon > svg {
+    margin-right: 4px;
+    width: 12px;
+    height: 12px;
+}
+
+
+/*.tag-state-superadmin {*/
+/*    background-color: var(--table-superadmin);*/
+/*    color: var(--gray-black);*/
+/*}*/
+
+/*.tag-state-superadmin.border {*/
+/*    background-color: var(--table-superadmin);*/
+/*    color: var(--gray-black);*/
+/*    border: 1px solid var(--table-superadmin-stroke);*/
+/*}*/
+
+/*.tag-with-icon.tag-state-superadmin > svg {*/
+/*    fill: var(--table-superadmin-stroke);*/
+/*}*/
+
+/*.tag-state-admin {*/
+/*    background-color: var(--table-admin);*/
+/*    color: var(--gray-black);*/
+/*}*/
+
+/*.tag-state-admin.border {*/
+/*    background-color: var(--table-admin);*/
+/*    color: var(--gray-black);*/
+/*    border: 1px solid var(--table-admin-stroke);*/
+/*}*/
+
+/*.tag-with-icon.tag-state-admin > svg {*/
+/*    fill: var(--table-admin-stroke);*/
+/*}*/
+
+/*.tag-state-operator {*/
+/*    background-color: var(--table-operator);*/
+/*    color: var(--gray-black);*/
+/*}*/
+
+/*.tag-state-operator.border {*/
+/*    background-color: var(--table-operator);*/
+/*    color: var(--gray-black);*/
+/*    border: 1px solid var(--table-operator-stroke);*/
+/*}*/
+
+/*.tag-with-icon.tag-state-operator > svg {*/
+/*    fill: var(--table-operator-stroke);*/
+/*}*/
+
+/* Стили для тегов с возможностью закрытия */
+/*.tag-closeable {*/
+/*    padding-right: 4px;*/
+/*}*/
+
+/*.tag-closeable svg {*/
+/*    margin-left: 4px;*/
+/*    width: 12px;*/
+/*    height: 12px;*/
+/*    cursor: pointer;*/
+/*}*/
+
+/* Стили для тегов с возможностью добавления */
+/*.tag-add-new {*/
+/*    background-color: var(--gray-04);*/
+/*    color: var(--gray-black);*/
+/*    border: 1px dashed var(--gray-03);*/
+/*    cursor: pointer;*/
+/*}*/
+
+/*.tag-add-new:hover {*/
+/*    background-color: var(--gray-05);*/
+/*}*/
+
+/*.tag-add-new svg {*/
+/*    margin-right: 4px;*/
+/*    width: 16px;*/
+/*    height: 16px;*/
+/*}*/

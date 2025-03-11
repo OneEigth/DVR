@@ -1,19 +1,79 @@
-.nameDeviceLayout{
-    height: 44px;
+
+.containerLayout {
     display: flex;
+    cursor: pointer;
+    margin-bottom: 16px;
+}
+
+.containerLayout.big {
+    width: 100%;
+}
+
+.containerLayout {
+    width: 600px;
+    margin-bottom: 0;
+    height: 200px;
+}
+
+.image.imageSmall{
+    height: 200px !important;
+}
+
+.coverLayout {
+    flex: 1;
+}
+
+.containerLayout .coverLayout {
+    width: 340px;
+}
+
+.containerLayout .propertiesLayout {
+    width: 260px;
+    padding: 8px 12px;
+}
+
+.Layout {
+    width: 100%;
+}
+
+.image {
+    width: 100%;
+    height: auto;
+}
+
+.propertiesLayout {
+    display: flex;
+}
+
+.nameLayout {
+    display: flex;
+    flex-direction: column;
+    width: 236px;
+}
+
+.iconLayout {
+    margin-right: 8px;
+}
+
+.deviceName_Layout {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.layoutComponentContainerTitle{
+    display: flex;
+    margin-bottom: 16px;
     align-items: center;
 }
 
-.iconDeviceLayout{
-    height: 14px;
-    margin-right: 13px;
-    margin-left: 13px;
+.layoutComponentContainerFlex{
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    gap: 8px;
 }
 
-.deviceName_Layout.title.large{
-    color: white;
-}
-
-.containerDeviceLayout{
-    cursor: pointer;
+.layoutComponentText{
+    color: var(--gray-black);
+    word-wrap: break-word; /* Перенос текста на новую строку */
 }

@@ -1,0 +1,9 @@
+.layouts-table_active {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    /*border: 1px solid var(--gray-03);*/
+    background-color: var(--bg-surface-hover);
+}

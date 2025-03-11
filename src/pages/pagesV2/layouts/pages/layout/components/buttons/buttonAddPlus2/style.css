@@ -1,0 +1,38 @@
+.flex{
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: start !important;
+    align-items: start!important;
+    justify-items: start!important;
+
+}
+
+.buttonAddPlus{
+    margin-bottom: 0!important;
+    padding: 0;
+
+}
+
+/*
+.buttonAddPlus {
+    width: 32px !important;
+    height: 32px;
+    background-color: #4D4E65;
+    color: #FFFFFF;
+    margin-right: 8px;
+    margin-top: 0!important;
+    border: none; !* Ensure there is no border *!
+    box-shadow: none!important; !* Remove any shadow *!
+
+}
+
+.buttonAddPlus:hover,
+.buttonAddPlus:focus,
+.buttonAddPlus:active{
+    background-color: #4D4E65!important; !* Maintain the same background color *!
+    color: #FFFFFF!important; !* Maintain the same text color *!
+    border: none!important; !* Ensure the border does not change *!
+    box-shadow: none!important; !* Remove any shadow *!
+}
+*/
+
