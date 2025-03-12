@@ -13,8 +13,8 @@
 }
 
 .ant-table-container {
-    border-bottom: 1px solid var(--button-disable-text);
-    border-top: 1px solid var(--button-disable-text);
+    /*border-bottom: 1px solid var(--divider-2);*/
+    border-top: 1px solid var(--divider-2);
 
     /*border-end-end-radius: 8px;*/
     /*border-end-start-radius: 8px;*/
@@ -22,7 +22,7 @@
 
 .ant-table-expanded-row .ant-table-container{
     border-bottom: none;
-    border-top: 1px solid var(--button-disable-text);
+    border-top: 1px solid var(--divider-2);
 }
 
 .table-scroll .ant-table-body::-webkit-scrollbar {
@@ -61,7 +61,7 @@
 }
 
 .custom-table .ant-table-thead > tr > th {
-    border-bottom: 1px solid var(--button-disable-text); /* Цвет и толщина разделяющей линии */
+    border-bottom: 1px solid var(--divider-2); /* Цвет и толщина разделяющей линии */
     font-weight: 700;
     line-height: 20px;
     letter-spacing: 0.25px;
@@ -70,12 +70,16 @@
 }
 
 .custom-table .ant-table-tbody > tr > td {
-    border-bottom: 1px solid var(--button-disable-text); /* Цвет и толщина разделяющей линии */
+    border-bottom: 1px solid var(--divider-2); /* Цвет и толщина разделяющей линии */
     font-weight: 400;
-    line-height: 20px;
+    line-height: 12px;
     letter-spacing: 0.25px;
     color: var(--gray-black);
 }
+
+/*.custom-table .ant-table-tbody > tr > td {*/
+/*    border-bottom: 1px solid var(--divider-2) !important; !* Цвет и толщина разделяющей линии *!*/
+/*}*/
 
 .custom-table table {
     width: 100%;
@@ -114,9 +118,9 @@
     border-bottom: 1px solid var(--button-disable-text) !important; /* Отображаем нижнюю границу */
 }
 
-.custom-table .ant-table-tbody > tr:last-child > td {
-    border-bottom: none !important; /* Убираем нижнюю границу */
-}
+/*.custom-table .ant-table-tbody > tr:last-child > td {*/
+/*    border-bottom: none !important; !* Убираем нижнюю границу *!*/
+/*}*/
 
 .custom-table .ant-pagination {
     /*display: none;*/
@@ -192,9 +196,9 @@
     color: var(--button-primary) !important;
 }
 
-.custom-table:not(.pagination) .ant-table-tbody > tr:last-child > td {
-    border-bottom: none !important; /* Убираем нижнюю границу */
-}
+/*.custom-table:not(.pagination) .ant-table-tbody > tr:last-child > td {*/
+/*    border-bottom: none !important; !* Убираем нижнюю границу *!*/
+/*}*/
 
 
 /*.custom-table .ant-table-tbody > tr:last-child > td:first-child {*/

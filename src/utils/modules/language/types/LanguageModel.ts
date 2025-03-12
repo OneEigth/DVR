@@ -315,4 +315,6 @@ export interface LanguageModel {
     clearFilters: string;
 
     appearance: string;
+    deviceName: string;
+    deviceGroup: string;
 }

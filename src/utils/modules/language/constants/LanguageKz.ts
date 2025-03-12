@@ -318,4 +318,6 @@ export const LanguageKz: LanguageModel = {
 
     // DVR
     appearance: 'Внешний вид',
+    deviceName: 'Название устройства',
+    deviceGroup: 'Группа устройства',
 };
