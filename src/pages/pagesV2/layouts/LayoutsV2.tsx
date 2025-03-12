@@ -97,15 +97,15 @@ const LayoutsV2: React.FC = () => {
                             <ButtonAddPlus onClick={handleAddLayout} />
                         </div>
                     </div>
-                    <div className="pagination-container">
-                        <Pagination
-                            current={currentPage}
-                            pageSize={pageSize}
-                            total={filteredLayouts.length}
-                            onChange={handlePageChange}
-                            showSizeChanger={false}
-                        />
-                    </div>
+                    {/*<div className="pagination-container">*/}
+                    {/*    <Pagination*/}
+                    {/*        current={currentPage}*/}
+                    {/*        pageSize={pageSize}*/}
+                    {/*        total={filteredLayouts.length}*/}
+                    {/*        onChange={handlePageChange}*/}
+                    {/*        showSizeChanger={false}*/}
+                    {/*    />*/}
+                    {/*</div>*/}
                     <div className="right_HT">
                         {/*<Input*/}
                         {/*    placeholder={"Поиск"}*/}
