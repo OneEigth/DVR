@@ -318,4 +318,6 @@ export const LanguageRu: LanguageModel = {
 
     // DVR
     appearance: 'Внешний вид',
+    deviceName: 'Название устройства',
+    deviceGroup: 'Группа устройства',
 };

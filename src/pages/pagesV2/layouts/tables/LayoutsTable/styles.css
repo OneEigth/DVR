@@ -7,3 +7,44 @@
     /*border: 1px solid var(--gray-03);*/
     background-color: var(--bg-surface-hover);
 }
+
+.nested-table .ant-table{
+    margin-inline: -16px -16px !important;
+}
+
+.nested-table .ant-table-tbody > tr > td {
+    position: relative; /* Для позиционирования псевдоэлемента */
+    border: none !important;
+}
+
+.nested-table .ant-table-tbody > tr > td::after {
+    content: '';
+    position: absolute;
+    left: 0; /* Сдвигаем бордер на 100px вправо */
+    right: 0; /* Бордер доходит до конца элемента */
+    bottom: 0; /* Позиционируем снизу */
+    height: 1px; /* Толщина бордера */
+    background-color: var(--divider-2); /* Цвет бордера */
+}
+
+.nested-table .ant-table-tbody> tr:last-child > td {
+    border-bottom: none !important;
+}
+
+.ant-table-expanded-row > .ant-table-cell{
+    border: none !important;
+}
+
+.nested-table .ant-table-tbody > tr > td:nth-child(1)::after {
+    left: 60px;
+}
+
+.ant-table-measure-row{
+    visibility: collapse !important;
+}
+
+.custom-table .ant-table-tbody > tr.custom-row > td {
+    height: 52px !important; /* Фиксированная высота строки */
+    padding: 13px 16px !important; /* Отступы */
+    /*border-bottom: 1px solid var(--divider-2) !important; !* Бордер *!*/
+}

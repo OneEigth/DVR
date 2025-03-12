@@ -5,13 +5,29 @@ import './styles.css';
 import { Button, Table } from 'antd';
 import { ReactComponent as SvgDelete } from 'utils/app/assets/icons/Delete.svg';
 import { ReactComponent as SvgClose } from 'utils/app/assets/icons/Close.svg';
+import { ReactComponent as SvgUp } from 'utils/app/assets/icons/Up.svg';
+import { ReactComponent as SvgDown } from 'utils/app/assets/icons/Down.svg';
+
 import { useLanguageStore } from '../../../../../utils/modules/language/api/store';
 import { LayoutType } from '../../../../../types/LayoutType';
 import TableLayout from '../../../../../utils/widgets/Layouts/TableLayout/TableLayout';
 import useLayoutsStore from '../../api/store';
-import { getLayoutsColumns } from './consts/columns';
+import { getLayoutsColumns, getLayoutsDeviceColumns } from './consts/columns';
+import { Device } from '../../../../../types/Device';
 
 interface UsersTableProps {}
+
+// @ts-ignore
+const customExpandIcon = ({ expanded, onExpand, record }) => {
+    return (
+        <span
+            onClick={(e) => onExpand(record, e)}
+            style={{ cursor: 'pointer', position: 'relative', top: 2 }}
+        >
+            {expanded ? <SvgUp /> : <SvgDown />}
+        </span>
+    );
+};
 
 const LayoutsTable: FC<UsersTableProps> = (props) => {
     const {} = props;
@@ -59,34 +75,29 @@ const LayoutsTable: FC<UsersTableProps> = (props) => {
                 data={layouts}
                 // rowSelection={rowSelection}
                 rowKey="id"
-                paginationBool={true}
-                rowClassName={(record) => (record.id === selectedRowKey ? 'selected-row' : '')}
+                paginationBool={false}
+                rowClassName={(record) =>
+                    record.id === selectedRowKey ? 'selected-row custom-row' : 'custom-row'
+                }
                 classNameTable={'layouts-table'}
                 expandable={{
                     expandedRowRender: (record: LayoutType) => (
-                        <Table
-                            columns={[
-                                {
-                                    title: 'ID устройства',
-                                    dataIndex: 'ID',
-                                    key: 'ID',
-                                    width: 200,
-                                },
-                                {
-                                    title: 'Название устройства',
-                                    dataIndex: 'name',
-                                    key: 'name',
-                                    width: 300,
-                                },
-                                // Добавьте другие колонки для устройств
-                            ]}
+                        <Table<Device>
+                            columns={getLayoutsDeviceColumns(
+                                language,
+                                () => {},
+                                () => {},
+                            )}
                             dataSource={record.devices}
                             // rowKey="ID"
+                            rowClassName={() => 'custom-row'}
                             pagination={false}
+                            showHeader={false}
                             className="nested-table"
                         />
                     ),
-                    rowExpandable: (record: LayoutType) => record.devices?.length > 0,
+                    // rowExpandable: (record: LayoutType) => record.devices?.length > 0,
+                    expandIcon: customExpandIcon,
                 }}
             />
 
