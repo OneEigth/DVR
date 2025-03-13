@@ -45,7 +45,7 @@ const LayoutComponent: FC<LayoutComponentProps> = ({ layout }) => {
                         <img
                             className="image imageSmall"
                             alt={''}
-                            src={VIDEO_PREVIEW_URL(layout?.uid, SmartDVRToken)}
+                            src={VIDEO_PREVIEW_URL(layout?.devices[0]?.UID, SmartDVRToken)}
                         />
                     }
                     onError={handleError}

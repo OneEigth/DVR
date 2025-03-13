@@ -258,6 +258,18 @@
     background-color: var(--bg-surface-hover)  !important; /* Цвет фона при наведении */
 }
 
+.nested-table .ant-table-tbody > tr:active > td {
+    background-color: var(--bg-surface-select) !important;
+}
+
+.custom-table .ant-table-tbody > tr:hover > td {
+    background-color: var(--gray-05) !important;
+}
+
+.custom-table .ant-table-tbody > tr:active > td {
+    background-color: var(--gray-04) !important;
+}
+
 .ant-table-row{
     cursor: pointer;
 }

@@ -320,4 +320,5 @@ export const LanguageKz: LanguageModel = {
     appearance: 'Внешний вид',
     deviceName: 'Название устройства',
     deviceGroup: 'Группа устройства',
+    cameraCount: 'Количество камер',
 };

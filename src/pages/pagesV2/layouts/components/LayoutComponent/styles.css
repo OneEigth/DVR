@@ -10,13 +10,14 @@
 }
 
 .containerLayout {
-    width: 600px;
+    width: 616px;
     margin-bottom: 0;
     height: 200px;
 }
 
 .image.imageSmall{
     height: 200px !important;
+    border-radius: 12px 0 0 12px !important;
 }
 
 .coverLayout {
@@ -28,7 +29,7 @@
 }
 
 .containerLayout .propertiesLayout {
-    width: 260px;
+    width: 276px;
     padding: 8px 12px;
 }
 

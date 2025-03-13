@@ -4,6 +4,10 @@
     align-items: center;
 }
 
+.propertiesDeviceLayout{
+    border-radius: 0 0 12px 12px !important;
+}
+
 .iconDeviceLayout{
     height: 14px;
     margin-right: 13px;
@@ -16,4 +20,8 @@
 
 .containerDeviceLayout{
     cursor: pointer;
+}
+
+.image.imageBig{
+    border-radius: 12px 12px 0 0 !important;
 }

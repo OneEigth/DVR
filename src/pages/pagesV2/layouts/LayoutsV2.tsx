@@ -26,7 +26,10 @@ const LayoutsV2: React.FC = () => {
     const { allLayouts, fetchLayouts } = useLayoutsStore();
     const { FoundLayouts, fetchFoundLayouts } = useFindLayoutsStore();
     const [showAddLayoutModal, setShowAddLayoutModal] = useState(false);
-    const [activeDeviceSize, setActiveDeviceSize] = useState<'small' | 'medium' | 'big'>('big');
+    const [activeDeviceSize, setActiveDeviceSize] = useState<'small' | 'medium' | 'big'>(() => {
+        const savedSize = localStorage.getItem('activeButtonSize');
+        return (savedSize as 'small' | 'medium' | 'big') || 'small'; // По умолчанию 'small'
+    });
 
     const handleFilterButtonClick = (size: 'small' | 'medium' | 'big') => {
         setActiveDeviceSize(size);

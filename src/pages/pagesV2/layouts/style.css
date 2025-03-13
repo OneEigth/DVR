@@ -17,7 +17,7 @@
 .body_layouts--medium{
     flex-direction: row !important;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 12px;
 }
 
 
@@ -25,6 +25,7 @@
     padding: 16px 12px;
     background-color: #F1F1F1;
     margin-bottom: 20px;
+    border-radius: var(--sizeL);
 }
 
 .body_layouts-container_items{
@@ -75,5 +76,7 @@
 .right_HT_input{
     width: 240px;
 }
+
+
 
 

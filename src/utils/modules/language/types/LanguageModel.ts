@@ -317,4 +317,5 @@ export interface LanguageModel {
     appearance: string;
     deviceName: string;
     deviceGroup: string;
+    cameraCount: string;
 }
