@@ -48,3 +48,14 @@
     padding: 13px 16px !important; /* Отступы */
     /*border-bottom: 1px solid var(--divider-2) !important; !* Бордер *!*/
 }
+
+/*.nested-table .ant-table-tbody > tr > td:nth-child(1)::before{*/
+/*    content: '';*/
+/*    position: absolute;*/
+/*    left: 0; !* Сдвигаем бордер на 100px вправо *!*/
+/*    right: 0; !* Бордер доходит до конца элемента *!*/
+/*    bottom: 0; !* Позиционируем снизу *!*/
+/*    height: 52px; !* Толщина бордера *!*/
+/*    width: 48px;*/
+/*    background-color: var(--divider-2); !* Цвет бордера *!*/
+/*}*/

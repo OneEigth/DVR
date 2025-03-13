@@ -39,7 +39,7 @@ const LayoutComponentDevice: FC<LayoutComponentDeviceProps> = ({ device, layout 
                     key={device?.ID}
                     cover={
                         <img
-                            className="image"
+                            className="image imageBig"
                             alt={''}
                             src={VIDEO_PREVIEW_URL(device?.UID, SmartDVRToken)}
                         />
