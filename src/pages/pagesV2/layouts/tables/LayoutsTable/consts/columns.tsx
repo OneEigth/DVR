@@ -18,7 +18,7 @@ export const getLayoutsColumns = (
             title: `${language.name}`,
             dataIndex: 'name',
             key: 'name',
-            width: '38.035%',
+            width: '25.64%',
             // render: (text: string, record: any) => {
             //     return (
             //         <div>ret</div>
@@ -34,15 +34,16 @@ export const getLayoutsColumns = (
             // },
         },
         {
-            title: `${language.appearance}`,
-            dataIndex: 'viewType',
-            key: 'viewType',
-            width: '19.017%',
+            title: `${language.cameraCount}`,
+            dataIndex: 'cameraCount',
+            key: 'cameraCount',
+            width: '12.82%',
             render: (text: string, record: LayoutType) => {
                 return (
-                    <Tag state={'default'} border={true}>
-                        {text}
-                    </Tag>
+                    <span className={'body medium'}>{record.devices?.length ?? 0}</span>
+                    // <Tag state={'default'} border={true}>
+                    //     {text}
+                    // </Tag>
                 );
             },
         },
@@ -50,14 +51,14 @@ export const getLayoutsColumns = (
             title: `${language.description}`,
             dataIndex: 'description',
             key: 'description',
-            width: '11.252%',
+            width: '40.17%',
         },
 
         {
             title: `${language.operator}`,
             dataIndex: 'userName',
             key: 'userName',
-            width: '13.629%',
+            width: '9.19%',
             // render: (text: string, record: LayoutType) => {
             //     return (
             //         <div style={{ marginLeft: 5 }}>
@@ -77,7 +78,7 @@ export const getLayoutsColumns = (
             title: `${language.actions}`,
             dataIndex: 'actions',
             key: 'actions',
-            width: '15.531%',
+            width: '10.47%',
             render: (text: string, record: LayoutType) => {
                 return (
                     <div style={{ marginLeft: 5 }}>
@@ -103,16 +104,17 @@ export const getLayoutsDeviceColumns = (
 ) => {
     return [
         {
-            // title: `${language.deviceName}`,
-            dataIndex: 'id',
-            key: 'id',
-            width: '2.536%',
+            title: '',
+            dataIndex: 'empty',
+            key: 'empty',
+            width: '1.71%',
+            render: () => <div style={{ minWidth: 16 }}></div>,
         },
         {
             title: `${language.deviceName}`,
             dataIndex: 'name',
             key: 'name',
-            width: '38.035%',
+            width: '25.64%',
             render: (text: string, record: Device) => {
                 return (
                     <div>
@@ -134,7 +136,7 @@ export const getLayoutsDeviceColumns = (
             title: `${language.deviceGroup}`,
             dataIndex: 'groupName',
             key: 'groupName',
-            width: '19.017%',
+            width: '12.82%',
             render: (text: string, record: Device) => {
                 return (
                     <Tag state={'processing'} border={true}>
@@ -147,13 +149,13 @@ export const getLayoutsDeviceColumns = (
             title: `${language.model}`,
             dataIndex: 'description',
             key: 'description',
-            width: '11.252%',
+            width: '40.17%',
             render: (text: string, record: Device) => {
                 return (
                     <div>
                         {text || (
                             <Tag state={'error'} border={true}>
-                                not content
+                                no content
                             </Tag>
                         )}
                     </div>
@@ -165,7 +167,7 @@ export const getLayoutsDeviceColumns = (
             title: `${language.batteryLoad}`,
             dataIndex: 'battery_level',
             key: 'battery_level',
-            width: '13.629%',
+            width: '9.19%',
             render: (text: string, record: Device) => {
                 return <div>{`${text}% заряд`}</div>;
             },
@@ -174,7 +176,7 @@ export const getLayoutsDeviceColumns = (
             title: `${language.actions}`,
             dataIndex: 'actions',
             key: 'actions',
-            width: '15.531%',
+            width: '10.47%',
             render: (text: string, record: Device) => {
                 return (
                     <div style={{ marginLeft: 5 }}>
