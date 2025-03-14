@@ -13,3 +13,10 @@
 .DescButtons_layout{
     display: flex;
 }
+
+.mapText{
+    border-bottom: 1px solid var(--divider-2);
+    padding-bottom: 6px;
+    margin-bottom: 16px;
+    margin-right: 24px;
+}

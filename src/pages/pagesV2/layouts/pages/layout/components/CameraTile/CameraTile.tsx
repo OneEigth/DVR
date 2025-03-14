@@ -6,6 +6,8 @@ import { useAuthStore } from '../../../../../../../store/auth/auth';
 import LocationMap2 from '../../../../../../../components/locationMap2/LocationMap2';
 import { Device } from '../../../../../../../types/Device';
 import { ONLINE_PLAY_LAYOUT_URL } from '../../../../../../../const/const';
+import './styles.css';
+import { ReactComponent as SvgPoints } from 'utils/app/assets/icons/Points.svg';
 
 // Интерфейсы для типизации
 interface CameraConfig {
@@ -154,8 +156,20 @@ const CameraTile: React.FC<CameraTileProps> = ({
                 </HeaderLeft>
 
                 {device ? (
-                    <Dropdown overlay={menu(device, index, menuType)} trigger={['click']}>
-                        <ActionButton icon={<MoreOutlined />} />
+                    <Dropdown
+                        placement={'bottomRight'}
+                        overlay={menu(device, index, menuType)}
+                        trigger={['click']}
+                        getPopupContainer={(triggerNode) => triggerNode.parentElement!}
+                        overlayClassName="dropdown-camera"
+                    >
+                        <Button
+                            className={'button-base button-type-secondary button-size-small_icon'}
+                            style={{ border: '2px solid var(--button-secondary-text)' }}
+                        >
+                            <SvgPoints />
+                        </Button>
+                        {/*<ActionButton icon={<MoreOutlined />} />*/}
                     </Dropdown>
                 ) : (
                     <Button onClick={onAddDevice}>+</Button>
@@ -205,11 +219,11 @@ const CameraGrid: React.FC<CameraGridProps> = ({ viewType, devices, menuType, is
                 />
             ))}
 
-            {isMapVisible && (
-                <MapContainer cols={config.cols}>
-                    <LocationMap2 devices={devices} />
-                </MapContainer>
-            )}
+            {/*{isMapVisible && (*/}
+            {/*    <MapContainer cols={config.cols}>*/}
+            {/*        <LocationMap2 devices={devices} />*/}
+            {/*    </MapContainer>*/}
+            {/*)}*/}
         </GridContainer>
     );
 };
@@ -301,8 +315,7 @@ const EmptyTile = styled.div`
 
 const GridContainer = styled.div<{ cols: number; rows: number; isMapVisible: boolean }>`
     display: grid;
-    grid-template-columns: ${({ cols, isMapVisible }) =>
-        `repeat(${cols}, 1fr) ${isMapVisible ? '300px' : ''}`};
+    grid-template-columns: ${({ cols, isMapVisible }) => `repeat(${cols}, 1fr) `};
     grid-template-rows: repeat(${({ rows }) => rows}, minmax(200px, 1fr));
     gap: 10px;
     height: 100%;

@@ -1,0 +1,23 @@
+.dropdown-camera{
+    width: 179px;
+
+    min-width: 179px !important;
+}
+
+.dropdown-camera .ant-dropdown-menu{
+    background-color: var(--primary-dark) !important;
+    padding: 4px !important;
+
+}
+
+.dropdown-camera .ant-dropdown-menu > *{
+    color: var(--gray-white) !important;
+    padding: 6px 12px !important;
+}
+
+.dropdown-camera .ant-dropdown-menu > *:last-child{
+    border-top: 1px solid var(--divider-2) !important;
+    border-radius: 0;
+    margin-top: 4px;
+    padding-top: 10px !important;
+}
