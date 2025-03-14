@@ -20,18 +20,18 @@
 /* Классы для размеров кнопок */
 .button-size-medium {
     height: var(--button-medium-size);
-    padding: 6px 15px;
+    padding: 6px 16px;
 }
 
 .button-size-large {
     height: var(--button-large-size);
-    padding: 8px 15px;
+    padding: 8px 16px;
     border-radius: var(--sizeS);
 }
 
 .button-size-small {
     height: var(--button-small-size);
-    padding: 2px 7px;
+    padding: 2px 8px;
     border-radius: var(--size2XS);
 
 }
@@ -40,6 +40,7 @@
     width: var(--button-small-size);
     height: var(--button-small-size);
     padding: 0;
+    border-radius: 4px;
 }
 
 .button-size-small_icon > svg {
@@ -216,7 +217,7 @@
 .button-type-secondary {
     background-color: var(--button-secondary) !important;
     color: var(--button-secondary-text) !important;
-    /*border: none !important;*/
+    border: 1px solid var(--button-secondary-text);
 }
 
 .button-type-secondary:hover {

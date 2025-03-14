@@ -124,6 +124,10 @@
     color: #ff7875; /* Светлее красный при наведении */
 }
 
+.dropdown-menu-overlay-settings{
+    inset: 64px 16px auto auto !important;
+}
+
 .menu-dropdown{
     cursor: pointer !important;
     padding-left: 0;
