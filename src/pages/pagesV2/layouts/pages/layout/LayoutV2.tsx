@@ -10,14 +10,7 @@ import MainMenu from '../../../../../components/menu/Menu';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 
 import { Footer, Header } from 'antd/lib/layout/layout';
-import { Content } from 'antd/es/layout/layout';
-import CameraGrid2x2 from './components/cameraGrid/2x2/cameraGrid2x2';
-import CameraGrid1x5 from './components/cameraGrid/1x5/cameraGrid1x5';
-import CameraGrid3x4 from './components/cameraGrid/3x4/cameraGrid3x4';
-import CameraGrid3x3 from './components/cameraGrid/3х3/cameraGrid3x3';
-import CameraGrid2x8 from './components/cameraGrid/2х8/cameraGrid2x8';
-import CameraGrid1x12 from './components/cameraGrid/1x12/cameraGrid1x12';
-import CameraGrid4x4 from './components/cameraGrid/4x4/cameraGrid4x4';
+
 import ButtonRecordVideo from './components/buttons/buttonForToolBarDeviceOne/ButtonRecordVideo';
 import ButtonTakeAPhoto from './components/buttons/buttonForToolBarDeviceOne/ButtonTakeAPhoto';
 import ButtonRecordAudio from './components/buttons/buttonForToolBarDeviceOne/ButtonRecordAudio';
@@ -32,6 +25,7 @@ import { useSelectedLayout } from './api/layout/useSelectedLayout';
 import { useStateNameDevice } from './api/layout/useStateNameDevice';
 import { useIsLayoutFormChanged } from './api/layout/useIsLayoutFormChanged';
 import CameraGrid from './components/CameraTile/CameraTile';
+import LocationMap2 from '../../../../../components/locationMap2/LocationMap2';
 
 interface LayoutV2Props {}
 
@@ -202,212 +196,250 @@ const LayoutV2: FC<LayoutV2Props> = (props) => {
                         <MainMenu onClick={handleMenuClick} currentMenuItem={currentMenuItem} />
                     </div>
                 </Header>
-
-                <div className="layouts" style={{ display: 'flex', height: '100%', padding: 24 }}>
+                <div
+                    style={{
+                        display: 'flex',
+                        height: '100vh',
+                    }}
+                >
                     <div
-                        className="header_layout"
-                        style={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            paddingBottom: 8,
-                            borderBottom: '1px solid var(--divider-2)',
-                            marginBottom: 16,
-                            // flex: isMapVisible ? 2 : 3, // Левый блок занимает больше пространства при скрытой карте
-                            // transition: 'flex 0.3s ease', // Плавное изменение ширины
-                        }}
+                        className="layouts"
+                        style={{ display: 'flex', padding: 24, flex: 1, overflow: 'hidden' }}
                     >
-                        <div className="left_HT">
-                            <Button
-                                className="buttonLeft headline small"
-                                icon={<ArrowLeftOutlined />}
-                                style={{
-                                    border: 'none',
-                                    backgroundColor: 'none',
-                                    boxShadow: 'none',
-                                }}
-                                onClick={handleBackToAllDevice}
-                            >
-                                Раскладка
-                            </Button>
-                        </div>
+                        <div
+                            className="header_layout"
+                            style={{
+                                // flex: 1,
+                                display: 'flex',
+                                // flexDirection: 'column',
+                                // marginRight: isMapVisible ? 400 : 0, // Отступ для карты
+                                transition: 'margin-right 0.3s ease', // Плавное появление карты
 
-                        {/*<div className="center_LO">
+                                // display: 'flex',
+                                justifyContent: 'space-between',
+                                paddingBottom: 8,
+                                borderBottom: '1px solid var(--divider-2)',
+                                marginBottom: 16,
+                                // flex: isMapVisible ? 2 : 3, // Левый блок занимает больше пространства при скрытой карте
+                                // transition: 'flex 0.3s ease', // Плавное изменение ширины
+                            }}
+                        >
+                            <div className="left_HT">
+                                <Button
+                                    className="buttonLeft headline small"
+                                    icon={<ArrowLeftOutlined />}
+                                    style={{
+                                        border: 'none',
+                                        backgroundColor: 'none',
+                                        boxShadow: 'none',
+                                    }}
+                                    onClick={handleBackToAllDevice}
+                                >
+                                    Раскладка
+                                </Button>
+                            </div>
+
+                            {/*<div className="center_LO">
                                     <ButtonLayoutViewStyle onFilterButtonClick={handleSelectLayoutView}/>
                                 </div>*/}
 
-                        <div className="right_HT">
-                            <div className="rightSideToolBar">
-                                <ButtonRecordVideo onClick={handleRecordVideo} />
-                                <ButtonTakeAPhoto onClick={handleTakeAPhoto} />
-                                <ButtonRecordAudio onClick={handleRecordAudio} />
-                                <ButtonShowMap
-                                    onClick={handleShowMap}
-                                    isMapVisible={isMapVisible}
-                                />
+                            <div className="right_HT">
+                                <div className="rightSideToolBar">
+                                    <ButtonRecordVideo onClick={handleRecordVideo} />
+                                    <ButtonTakeAPhoto onClick={handleTakeAPhoto} />
+                                    <ButtonRecordAudio onClick={handleRecordAudio} />
+                                    <ButtonShowMap
+                                        onClick={handleShowMap}
+                                        isMapVisible={isMapVisible}
+                                    />
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div
-                        className="body_layouts"
-                        style={{
-                            flex: 1,
-                            overflow: 'hidden',
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                        }}
-                    >
-                        {selectedLayout ? (
-                            <>
-                                <CameraGrid
-                                    viewType={selectedLayout.viewType}
-                                    devices={selectedLayout.devices}
-                                    menuType="layout"
-                                    isMapVisible={isMapVisible}
-                                />
-                                {/*{selectedLayout.viewType === '2x2' && (*/}
-                                {/*    <CameraGrid2x2*/}
-                                {/*        menuType={'layout'}*/}
-                                {/*        isMapVisible={isMapVisible}*/}
-                                {/*    />*/}
-                                {/*)}*/}
-                                {/*{selectedLayout.viewType === '1х5' && (*/}
-                                {/*    <CameraGrid1x5*/}
-                                {/*        menuType={'layout'}*/}
-                                {/*        isMapVisible={isMapVisible}*/}
-                                {/*    />*/}
-                                {/*)}*/}
-                                {/*{selectedLayout.viewType === '3х4' && (*/}
-                                {/*    <CameraGrid3x4*/}
-                                {/*        menuType={'layout'}*/}
-                                {/*        isMapVisible={isMapVisible}*/}
-                                {/*    />*/}
-                                {/*)}*/}
-                                {/*{selectedLayout.viewType === '3х3' && (*/}
-                                {/*    <CameraGrid3x3*/}
-                                {/*        menuType={'layout'}*/}
-                                {/*        isMapVisible={isMapVisible}*/}
-                                {/*    />*/}
-                                {/*)}*/}
-                                {/*{selectedLayout.viewType === '2х8' && (*/}
-                                {/*    <CameraGrid2x8*/}
-                                {/*        menuType={'layout'}*/}
-                                {/*        isMapVisible={isMapVisible}*/}
-                                {/*    />*/}
-                                {/*)}*/}
-                                {/*{selectedLayout.viewType === '1х12' && (*/}
-                                {/*    <CameraGrid1x12*/}
-                                {/*        menuType={'layout'}*/}
-                                {/*        isMapVisible={isMapVisible}*/}
-                                {/*    />*/}
-                                {/*)}*/}
-                                {/*{selectedLayout.viewType === '4х4' && (*/}
-                                {/*    <CameraGrid4x4*/}
-                                {/*        menuType={'layout'}*/}
-                                {/*        isMapVisible={isMapVisible}*/}
-                                {/*    />*/}
-                                {/*)}*/}
-                            </>
-                        ) : (
-                            <p>Раскладка не выбрана</p>
-                        )}
-                    </div>
+                        <div
+                            className="body_layouts"
+                            style={{
+                                flex: 1,
+                                overflow: 'hidden',
+                                // display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            }}
+                        >
+                            {selectedLayout ? (
+                                <div
+                                    style={{
+                                        flex: 1,
+                                        // display: 'flex',
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                        overflow: 'hidden',
+                                    }}
+                                >
+                                    <CameraGrid
+                                        viewType={selectedLayout.viewType}
+                                        devices={selectedLayout.devices}
+                                        menuType="layout"
+                                        isMapVisible={isMapVisible}
+                                    />
+                                    {/*{selectedLayout.viewType === '2x2' && (*/}
+                                    {/*    <CameraGrid2x2*/}
+                                    {/*        menuType={'layout'}*/}
+                                    {/*        isMapVisible={isMapVisible}*/}
+                                    {/*    />*/}
+                                    {/*)}*/}
+                                    {/*{selectedLayout.viewType === '1х5' && (*/}
+                                    {/*    <CameraGrid1x5*/}
+                                    {/*        menuType={'layout'}*/}
+                                    {/*        isMapVisible={isMapVisible}*/}
+                                    {/*    />*/}
+                                    {/*)}*/}
+                                    {/*{selectedLayout.viewType === '3х4' && (*/}
+                                    {/*    <CameraGrid3x4*/}
+                                    {/*        menuType={'layout'}*/}
+                                    {/*        isMapVisible={isMapVisible}*/}
+                                    {/*    />*/}
+                                    {/*)}*/}
+                                    {/*{selectedLayout.viewType === '3х3' && (*/}
+                                    {/*    <CameraGrid3x3*/}
+                                    {/*        menuType={'layout'}*/}
+                                    {/*        isMapVisible={isMapVisible}*/}
+                                    {/*    />*/}
+                                    {/*)}*/}
+                                    {/*{selectedLayout.viewType === '2х8' && (*/}
+                                    {/*    <CameraGrid2x8*/}
+                                    {/*        menuType={'layout'}*/}
+                                    {/*        isMapVisible={isMapVisible}*/}
+                                    {/*    />*/}
+                                    {/*)}*/}
+                                    {/*{selectedLayout.viewType === '1х12' && (*/}
+                                    {/*    <CameraGrid1x12*/}
+                                    {/*        menuType={'layout'}*/}
+                                    {/*        isMapVisible={isMapVisible}*/}
+                                    {/*    />*/}
+                                    {/*)}*/}
+                                    {/*{selectedLayout.viewType === '4х4' && (*/}
+                                    {/*    <CameraGrid4x4*/}
+                                    {/*        menuType={'layout'}*/}
+                                    {/*        isMapVisible={isMapVisible}*/}
+                                    {/*    />*/}
+                                    {/*)}*/}
+                                </div>
+                            ) : (
+                                <p>Раскладка не выбрана</p>
+                            )}
+                        </div>
 
-                    <div
-                        className="description_layout"
-                        style={{
-                            display: 'flex',
-                            gap: '16px', // Отступ между элементами
-                            width: '100%', // Занимает всю ширину
-                            marginTop: 24,
-                        }}
-                    >
-                        {/* Группа слева */}
-                        <Form
-                            form={formLeft}
-                            className="form"
-                            name="description-layout-form"
-                            // labelCol={{ span: 24 }}
-                            wrapperCol={{ span: 24 }}
+                        <div
+                            className="description_layout"
                             style={{
                                 display: 'flex',
-                                gap: '16px', // Отступ между Form.Item
+                                gap: '16px', // Отступ между элементами
                                 width: '100%', // Занимает всю ширину
-                                flexDirection: 'row',
+                                marginTop: 24,
                             }}
-                            initialValues={{ name: selectedLayout?.name || '' }}
                         >
-                            <Form.Item
-                                label={<span className="inputLabel title medium">Название</span>}
-                                name="name"
+                            {/* Группа слева */}
+                            <Form
+                                form={formLeft}
+                                className="form"
+                                name="description-layout-form"
+                                // labelCol={{ span: 24 }}
+                                wrapperCol={{ span: 24 }}
                                 style={{
-                                    flex: 1, // Занимает равное пространство
-                                    margin: 0, // Убираем margin от antd
+                                    display: 'flex',
+                                    gap: '16px', // Отступ между Form.Item
+                                    width: '100%', // Занимает всю ширину
+                                    flexDirection: 'row',
                                 }}
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: 'Пожалуйста, введите Название',
-                                    },
-                                ]}
+                                initialValues={{ name: selectedLayout?.name || '' }}
                             >
-                                <Input className="input" disabled />
-                            </Form.Item>
-                            <Form.Item
-                                label={<span className="inputLabel title medium">Описание</span>}
-                                name="description"
-                                style={{
-                                    flex: 1, // Занимает равное пространство
-                                    margin: 0, // Убираем margin от antd
-                                }}
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: 'Пожалуйста, введите описание',
-                                    },
-                                ]}
-                            >
-                                <Input className="input" disabled />
-                            </Form.Item>
-                        </Form>
-                    </div>
-                    {/*    <div className="formGroupRight">*/}
-                    {/*        /!* Группа справа *!/*/}
+                                <Form.Item
+                                    label={
+                                        <span className="inputLabel title medium">Название</span>
+                                    }
+                                    name="name"
+                                    style={{
+                                        flex: 1, // Занимает равное пространство
+                                        margin: 0, // Убираем margin от antd
+                                    }}
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: 'Пожалуйста, введите Название',
+                                        },
+                                    ]}
+                                >
+                                    <Input className="input" disabled />
+                                </Form.Item>
+                                <Form.Item
+                                    label={
+                                        <span className="inputLabel title medium">Описание</span>
+                                    }
+                                    name="description"
+                                    style={{
+                                        flex: 1, // Занимает равное пространство
+                                        margin: 0, // Убираем margin от antd
+                                    }}
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: 'Пожалуйста, введите описание',
+                                        },
+                                    ]}
+                                >
+                                    <Input className="input" disabled />
+                                </Form.Item>
+                            </Form>
+                        </div>
+                        {/*    <div className="formGroupRight">*/}
+                        {/*        /!* Группа справа *!/*/}
 
-                    {/*        <Form*/}
-                    {/*            form={formRight}*/}
-                    {/*            className="form"*/}
-                    {/*            name="basicRight"*/}
-                    {/*            labelCol={{ span: 5 }}*/}
-                    {/*            wrapperCol={{ span: 19 }}*/}
-                    {/*            style={{ maxWidth: '100%' }}*/}
-                    {/*            initialValues={{*/}
-                    {/*                description: selectedLayout?.description || '',*/}
-                    {/*            }}*/}
-                    {/*        >*/}
-                    {/*            <Form.Item*/}
-                    {/*                label={<span className="inputLabel">Описание</span>}*/}
-                    {/*                name="description"*/}
-                    {/*                rules={[*/}
-                    {/*                    {*/}
-                    {/*                        required: true,*/}
-                    {/*                        message: 'Пожалуйста, введите описание',*/}
-                    {/*                    },*/}
-                    {/*                ]}*/}
-                    {/*            >*/}
-                    {/*                <Input className="input" disabled />*/}
-                    {/*            </Form.Item>*/}
-                    {/*        </Form>*/}
-                    {/*    </div>*/}
-                    {/*</div>*/}
+                        {/*        <Form*/}
+                        {/*            form={formRight}*/}
+                        {/*            className="form"*/}
+                        {/*            name="basicRight"*/}
+                        {/*            labelCol={{ span: 5 }}*/}
+                        {/*            wrapperCol={{ span: 19 }}*/}
+                        {/*            style={{ maxWidth: '100%' }}*/}
+                        {/*            initialValues={{*/}
+                        {/*                description: selectedLayout?.description || '',*/}
+                        {/*            }}*/}
+                        {/*        >*/}
+                        {/*            <Form.Item*/}
+                        {/*                label={<span className="inputLabel">Описание</span>}*/}
+                        {/*                name="description"*/}
+                        {/*                rules={[*/}
+                        {/*                    {*/}
+                        {/*                        required: true,*/}
+                        {/*                        message: 'Пожалуйста, введите описание',*/}
+                        {/*                    },*/}
+                        {/*                ]}*/}
+                        {/*            >*/}
+                        {/*                <Input className="input" disabled />*/}
+                        {/*            </Form.Item>*/}
+                        {/*        </Form>*/}
+                        {/*    </div>*/}
+                        {/*</div>*/}
 
-                    <div className="DescButtons_layout">
-                        <ButtonLayoutEdit onClick={handleEditLayout} />
-                        <ButtonLayoutDelete onClick={handleDeleteLayout} />
+                        <div className="DescButtons_layout">
+                            <ButtonLayoutEdit onClick={handleEditLayout} />
+                            <ButtonLayoutDelete onClick={handleDeleteLayout} />
+                        </div>
                     </div>
+                    {isMapVisible && (
+                        <div
+                            style={{
+                                // width: 400, // Фиксированная ширина карты
+                                // height: '100%', // Карта занимает всю высоту
+                                marginTop: 24, // Отступ от камер
+                            }}
+                        >
+                            <div className={'headline small mapText'}>Карта</div>
+                            <LocationMap2 devices={selectedLayout?.devices || []} />
+                        </div>
+                    )}
                 </div>
-
                 {/*<Footer*/}
                 {/*    style={{*/}
                 {/*        width: '100%',*/}
@@ -442,7 +474,7 @@ const LayoutV2: FC<LayoutV2Props> = (props) => {
                     visible={showModalSelectDevicePhoto}
                     layoutViewType={layoutViewType}
                 />
-            </div>
+            </div>{' '}
         </>
     );
 };

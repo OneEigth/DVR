@@ -288,7 +288,7 @@
 
 .ant-dropdown{
     min-width: 240px !important;
-    inset: 64px 16px auto auto !important;
+    /*inset: 64px 16px auto auto !important;*/
 }
 
 .ant-row {
