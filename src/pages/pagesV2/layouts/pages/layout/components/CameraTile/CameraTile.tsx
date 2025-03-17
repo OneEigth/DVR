@@ -192,8 +192,8 @@ const CameraTile: React.FC<CameraTileProps> = ({
 // Компонент CameraGrid
 const CameraGrid: React.FC<CameraGridProps> = ({ viewType, devices, menuType, isMapVisible }) => {
     // Получаем конфигурацию или используем fallback
-    console.log(viewType);
     const config = layoutConfigs[`${viewType}`] || defaultConfig;
+    console.log(viewType);
 
     return (
         <GridContainer cols={config.cols} rows={config.rows} isMapVisible={isMapVisible}>

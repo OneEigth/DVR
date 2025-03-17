@@ -15,9 +15,9 @@
 }
 
 .body_layouts--medium{
-    flex-direction: row !important;
-    flex-wrap: wrap;
-    gap: 12px;
+    /*flex-direction: row !important;*/
+    /*flex-wrap: wrap;*/
+    gap: 20px;
 }
 
 
@@ -33,6 +33,19 @@
     gap: 16px;
     overflow: auto;
     padding-bottom: 8px;
+}
+
+.body_layouts-container_items--medium{
+    display: flex;
+    gap: 16px;
+    overflow: auto;
+    /*padding-bottom: 8px;*/
+    /*height: 164px;*/
+
+}
+
+.body_layouts-container.body_layouts-container--medium{
+    padding: 12px;
 }
 
 .body_layouts-container_items::-webkit-scrollbar {

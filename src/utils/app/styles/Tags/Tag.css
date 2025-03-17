@@ -11,6 +11,10 @@
     transition: all 0.3s;
 }
 
+.tag-base.border{
+    padding: 3px 8px;
+}
+
 /* Стили для различных состояний тегов */
 .tag-state-default {
     background-color: var(--gray-04);
@@ -41,6 +45,8 @@
     background-color: #FFFFFF;
     color: var(--gray-black);
 }
+
+
 
 /* Border стили */
 .tag-state-default.border {

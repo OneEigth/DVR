@@ -1,40 +1,65 @@
-
 .containerLayout {
     display: flex;
     cursor: pointer;
-    margin-bottom: 16px;
+    /*margin-bottom: 16px;*/
+    width: 100%; /* Занимаем всю доступную ширину */
+    overflow: visible; /* Убедимся, что ничего не обрезается */
+    align-items: center;
 }
 
-.containerLayout.big {
-    width: 100%;
+.containerLayoutDeviceImages {
+    display: flex;
+    gap: 8px; /* Отступ между элементами */
+    align-items: center;
+    overflow-x: auto; /* Горизонтальный скролл */
+    overflow-y: hidden; /* Скрываем вертикальный скролл */
+    max-width: 100%; /* Ограничиваем ширину контейнера */
+    width: 100%; /* Занимаем всю доступную ширину */
+    /*padding-bottom: 8px; !* Отступ для скролла *!*/
+    /*box-sizing: content-box;*/
+    /*position: relative;*/
+    /*scrollbar-gutter: stable;*/
+    /*scrollbar-width: thin; !* Тонкий скроллбар (для Firefox) *!*/
+    /*scrollbar-color: #888 transparent; !* Цвет скроллбара (для Firefox) *!*/
 }
 
-.containerLayout {
-    width: 616px;
-    margin-bottom: 0;
-    height: 200px;
+.containerLayoutDeviceImages::-webkit-scrollbar {
+    width: 8px; /* Ширина скроллбара */
+    height: 8px; /* Высота скроллбара */
+    /*margin-top: 8px !important;*/
+    z-index: 10;
 }
 
-.image.imageSmall{
-    height: 200px !important;
-    border-radius: 12px 0 0 12px !important;
+.containerLayoutDeviceImages::-webkit-scrollbar-track {
+    background: #CDD0D2; /* Цвет фона трека */
+    border-radius: 4px; /* Скругление углов трека */
 }
+
+.containerLayoutDeviceImages::-webkit-scrollbar-thumb {
+    background-color: #4D4E65; /* Цвет ползунка */
+    border-radius: 4px; /* Скругление углов ползунка */
+    /*border: 3px solid var(--gray-05); !* Обводка ползунка *!*/
+}
+
 
 .coverLayout {
-    flex: 1;
+    flex: 0 0 auto; /* Запрещаем сжатие и растяжение */
+    width: 258px; /* Ширина элемента */
 }
 
-.containerLayout .coverLayout {
-    width: 340px;
+.Layout > .ant-card-body{
+    width: auto;
 }
 
-.containerLayout .propertiesLayout {
-    width: 276px;
-    padding: 8px 12px;
+
+.propertiesLayout {
+    width: 260px;
+    margin-right: 8px;
 }
 
-.Layout {
-    width: 100%;
+.image.imageSmall {
+    height: 140px !important;
+    border-radius: var(--sizeS) !important;
 }
 
 .image {
@@ -42,39 +67,41 @@
     height: auto;
 }
 
-.propertiesLayout {
-    display: flex;
-}
-
 .nameLayout {
     display: flex;
     flex-direction: column;
-    width: 236px;
 }
 
-.iconLayout {
-    margin-right: 8px;
-}
-
-.deviceName_Layout {
-    font-size: 16px;
-    font-weight: bold;
-}
-
-.layoutComponentContainerTitle{
+.layoutComponentContainerTitle {
     display: flex;
-    margin-bottom: 16px;
+    margin-bottom: 22px;
     align-items: center;
 }
 
-.layoutComponentContainerFlex{
+.layoutComponentContainerFlex {
     display: flex;
     align-items: center;
-    margin-bottom: 8px;
     gap: 8px;
 }
 
-.layoutComponentText{
+.layoutComponentText {
     color: var(--gray-black);
+    width: 260px;
     word-wrap: break-word; /* Перенос текста на новую строку */
+}
+
+.remaining-counter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    height: 32px;
+    padding: 0 8px;
+    border-radius: 16px;
+    background-color: #e0e0e0;
+    color: #333;
+    font-size: 14px;
+    font-weight: bold;
+    margin-left: 8px;
+    flex-shrink: 0;
 }
