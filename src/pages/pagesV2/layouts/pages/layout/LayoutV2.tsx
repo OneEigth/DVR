@@ -21,11 +21,12 @@ import ModalSelectDevice from './components/modals/ModalSelectDevice/ModalSelect
 import ModalSelectDeviceAudio from './components/modals/ModalSelectDeviceAudio/ModalSelectDeviceAudio';
 import ModalSelectDevicePhoto from './components/modals/ModalSelectDevicePhoto/ModalSelectDevicePhoto';
 import { useLayoutsStore } from './api/layout/useLayoutsStore';
-import { useSelectedLayout } from './api/layout/useSelectedLayout';
 import { useStateNameDevice } from './api/layout/useStateNameDevice';
 import { useIsLayoutFormChanged } from './api/layout/useIsLayoutFormChanged';
 import CameraGrid from './components/CameraTile/CameraTile';
 import LocationMap2 from '../../../../../components/locationMap2/LocationMap2';
+import { LayoutType } from '../../../../../types/LayoutType';
+import { useSelectedLayout } from '../../../../../store/useSelectedLayout';
 
 interface LayoutV2Props {}
 
@@ -58,28 +59,58 @@ const LayoutV2: FC<LayoutV2Props> = (props) => {
         setActiveDeviceSize(size);
     };
 
-    useEffect(() => {
-        if (selectedLayout) {
-            localStorage.setItem('selectedLayout', JSON.stringify(selectedLayout));
-        }
-    }, [selectedLayout]);
+    // useEffect(() => {
+    //     if (selectedLayout) {
+    //         localStorage.setItem('selectedLayout', JSON.stringify(selectedLayout));
+    //     }
+    // }, [selectedLayout]);
 
-    useEffect(() => {
-        if (!selectedLayout) {
-            const savedLayout = localStorage.getItem('selectedLayout');
-            if (savedLayout) {
-                setSelectedLayout(JSON.parse(savedLayout));
-            } else {
-                fetchLayouts(); // Если данных нет в localStorage, загрузить из API
-            }
-        }
-    }, [selectedLayout, fetchLayouts, setSelectedLayout]);
+    // useEffect(() => {
+    //     const loadLayouts = async () => {
+    //         if (!selectedLayout) {
+    //             const savedLayout = localStorage.getItem('selectedLayout');
+    //             if (savedLayout) {
+    //                 try {
+    //                     const parsedLayout = JSON.parse(savedLayout);
+    //                     // Проверяем, существует ли макет в загруженных данных
+    //                     if (allLayouts.some((layout) => layout.uid === parsedLayout.uid)) {
+    //                         setSelectedLayout(parsedLayout);
+    //                     } else {
+    //                         localStorage.removeItem('selectedLayout');
+    //                         await fetchLayouts();
+    //                     }
+    //                 } catch (e) {
+    //                     console.error('Error parsing saved layout:', e);
+    //                 }
+    //             } else {
+    //                 await fetchLayouts();
+    //                 // Устанавливаем первый макет, если есть
+    //                 if (allLayouts.length > 0) {
+    //                     setSelectedLayout(allLayouts[0]);
+    //                 }
+    //             }
+    //         }
+    //     };
+    //
+    //     loadLayouts();
+    // }, [selectedLayout, fetchLayouts, setSelectedLayout, allLayouts]);
 
-    useEffect(() => {
-        if (state?.layout) {
-            setSelectedLayout(state.layout); // Обновляем состояние
-        }
-    }, [state, setSelectedLayout]);
+    // useEffect(() => {
+    //     if (!selectedLayout) {
+    //         const savedLayout = localStorage.getItem('selectedLayout');
+    //         if (savedLayout) {
+    //             setSelectedLayout(JSON.parse(savedLayout));
+    //         } else {
+    //             fetchLayouts(); // Если данных нет в localStorage, загрузить из API
+    //         }
+    //     }
+    // }, [selectedLayout, fetchLayouts, setSelectedLayout]);
+
+    // useEffect(() => {
+    //     if (state?.layout) {
+    //         setSelectedLayout(state.layout); // Обновляем состояние
+    //     }
+    // }, [state, setSelectedLayout]);
 
     useEffect(() => {
         if (selectedLayout) {
@@ -94,6 +125,31 @@ const LayoutV2: FC<LayoutV2Props> = (props) => {
             fetchLayouts(); // or any relevant function to initialize selectedLayout
         }
     }, [selectedLayout, fetchLayouts]);
+
+    useEffect(() => {
+        if (!selectedLayout && allLayouts.length > 0) {
+            setSelectedLayout(allLayouts[0]);
+        }
+    }, [allLayouts, selectedLayout, setSelectedLayout]);
+
+    // useEffect(() => {
+    //     // Загружаем выбранную раскладку из localStorage при инициализации
+    //     const savedLayout = localStorage.getItem('selectedLayout');
+    //     if (savedLayout) {
+    //         try {
+    //             const parsedLayout = JSON.parse(savedLayout);
+    //             setSelectedLayout(parsedLayout);
+    //         } catch (e) {
+    //             console.error('Ошибка при парсинге сохраненной раскладки:', e);
+    //             localStorage.removeItem('selectedLayout');
+    //         }
+    //     }
+    // }, [setSelectedLayout]);
+
+    // Функция для выбора новой раскладки
+    // const handleSelectLayout = (layout: LayoutType) => {
+    //     setSelectedLayout(layout); // Это автоматически обновит localStorage благодаря useEffect выше
+    // };
 
     const handleMenuClick = (key: string) => {
         setCurrentMenuItem(key);
@@ -128,6 +184,7 @@ const LayoutV2: FC<LayoutV2Props> = (props) => {
                 console.log('Layout deleted successfully:', response);
                 // Обновляем список раскладок
                 fetchLayouts();
+                localStorage.removeItem('selectedLayout');
                 // Сбрасываем выбранную раскладку
                 setSelectedLayout(null);
                 navigate('/layouts');
@@ -176,6 +233,8 @@ const LayoutV2: FC<LayoutV2Props> = (props) => {
     const handleCancelModalSelectDeviceAudio = () => {
         setShowModalSelectDeviceAudio(false);
     };
+
+    console.log(selectedLayout);
 
     return (
         <>
@@ -474,7 +533,7 @@ const LayoutV2: FC<LayoutV2Props> = (props) => {
                     visible={showModalSelectDevicePhoto}
                     layoutViewType={layoutViewType}
                 />
-            </div>{' '}
+            </div>
         </>
     );
 };

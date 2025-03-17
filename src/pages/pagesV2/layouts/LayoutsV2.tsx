@@ -140,41 +140,43 @@ const LayoutsV2: React.FC = () => {
                                 key={layoutItem.uid}
                                 className={`body_layouts-container body_layouts-container--${activeDeviceSize}`}
                             >
-                                <div>
-                                    {activeDeviceSize !== 'medium' && (
-                                        <div className="body_layouts-container_header">
-                                            <span
-                                                className={'title large'}
-                                                style={{ color: 'var(--gray-black)' }}
-                                            >
-                                                {layoutItem.description}
-                                            </span>
-                                            <span
-                                                className={'title large'}
-                                                style={{ color: 'var(--gray-02)', marginLeft: 8 }}
-                                            >
-                                                ({layoutItem.devices.length})
-                                            </span>
-                                            <ButtonAddPlus onClick={handleAddLayout} />
-                                        </div>
-                                    )}
+                                {activeDeviceSize !== 'medium' && (
+                                    <div className="body_layouts-container_header">
+                                        <span
+                                            className={'title large'}
+                                            style={{ color: 'var(--gray-black)' }}
+                                        >
+                                            {layoutItem.description}
+                                        </span>
+                                        <span
+                                            className={'title large'}
+                                            style={{ color: 'var(--gray-02)', marginLeft: 8 }}
+                                        >
+                                            ({layoutItem.devices.length})
+                                        </span>
+                                        <ButtonAddPlus onClick={handleAddLayout} />
+                                    </div>
+                                )}
 
-                                    {activeDeviceSize === 'medium' ? (
-                                        <div className={'body_layouts-container_items--medium'}>
-                                            <LayoutComponent layout={layoutItem} />
-                                        </div>
-                                    ) : (
-                                        <div className={'body_layouts-container_items'}>
-                                            {layoutItem.devices.map((device) => (
-                                                <LayoutComponentDevice
-                                                    key={device.ID}
-                                                    device={device}
-                                                    layout={layoutItem}
-                                                />
-                                            ))}
-                                        </div>
-                                    )}
-                                </div>
+                                {activeDeviceSize === 'medium' ? (
+                                    <div className={'body_layouts-container_items--medium'}>
+                                        <LayoutComponent
+                                            // key={device.ID}
+                                            // device={device}
+                                            layout={layoutItem}
+                                        />
+                                    </div>
+                                ) : (
+                                    <div className={'body_layouts-container_items'}>
+                                        {layoutItem.devices.map((device) => (
+                                            <LayoutComponentDevice
+                                                key={device.ID}
+                                                device={device}
+                                                layout={layoutItem}
+                                            />
+                                        ))}
+                                    </div>
+                                )}
                             </div>
                         ))}
                     </div>
