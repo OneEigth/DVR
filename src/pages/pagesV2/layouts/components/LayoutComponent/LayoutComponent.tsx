@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 
 import './styles.css';
 import { useAuthStore } from '../../../../../store/auth/auth';
@@ -8,14 +8,9 @@ import { LayoutType } from '../../../../../types/LayoutType';
 import img from '../../../../../components/layouts/camera/Video.png';
 import { Card } from 'antd';
 import { VIDEO_PREVIEW_URL } from '../../../../../const/const';
-import IconOnline from '../../../../../components/icons/iconOnline/IconOnline';
-import IconOffline from '../../../../../components/icons/iconOffline/IconOffline';
-import { Device } from '../../../../../types/Device';
-import { ReactComponent as CircleImg } from 'utils/app/assets/icons/circle.svg';
 import ButtonAddPlus from '../../../../../components/buttons/buttonAddPlus/ButtonAddPlus';
-import { ReactComponent as DeviceImg } from 'utils/app/assets/icons/Device.svg';
-import { ReactComponent as UserImg } from 'utils/app/assets/icons/User.svg';
 import Tag from '../../../../../utils/shared/components/Tags/Tag';
+import useHasScroll from '../../../../../utils/features/hooks/useHasScroll';
 
 interface LayoutComponentProps {
     // device: Device;
@@ -26,7 +21,7 @@ const LayoutComponent: FC<LayoutComponentProps> = ({ layout }) => {
     const { SmartDVRToken } = useAuthStore.getState();
     const navigate = useNavigate();
     const { selectedLayout, setSelectedLayout } = useSelectedLayout();
-
+    console.log(selectedLayout);
     const handleDeviceClick = (layout: LayoutType) => {
         navigate(`/layout/${layout.uid}`);
         setSelectedLayout(layout);
@@ -35,22 +30,11 @@ const LayoutComponent: FC<LayoutComponentProps> = ({ layout }) => {
     const handleError = (e: any) => {
         e.target.src = img; // Устанавливаем локальную картинку при ошибке загрузки
     };
+
+    const { containerRef, hasScroll } = useHasScroll();
+
     return (
         <div className="containerLayout" onClick={() => handleDeviceClick(layout)}>
-            <div className="coverLayout">
-                <Card
-                    className="Layout"
-                    key={layout?.id}
-                    cover={
-                        <img
-                            className="image imageSmall"
-                            alt={''}
-                            src={VIDEO_PREVIEW_URL(layout?.devices[0]?.UID, SmartDVRToken)}
-                        />
-                    }
-                    onError={handleError}
-                />
-            </div>
             <div className="propertiesLayout">
                 <span className="nameLayout">
                     <div className={'layoutComponentContainerTitle'}>
@@ -58,26 +42,46 @@ const LayoutComponent: FC<LayoutComponentProps> = ({ layout }) => {
                         <ButtonAddPlus onClick={() => {}} />
                     </div>
 
-                    <span className={'body medium layoutComponentText'} style={{ marginBottom: 8 }}>
-                        {layout.description}
+                    <span
+                        className={'body medium layoutComponentText'}
+                        style={{ marginBottom: 22 }}
+                    >
+                        {layout.description}, {layout.viewType}
                     </span>
+
                     <div className={'layoutComponentContainerFlex'}>
-                        <span className={'body large layoutComponentText'}>Вид: </span>
+                        <Tag state={'processing'} border={true}>
+                            {layout.devices.length} устройств
+                        </Tag>
                         <Tag state={'default'} border={true}>
-                            {layout.viewType}
+                            {layout.userName}
                         </Tag>
                     </div>
-                    <div className={'layoutComponentContainerFlex'}>
-                        <UserImg />
-                        <span className={'body large layoutComponentText'}>{layout.userName}</span>
-                    </div>
-                    <div className={'layoutComponentContainerFlex'}>
-                        <DeviceImg />
-                        <span className={'body large layoutComponentText'}>
-                            {layout.devices.length} устройств
-                        </span>
-                    </div>
                 </span>
+            </div>
+
+            <div
+                ref={containerRef}
+                className={'containerLayoutDeviceImages'}
+                style={{ paddingBottom: hasScroll ? '8px' : '0' }}
+            >
+                {layout?.devices.map((device) => (
+                    <div className="coverLayout">
+                        <Card
+                            className="Layout"
+                            key={device?.ID}
+                            cover={
+                                <img
+                                    className="image imageSmall"
+                                    alt={''}
+                                    src={VIDEO_PREVIEW_URL(device?.UID, SmartDVRToken)}
+                                />
+                            }
+                            onError={handleError}
+                        />
+                    </div>
+                ))}
+                {/*{remaining > 0 && <div className="remaining-counter">+{remaining}</div>}*/}
             </div>
         </div>
     );
