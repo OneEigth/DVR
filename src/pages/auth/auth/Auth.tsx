@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {Button, Form, type FormProps, Input, Radio} from 'antd';
 import '../styles/Style.css';
-import ButtonLang from "../../../components/buttons/buttonLang/ButtonLang";
 import flag from '../img/DVR2.png'
 import {useAuthStore} from "../../../store/auth/auth";
 import { useNavigate } from 'react-router-dom';
@@ -16,7 +15,7 @@ const onFinishFailed: FormProps<FieldType>["onFinishFailed"] = (errorInfo) => {
 };
 
 const LoginPage: React.FC = () =>{
-    const {login, isAuthenticated } = useAuthStore();
+    const {login} = useAuthStore();
     const navigate = useNavigate();
     const [selectedLang, setSelectedLang] = useState<string>('RU'); // Установка начального значения "RU"
 

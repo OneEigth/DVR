@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {Button,  Form,  Modal, Select} from 'antd';
 import {CloseOutlined} from "@ant-design/icons";
 import './styleEditDeviceGroup.css'
@@ -8,6 +8,7 @@ import {useAuthStore} from "../../../store/auth/auth";
 import {getGroupEditDevice} from "../../../api/devices/getEditDeviceGroup";
 import {Key} from "antd/lib/table/interface";
 import {useButtonsFromAllcams} from "../../../store/devices/useButtonsFromAllcams";
+import { message } from 'antd';
 
 const { Option } = Select;
 interface NewGroupModalProps {
@@ -26,55 +27,64 @@ const NewGroupModal: React.FC<NewGroupModalProps> = ({ visible, onOk, onCancel, 
 
 
     useEffect(() => {
-        if (groups.length === 0) {
+        if (visible && groups.length === 0) {
             fetchGroups();
         }
-    }, [fetchGroups, groups.length]);
+    }, [visible, fetchGroups, groups.length]);
 
     const handleParentUidChange = (value: string) => {
         setGroupUID(value);
     };
 
-    const getAllSubGroups = (group: Group): Group[] => {
-        const subGroups: Group[] = [];
+    const getAllSubGroups = useCallback((group: Group): Group[] => {
+        let subGroups: Group[] = [];
         group.sub_groups.forEach(subGroup => {
             subGroups.push(subGroup);
-            if (subGroup.sub_groups) {
-                subGroups.push(...getAllSubGroups(subGroup));
+            if (subGroup.sub_groups.length > 0) {
+                subGroups = [...subGroups, ...getAllSubGroups(subGroup)];
             }
         });
         return subGroups;
-    };
+    }, []);
 
     // Объединяем группы и подгруппы в один массив
-    const allGroups: Group[] = [];
-    groups.forEach(group => {
-        allGroups.push(group);
-        if (group.sub_groups) {
-            allGroups.push(...getAllSubGroups(group));
+    const allGroups = useMemo(() => {
+        let result: Group[] = [];
+        groups.forEach(group => {
+            result.push(group);
+            if (group.sub_groups) {
+                result = [...result, ...getAllSubGroups(group)];
+            }
+        });
+        return result;
+    }, [groups, getAllSubGroups]);
+
+
+    const handleOk = async () => {
+        if (!groupUID) {
+            message.error("Выберите группу!");
+            return;
         }
-    });
+        if (!user) {
+            message.error("Ошибка авторизации!");
+            return;
+        }
 
+        const groupData = { group_uid: groupUID, uid: device };
 
-    const handleOk = () => {
-        if (groupUID && user) {
-            const groupData = { group_uid: groupUID, uid: device };
-            getGroupEditDevice(SmartDVRToken, user.login, groupData as any)
-                .then((response) => {
-                    console.log('Group created:', response);
-                    if (response.success) {
-                        onOk(); // Close modal on success
-                        setIsEditDeviceGroupModal(false);
-                    } else {
-                        console.error('Error creating group:', response.error);
-                        console.log('Error creating group:', response.error)
-                    }
-                })
-                .catch((error) => {
-                    console.error('Error creating group:', error);
-                });
-        } else {
-            console.warn('Group name, parent UID, or user is missing');
+        try {
+            const response = await getGroupEditDevice(SmartDVRToken, user.login, groupData as any);
+
+            if (response.success) {
+                message.success("Группа устройств успешно обновлена!");
+                setIsEditDeviceGroupModal(false);
+                onOk();
+            } else {
+                message.error(`Ошибка: ${response.error}`);
+            }
+        } catch (error) {
+            message.error("Ошибка при обновлении группы устройств!");
+            console.error('Error updating group:', error);
         }
     };
 

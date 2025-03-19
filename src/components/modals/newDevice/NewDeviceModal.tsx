@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useCallback, useEffect, useMemo} from 'react';
 import {Button, Form, Input, Modal, Select} from 'antd';
 import {CloseOutlined} from "@ant-design/icons";
 import './styleDeviceGroup.css'
@@ -7,6 +7,7 @@ import {getCreateDevice} from "../../../api/devices/getCreateDevice";
 import {useGroupsStore} from "../../../store/groups/Groups";
 import {Group} from "../../../types/Group";
 import {useIsDeviceAdded} from "../../../store/devices/isDeviceAdded";
+import { message } from 'antd';
 
 const { Option } = Select;
 interface NewGroupModalProps {
@@ -21,59 +22,67 @@ const NewDeviceModal: React.FC<NewGroupModalProps> = ({ visible, onOk, onCancel 
     const {setIsDeviceAdded} = useIsDeviceAdded();
 
 
-    const getAllSubGroups = (group: Group): Group[] => {
-        const subGroups: Group[] = [];
+    const getAllSubGroups = useCallback((group: Group): Group[] => {
+        let subGroups: Group[] = [];
         group.sub_groups.forEach(subGroup => {
             subGroups.push(subGroup);
-            if (subGroup.sub_groups) {
-                subGroups.push(...getAllSubGroups(subGroup));
+            if (subGroup.sub_groups.length > 0) {
+                subGroups = [...subGroups, ...getAllSubGroups(subGroup)];
             }
         });
         return subGroups;
-    };
+    }, []);
 
-    // Объединяем группы и подгруппы в один массив
-    const allGroups: Group[] = [];
-    groups.forEach(group => {
-        allGroups.push(group);
-        if (group.sub_groups) {
-            allGroups.push(...getAllSubGroups(group));
-        }
-    });
+    const allGroups = useMemo(() => {
+        let result: Group[] = [];
+        groups.forEach(group => {
+            result.push(group);
+            if (group.sub_groups) {
+                result = [...result, ...getAllSubGroups(group)];
+            }
+        });
+        return result;
+    }, [groups, getAllSubGroups]);
 
     useEffect(() => {
-        if (groups.length === 0) {
+        if (visible && groups.length === 0) {
             fetchGroups();
         }
-    }, [fetchGroups, groups.length]);
+    }, [visible, fetchGroups, groups.length]);
 
-    const handleOk = () => {
+    const handleOk = async () => {
+        try {
+            const values = await form.validateFields();
 
-        form.validateFields().then(values => {
+            if (!values.name.trim()) {
+                message.error("Введите название устройства!");
+                return;
+            }
+            if (!values.DID.trim()) {
+                message.error("Введите серийный номер устройства!");
+                return;
+            }
             if (!values.groupUID) {
                 values.groupUID = '00000000-0000-0000-0000-000000000002';
             }
-            if (user) {
-                getCreateDevice(SmartDVRToken, user.login, values)
-                    .then((response) => {
-                        console.log('Device created:', response);
-                        if (response.success) {
-                            onOk(); // Close modal on success
-                            setIsDeviceAdded(true);
-                            form.resetFields();
-                        } else {
-                            console.error('Error creating device:', response.error);
-                        }
-                    })
-                    .catch((error) => {
-                        console.error('Error creating device:', error);
-                    });
-            } else {
-                console.warn('User is missing');
+            if (!user) {
+                message.error("Ошибка авторизации!");
+                return;
             }
-        }).catch(errorInfo => {
+
+            const response = await getCreateDevice(SmartDVRToken, user.login, values);
+
+            if (response.success) {
+                message.success("Устройство успешно добавлено!");
+                setIsDeviceAdded(true);
+                form.resetFields();
+                onOk();
+            } else {
+                message.error(`Ошибка: ${response.error}`);
+            }
+        } catch (errorInfo) {
             console.error('Validation failed:', errorInfo);
-        });
+        }
     };
 
     return (
