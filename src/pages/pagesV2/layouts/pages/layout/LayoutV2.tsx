@@ -3,7 +3,7 @@ import React, { FC, useEffect, useState } from 'react';
 import './styles.css';
 import { useAuthStore } from '../../../../../store/auth/auth';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Button, Form, Input, Layout } from 'antd';
+import { Button, Form, Input, Layout, message, Radio, RadioChangeEvent } from 'antd';
 
 import { DeleteLayouts } from '../../../../../api/layout/DeleteLayout';
 import MainMenu from '../../../../../components/menu/Menu';
@@ -27,8 +27,63 @@ import CameraGrid from './components/CameraTile/CameraTile';
 import LocationMap2 from '../../../../../components/locationMap2/LocationMap2';
 import { LayoutType } from '../../../../../types/LayoutType';
 import { useSelectedLayout } from '../../../../../store/useSelectedLayout';
+import ButtonLayoutViewStyle from './components/buttons/buttonLayout/buttonLayoutViewStyle';
+import styled from 'styled-components';
+import { UpdateLayouts } from '../../../../../api/layout/UpdateLayout';
+import DevicePositionModal from '../../../../../components/devicePosition/2x2/DevicePosition';
+import { Device } from '../../../../../types/Device';
+import SelectChecker from '../../../../../utils/shared/components/Select/SelectChecker/SelectChecker';
 
 interface LayoutV2Props {}
+const StyledRadioGroup = styled(Radio.Group)`
+    display: flex;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+    width: 100%;
+`;
+
+// Стилизация Radio.Button
+const StyledRadioButton = styled(Radio.Button)`
+    flex: 1;
+    text-align: center;
+    border: none;
+    padding: 8px 16px;
+    font-size: 14px;
+    line-height: 1.5;
+    cursor: pointer;
+
+    &.ant-radio-button-wrapper {
+        border-radius: 0;
+        border: none;
+        box-shadow: none;
+    }
+
+    &.ant-radio-button-wrapper-checked {
+        background-color: #4d4e65; /* Цвет для выделенной кнопки */
+        color: white;
+
+        &:hover {
+            background-color: #4d4e65; /* Цвет при наведении на выделенную кнопку */
+            color: white; /* Текст остается белым */
+        }
+    }
+
+    &:not(.ant-radio-button-wrapper-checked) {
+        background-color: #cdd0d2; /* Цвет для невыделенных кнопок */
+        color: #333;
+
+        &:hover {
+            background-color: #4d4e65; /* Цвет при наведении на невыделенную кнопку */
+            color: white; /* Текст становится белым */
+        }
+    }
+`;
+
+export const showHideOptions = [
+    { label: 'Показать', value: '1' },
+    { label: 'Скрыть', value: '2' },
+];
 
 const LayoutV2: FC<LayoutV2Props> = (props) => {
     const { SmartDVRToken, user } = useAuthStore();
@@ -38,6 +93,7 @@ const LayoutV2: FC<LayoutV2Props> = (props) => {
     const [formLeft] = Form.useForm();
     const [formRight] = Form.useForm();
     const [currentMenuItem, setCurrentMenuItem] = useState('layouts');
+    const [isEdit, setIsEdit] = useState(false);
     const [searchText, setSearchText] = useState('');
     const { allLayouts, fetchLayouts } = useLayoutsStore();
     const [showAddLayoutModal, setShowAddLayoutModal] = useState(false);
@@ -48,6 +104,26 @@ const LayoutV2: FC<LayoutV2Props> = (props) => {
     const [showModalSelectDevice, setShowModalSelectDevice] = useState(false);
     const [showModalSelectDeviceAudio, setShowModalSelectDeviceAudio] = useState(false);
     const [showModalSelectDevicePhoto, setShowModalSelectDevicePhoto] = useState(false);
+    const [messageApi, contextHolder] = message.useMessage();
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [selectedDevice, setSelectedDevice] = useState<Device | null>(null);
+    const [showHide, setShowHide] = useState<'1' | '2'>('1');
+
+    const [devices, setDevices] = useState<Device[]>(selectedLayout?.devices || []);
+
+    const [newPosition, setNewPosition] = useState<number | null>(null);
+
+    // const {
+    //     setIsLayoutFormChanged,
+    //     setIsNotSavedModalVisible,
+    //     isNotSavedModalVisible,
+    //     layoutViewType,
+    //     setLayoutViewType,
+    // } = useIsLayoutFormChanged();
+    const handleFilterButtonClick = (size: 'small' | 'medium' | 'big') => {
+        setActiveDeviceSize(size);
+    };
+    const [selectedType, setSelectedType] = useState(isShowNameDevice ? 'Show' : 'Hide');
     const {
         setIsLayoutFormChanged,
         setIsNotSavedModalVisible,
@@ -55,62 +131,20 @@ const LayoutV2: FC<LayoutV2Props> = (props) => {
         layoutViewType,
         setLayoutViewType,
     } = useIsLayoutFormChanged();
-    const handleFilterButtonClick = (size: 'small' | 'medium' | 'big') => {
-        setActiveDeviceSize(size);
+
+    // const [layoutViewType, setLayoutViewType] = useState<
+    //     '2x2' | '1х5' | '3х4' | '3х3' | '2х8' | '1х12' | '4х4'
+    // >('2x2');
+
+    // const handleSelectLayoutView = (size: '2x2' | '1х5' | '3х4' | '3х3' | '2х8' | '1х12' | '4х4') => {
+    //     setLayoutViewType(size);
+    // };
+
+    const handleRadioChange = (e: RadioChangeEvent) => {
+        const value = e.target.value;
+        setSelectedType(value);
+        setIsShowNameDevice(value === 'Show');
     };
-
-    // useEffect(() => {
-    //     if (selectedLayout) {
-    //         localStorage.setItem('selectedLayout', JSON.stringify(selectedLayout));
-    //     }
-    // }, [selectedLayout]);
-
-    // useEffect(() => {
-    //     const loadLayouts = async () => {
-    //         if (!selectedLayout) {
-    //             const savedLayout = localStorage.getItem('selectedLayout');
-    //             if (savedLayout) {
-    //                 try {
-    //                     const parsedLayout = JSON.parse(savedLayout);
-    //                     // Проверяем, существует ли макет в загруженных данных
-    //                     if (allLayouts.some((layout) => layout.uid === parsedLayout.uid)) {
-    //                         setSelectedLayout(parsedLayout);
-    //                     } else {
-    //                         localStorage.removeItem('selectedLayout');
-    //                         await fetchLayouts();
-    //                     }
-    //                 } catch (e) {
-    //                     console.error('Error parsing saved layout:', e);
-    //                 }
-    //             } else {
-    //                 await fetchLayouts();
-    //                 // Устанавливаем первый макет, если есть
-    //                 if (allLayouts.length > 0) {
-    //                     setSelectedLayout(allLayouts[0]);
-    //                 }
-    //             }
-    //         }
-    //     };
-    //
-    //     loadLayouts();
-    // }, [selectedLayout, fetchLayouts, setSelectedLayout, allLayouts]);
-
-    // useEffect(() => {
-    //     if (!selectedLayout) {
-    //         const savedLayout = localStorage.getItem('selectedLayout');
-    //         if (savedLayout) {
-    //             setSelectedLayout(JSON.parse(savedLayout));
-    //         } else {
-    //             fetchLayouts(); // Если данных нет в localStorage, загрузить из API
-    //         }
-    //     }
-    // }, [selectedLayout, fetchLayouts, setSelectedLayout]);
-
-    // useEffect(() => {
-    //     if (state?.layout) {
-    //         setSelectedLayout(state.layout); // Обновляем состояние
-    //     }
-    // }, [state, setSelectedLayout]);
 
     useEffect(() => {
         if (selectedLayout) {
@@ -131,25 +165,6 @@ const LayoutV2: FC<LayoutV2Props> = (props) => {
             setSelectedLayout(allLayouts[0]);
         }
     }, [allLayouts, selectedLayout, setSelectedLayout]);
-
-    // useEffect(() => {
-    //     // Загружаем выбранную раскладку из localStorage при инициализации
-    //     const savedLayout = localStorage.getItem('selectedLayout');
-    //     if (savedLayout) {
-    //         try {
-    //             const parsedLayout = JSON.parse(savedLayout);
-    //             setSelectedLayout(parsedLayout);
-    //         } catch (e) {
-    //             console.error('Ошибка при парсинге сохраненной раскладки:', e);
-    //             localStorage.removeItem('selectedLayout');
-    //         }
-    //     }
-    // }, [setSelectedLayout]);
-
-    // Функция для выбора новой раскладки
-    // const handleSelectLayout = (layout: LayoutType) => {
-    //     setSelectedLayout(layout); // Это автоматически обновит localStorage благодаря useEffect выше
-    // };
 
     const handleMenuClick = (key: string) => {
         setCurrentMenuItem(key);
@@ -234,7 +249,132 @@ const LayoutV2: FC<LayoutV2Props> = (props) => {
         setShowModalSelectDeviceAudio(false);
     };
 
-    console.log(selectedLayout);
+    const handleSelectLayoutView = (
+        size: '2x2' | '1х5' | '3х4' | '3х3' | '2х8' | '1х12' | '4х4' | '1х7',
+    ) => {
+        setLayoutViewType(size);
+    };
+
+    const getChangedFields = (
+        initialValues: { [key: string]: any },
+        currentValues: { [key: string]: any },
+    ) => {
+        const changedFields: { [key: string]: any } = {};
+        for (const key in currentValues) {
+            if (currentValues[key] !== initialValues[key]) {
+                changedFields[key] = currentValues[key];
+            }
+        }
+        return changedFields;
+    };
+
+    const handleLayoutSave = async () => {
+        setIsEdit(false);
+        if (user?.login) {
+            try {
+                const valuesLeft = await formLeft.validateFields();
+                const valuesRight = await formRight.validateFields();
+
+                const initialValuesLeft = {
+                    name: selectedLayout?.name,
+                };
+                const initialValuesRight = {
+                    description: selectedLayout?.description,
+                };
+
+                const changedValuesLeft = getChangedFields(initialValuesLeft, valuesLeft);
+                const changedValuesRight = getChangedFields(initialValuesRight, valuesRight);
+
+                if (selectedLayout?.uid && SmartDVRToken) {
+                    // Проверьте регистр 'uid' или 'UID'
+                    const updatedLayoutData = {
+                        ...selectedLayout,
+                        ...changedValuesLeft,
+                        ...changedValuesRight,
+                        viewType: layoutViewType,
+                    };
+
+                    console.log('Updated Layout Data:', updatedLayoutData);
+
+                    const response = await UpdateLayouts(
+                        SmartDVRToken,
+                        user.login,
+                        updatedLayoutData,
+                    );
+
+                    if (response?.success) {
+                        messageApi.success('Раскладка успешно обновлена');
+                        // setIsLayoutFormChanged(false);
+                        setSelectedLayout(updatedLayoutData);
+
+                        navigate('/layout/${selectedLayout.uid}', {
+                            state: { layout: updatedLayoutData },
+                        });
+                    } else {
+                        const errorMessage = response?.error || 'Неизвестная ошибка';
+                        messageApi.error('Ошибка обновления: ' + errorMessage);
+                    }
+                } else {
+                    messageApi.error('UID или SmartDVRToken отсутствует.');
+                }
+            } catch (error) {
+                console.error('Ошибка валидации или сохранения:', error);
+                messageApi.error('Ошибка валидации или сохранения');
+            }
+        } else {
+            messageApi.error('Пользователь не авторизован');
+        }
+    };
+
+    useEffect(() => {
+        if (selectedLayout) {
+            setLayoutViewType(selectedLayout.viewType);
+        }
+    }, [selectedLayout]);
+
+    const handleOk = async () => {
+        if (newPosition !== null && selectedDevice) {
+            const currentDeviceIndex = devices.findIndex((d) => d.UID === selectedDevice.UID);
+
+            if (currentDeviceIndex !== -1 && currentDeviceIndex !== newPosition - 1) {
+                const newDeviceIndex = newPosition - 1;
+                const updatedDevices = [...devices];
+
+                // Меняем местами устройства
+                const temp = updatedDevices[newDeviceIndex];
+                updatedDevices[newDeviceIndex] = updatedDevices[currentDeviceIndex];
+                updatedDevices[currentDeviceIndex] = temp;
+
+                // Обновляем локальное состояние
+                setDevices(updatedDevices);
+
+                // Создаем данные для обновления раскладки
+                const updatedLayoutData = {
+                    ...selectedLayout,
+                    devices: updatedDevices,
+                };
+
+                try {
+                    const response = await UpdateLayouts(
+                        SmartDVRToken,
+                        user?.login || '',
+                        updatedLayoutData,
+                    );
+
+                    if (response?.success) {
+                        message.success('Положение устройства успешно изменено!');
+                        setSelectedLayout(updatedLayoutData); // Обновляем состояние раскладки
+                    } else {
+                        message.error('Не удалось сохранить изменения.');
+                    }
+                } catch (error) {
+                    console.error('Ошибка при обновлении раскладки:', error);
+                    message.error('Произошла ошибка при сохранении.');
+                }
+            }
+            setIsModalVisible(false); // Закрываем модальное окно
+        }
+    };
 
     return (
         <>
@@ -284,18 +424,36 @@ const LayoutV2: FC<LayoutV2Props> = (props) => {
                             }}
                         >
                             <div className="left_HT">
-                                <Button
-                                    className="buttonLeft headline small"
-                                    icon={<ArrowLeftOutlined />}
-                                    style={{
-                                        border: 'none',
-                                        backgroundColor: 'none',
-                                        boxShadow: 'none',
-                                    }}
-                                    onClick={handleBackToAllDevice}
-                                >
-                                    Раскладка
-                                </Button>
+                                {isEdit ? (
+                                    <Button
+                                        className="buttonLeft headline small"
+                                        icon={<ArrowLeftOutlined />}
+                                        style={{
+                                            border: 'none',
+                                            backgroundColor: 'none',
+                                            boxShadow: 'none',
+                                        }}
+                                        onClick={() => (
+                                            setIsEdit(false),
+                                            setLayoutViewType(selectedLayout.viewType)
+                                        )}
+                                    >
+                                        Раскладка: режим редактирования
+                                    </Button>
+                                ) : (
+                                    <Button
+                                        className="buttonLeft headline small"
+                                        icon={<ArrowLeftOutlined />}
+                                        style={{
+                                            border: 'none',
+                                            backgroundColor: 'none',
+                                            boxShadow: 'none',
+                                        }}
+                                        onClick={handleBackToAllDevice}
+                                    >
+                                        Раскладка
+                                    </Button>
+                                )}
                             </div>
 
                             {/*<div className="center_LO">
@@ -303,15 +461,22 @@ const LayoutV2: FC<LayoutV2Props> = (props) => {
                                 </div>*/}
 
                             <div className="right_HT">
-                                <div className="rightSideToolBar">
-                                    <ButtonRecordVideo onClick={handleRecordVideo} />
-                                    <ButtonTakeAPhoto onClick={handleTakeAPhoto} />
-                                    <ButtonRecordAudio onClick={handleRecordAudio} />
-                                    <ButtonShowMap
-                                        onClick={handleShowMap}
-                                        isMapVisible={isMapVisible}
+                                {isEdit ? (
+                                    <ButtonLayoutViewStyle
+                                        onFilterButtonClick={handleSelectLayoutView}
+                                        activeButton={layoutViewType}
                                     />
-                                </div>
+                                ) : (
+                                    <div className="rightSideToolBar">
+                                        <ButtonRecordVideo onClick={handleRecordVideo} />
+                                        <ButtonTakeAPhoto onClick={handleTakeAPhoto} />
+                                        <ButtonRecordAudio onClick={handleRecordAudio} />
+                                        <ButtonShowMap
+                                            onClick={handleShowMap}
+                                            isMapVisible={isMapVisible}
+                                        />
+                                    </div>
+                                )}
                             </div>
                         </div>
 
@@ -336,10 +501,11 @@ const LayoutV2: FC<LayoutV2Props> = (props) => {
                                     }}
                                 >
                                     <CameraGrid
-                                        viewType={selectedLayout.viewType}
+                                        viewType={layoutViewType}
                                         devices={selectedLayout.devices}
-                                        menuType="layout"
+                                        menuType={isEdit ? 'edit' : 'layout'}
                                         isMapVisible={isMapVisible}
+                                        setIsModalVisible={setIsModalVisible}
                                     />
                                     {/*{selectedLayout.viewType === '2x2' && (*/}
                                     {/*    <CameraGrid2x2*/}
@@ -442,13 +608,60 @@ const LayoutV2: FC<LayoutV2Props> = (props) => {
                                     }}
                                     rules={[
                                         {
-                                            required: true,
+                                            required: false,
                                             message: 'Пожалуйста, введите описание',
                                         },
                                     ]}
                                 >
                                     <Input className="input" disabled />
                                 </Form.Item>
+                                {isEdit && (
+                                    <Form.Item
+                                        label={
+                                            <span
+                                                className="inputLabel title medium"
+                                                style={{
+                                                    flex: 1, // Занимает равное пространство
+                                                    margin: 0, // Убираем margin от antd
+                                                }}
+                                            >
+                                                Названия устройств
+                                            </span>
+                                        }
+                                        initialValue={showHide}
+                                        name="nameOfDevice"
+                                        rules={[
+                                            {
+                                                required: false,
+                                                message: 'Пожалуйста, введите Название',
+                                            },
+                                        ]}
+                                    >
+                                        <SelectChecker
+                                            // className={props.className}
+                                            value={showHide}
+                                            onChange={(event) => {
+                                                console.log(showHide);
+                                                setShowHide(event.target.value);
+                                            }}
+                                            options={showHideOptions}
+                                            // size={'middle'}
+                                        />
+                                        {/*<div style={{ width: '100%' }}>*/}
+                                        {/*    <StyledRadioGroup*/}
+                                        {/*        value={selectedType}*/}
+                                        {/*        onChange={handleRadioChange}*/}
+                                        {/*    >*/}
+                                        {/*        <StyledRadioButton value="Show">*/}
+                                        {/*            Показать*/}
+                                        {/*        </StyledRadioButton>*/}
+                                        {/*        <StyledRadioButton value="Hide">*/}
+                                        {/*            Скрыть*/}
+                                        {/*        </StyledRadioButton>*/}
+                                        {/*    </StyledRadioGroup>*/}
+                                        {/*</div>*/}
+                                    </Form.Item>
+                                )}
                             </Form>
                         </div>
                         {/*    <div className="formGroupRight">*/}
@@ -482,8 +695,35 @@ const LayoutV2: FC<LayoutV2Props> = (props) => {
                         {/*</div>*/}
 
                         <div className="DescButtons_layout">
-                            <ButtonLayoutEdit onClick={handleEditLayout} />
-                            <ButtonLayoutDelete onClick={handleDeleteLayout} />
+                            {isEdit ? (
+                                <Button
+                                    className={'button-base button-size-medium button-type-primary'}
+                                    // onClick={handleEditLayout}
+                                    onClick={() => handleLayoutSave()}
+                                >
+                                    Сохранить
+                                </Button>
+                            ) : (
+                                <>
+                                    <Button
+                                        className={
+                                            'button-base button-size-medium button-type-primary'
+                                        }
+                                        // onClick={handleEditLayout}
+                                        onClick={() => setIsEdit(true)}
+                                    >
+                                        Редактировать
+                                    </Button>
+                                    <Button
+                                        className={
+                                            'button-base button-size-medium button-type-primary button-state-danger'
+                                        }
+                                        onClick={handleDeleteLayout}
+                                    >
+                                        Удалить
+                                    </Button>
+                                </>
+                            )}
                         </div>
                     </div>
                     {isMapVisible && (
@@ -515,6 +755,20 @@ const LayoutV2: FC<LayoutV2Props> = (props) => {
                 {/*    /!* Ваш футер здесь *!/*/}
                 {/*</Footer>*/}
                 {/* Модальные окна */}
+
+                <DevicePositionModal
+                    visible={isModalVisible}
+                    onOk={() => {
+                        if (newPosition) {
+                            handleOk(); // Подтвердить выбор позиции
+                        }
+                        setIsModalVisible(false);
+                    }}
+                    onCancel={() => setIsModalVisible(false)}
+                    currentPosition={newPosition}
+                    onPositionChange={(value) => setNewPosition(value)} // Обновляем состояние позиции
+                    selectedDevices={selectedLayout.devices.map((device: Device) => device.UID)} // Передаем список UID устройств
+                />
                 <ModalSelectDevice
                     onOk={handleOkModalSelectDevice}
                     onCancel={handleCancelModalSelectDevice}

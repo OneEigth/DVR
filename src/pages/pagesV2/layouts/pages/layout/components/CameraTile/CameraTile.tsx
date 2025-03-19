@@ -34,6 +34,7 @@ interface CameraTileProps {
     onAddDevice: () => void;
     menuType: 'edit' | 'layout';
     style?: React.CSSProperties;
+    setIsModalVisible: (open: boolean) => void;
 }
 
 interface CameraGridProps {
@@ -41,6 +42,7 @@ interface CameraGridProps {
     devices: Device[];
     menuType: 'edit' | 'layout';
     isMapVisible: boolean;
+    setIsModalVisible: (open: boolean) => void;
 }
 
 // Конфигурация раскладок
@@ -189,6 +191,7 @@ const CameraTile: React.FC<CameraTileProps> = ({
     onAddDevice,
     menuType,
     style,
+    setIsModalVisible,
 }) => {
     const { SmartDVRToken } = useAuthStore();
     const [audio, setAudio] = useState(true);
@@ -207,7 +210,7 @@ const CameraTile: React.FC<CameraTileProps> = ({
                     {device ? (
                         <Dropdown
                             placement={'bottomRight'}
-                            overlay={menu(device, index, menuType)}
+                            overlay={menu(device, index, menuType, setIsModalVisible)}
                             trigger={['click']}
                             // getPopupContainer={(triggerNode) => triggerNode.parentElement!}
                             getPopupContainer={(triggerNode) =>
@@ -267,7 +270,13 @@ const CameraTile: React.FC<CameraTileProps> = ({
 };
 
 // Компонент CameraGrid
-const CameraGrid: React.FC<CameraGridProps> = ({ viewType, devices, menuType, isMapVisible }) => {
+const CameraGrid: React.FC<CameraGridProps> = ({
+    viewType,
+    devices,
+    menuType,
+    isMapVisible,
+    setIsModalVisible,
+}) => {
     // Получаем конфигурацию или используем fallback
     const config = layoutConfigs[`${viewType}`] || defaultConfig;
     // const config = layoutConfigs[`1х5`] || defaultConfig;
@@ -291,6 +300,7 @@ const CameraGrid: React.FC<CameraGridProps> = ({ viewType, devices, menuType, is
                     }}
                     isShowNameDevice={true}
                     menuType={menuType}
+                    setIsModalVisible={setIsModalVisible}
                     onAddDevice={() => {
                         // Логика добавления устройства
                         console.log('Add device');
@@ -442,11 +452,18 @@ const MapContainer = styled.div<{ cols: number }>`
 `;
 
 // Вспомогательная функция для меню
-const menu = (device: Device, index: number, menuType: 'edit' | 'layout') => (
+const menu = (
+    device: Device,
+    index: number,
+    menuType: 'edit' | 'layout',
+    setIsModalVisible: (open: boolean) => void,
+) => (
     <Menu>
         {menuType === 'edit' ? (
             <>
-                <Menu.Item key="edit">Изменить положение</Menu.Item>
+                <Menu.Item key="edit" onClick={() => setIsModalVisible(true)}>
+                    Изменить положение
+                </Menu.Item>
                 <Menu.Item key="delete" danger>
                     Удалить
                 </Menu.Item>

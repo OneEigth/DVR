@@ -12,6 +12,8 @@
 
 .DescButtons_layout{
     display: flex;
+    gap: 12px;
+    margin-top: 16px;
 }
 
 .mapText{
@@ -19,4 +21,14 @@
     padding-bottom: 6px;
     margin-bottom: 16px;
     margin-right: 24px;
+}
+
+.description_layout{
+    height: 40px;
+}
+
+.inputLabel{
+    min-width: 80px !important;
+    max-width: 200px !important;
+    width: auto !important;
 }

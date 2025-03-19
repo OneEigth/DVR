@@ -8,6 +8,6 @@ interface IsShowNameDeviceState {
 
 // Создание состояния с Zustand
 export const useStateNameDevice = create<IsShowNameDeviceState>((set) => ({
-    isShowNameDevice: false,
+    isShowNameDevice: true,
     setIsShowNameDevice: (isShowNameDevice: boolean) => set({ isShowNameDevice }),
 }));
