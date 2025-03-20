@@ -108,6 +108,7 @@ const LayoutV2: FC<LayoutV2Props> = (props) => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [selectedDevice, setSelectedDevice] = useState<Device | null>(null);
     const [showHide, setShowHide] = useState<'1' | '2'>('1');
+    // const [isShowNameDevice, setIsShowNameDevice] = useState(true); // Состояние для управления видимостью заголовков
 
     const [devices, setDevices] = useState<Device[]>(selectedLayout?.devices || []);
 
@@ -640,10 +641,12 @@ const LayoutV2: FC<LayoutV2Props> = (props) => {
                                         <SelectChecker
                                             // className={props.className}
                                             value={showHide}
-                                            onChange={(event) => {
-                                                console.log(showHide);
-                                                setShowHide(event.target.value);
-                                            }}
+                                            onChange={(event) =>
+                                                setIsShowNameDevice(event.target.value === '1')
+                                            }
+                                            //     setShowHide(event.target.value);
+                                            //     console.log(event.target.value, showHide);
+                                            // }}
                                             options={showHideOptions}
                                             // size={'middle'}
                                         />

@@ -11,6 +11,7 @@ import { ReactComponent as SvgPoints } from 'utils/app/assets/icons/Points.svg';
 import { ReactComponent as SvgSetting } from 'utils/app/assets/icons/Setting.svg';
 import { ReactComponent as SvgSoundOn } from 'utils/app/assets/icons/Sound-on.svg';
 import { ReactComponent as SvgSoundOff } from 'utils/app/assets/icons/Sound-off.svg';
+import { useStateNameDevice } from '../../api/layout/useStateNameDevice';
 
 // Интерфейсы для типизации
 interface CameraConfig {
@@ -187,7 +188,6 @@ const CameraTile: React.FC<CameraTileProps> = ({
     device,
     index,
     onMenuClick,
-    isShowNameDevice,
     onAddDevice,
     menuType,
     style,
@@ -195,11 +195,17 @@ const CameraTile: React.FC<CameraTileProps> = ({
 }) => {
     const { SmartDVRToken } = useAuthStore();
     const [audio, setAudio] = useState(true);
+    const [isHovered, setIsHovered] = useState(false);
+    const { isShowNameDevice, setIsShowNameDevice } = useStateNameDevice();
 
     return (
-        <TileContainer style={style}>
-            {device && (
-                <CameraHeader>
+        <TileContainer
+            style={style}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+        >
+            {(isShowNameDevice || isHovered) && device && (
+                <CameraHeader className={!isShowNameDevice && !isHovered ? 'hidden' : ''}>
                     <HeaderLeft>
                         <>
                             <Circle>{index + 1}</Circle>
@@ -212,7 +218,6 @@ const CameraTile: React.FC<CameraTileProps> = ({
                             placement={'bottomRight'}
                             overlay={menu(device, index, menuType, setIsModalVisible)}
                             trigger={['click']}
-                            // getPopupContainer={(triggerNode) => triggerNode.parentElement!}
                             getPopupContainer={(triggerNode) =>
                                 triggerNode.parentElement || document.body
                             }
@@ -226,11 +231,9 @@ const CameraTile: React.FC<CameraTileProps> = ({
                             >
                                 <SvgPoints />
                             </Button>
-                            {/*<ActionButton icon={<MoreOutlined />} />*/}
                         </Dropdown>
                     ) : (
                         ''
-                        // <Button onClick={onAddDevice}>+</Button>
                     )}
                 </CameraHeader>
             )}
@@ -245,8 +248,9 @@ const CameraTile: React.FC<CameraTileProps> = ({
                 <EmptyTile onClick={onAddDevice}>+</EmptyTile>
             )}
 
+            {/* Условие для отображения футера */}
             {device && (
-                <CameraFooter>
+                <CameraFooter className={!isShowNameDevice && !isHovered ? 'hidden' : ''}>
                     <FooterIcon onClick={() => console.log('Left icon clicked')}>
                         {audio ? (
                             <SvgSoundOn
@@ -280,6 +284,7 @@ const CameraGrid: React.FC<CameraGridProps> = ({
     // Получаем конфигурацию или используем fallback
     const config = layoutConfigs[`${viewType}`] || defaultConfig;
     // const config = layoutConfigs[`1х5`] || defaultConfig;
+    const { isShowNameDevice, setIsShowNameDevice } = useStateNameDevice();
 
     console.log(viewType);
 
@@ -298,7 +303,8 @@ const CameraGrid: React.FC<CameraGridProps> = ({
                         // Обработка действий
                         console.log(action, device, idx);
                     }}
-                    isShowNameDevice={true}
+                    isShowNameDevice={isShowNameDevice}
+                    // isShowNameDevice={true}
                     menuType={menuType}
                     setIsModalVisible={setIsModalVisible}
                     onAddDevice={() => {
