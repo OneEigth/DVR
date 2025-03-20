@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Layout, Button, Dropdown, Menu } from 'antd';
 import { MoreOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
@@ -8,6 +8,10 @@ import { Device } from '../../../../../../../types/Device';
 import { ONLINE_PLAY_LAYOUT_URL } from '../../../../../../../const/const';
 import './styles.css';
 import { ReactComponent as SvgPoints } from 'utils/app/assets/icons/Points.svg';
+import { ReactComponent as SvgSetting } from 'utils/app/assets/icons/Setting.svg';
+import { ReactComponent as SvgSoundOn } from 'utils/app/assets/icons/Sound-on.svg';
+import { ReactComponent as SvgSoundOff } from 'utils/app/assets/icons/Sound-off.svg';
+import { useStateNameDevice } from '../../api/layout/useStateNameDevice';
 
 // Интерфейсы для типизации
 interface CameraConfig {
@@ -31,6 +35,7 @@ interface CameraTileProps {
     onAddDevice: () => void;
     menuType: 'edit' | 'layout';
     style?: React.CSSProperties;
+    setIsModalVisible: (open: boolean) => void;
 }
 
 interface CameraGridProps {
@@ -38,6 +43,7 @@ interface CameraGridProps {
     devices: Device[];
     menuType: 'edit' | 'layout';
     isMapVisible: boolean;
+    setIsModalVisible: (open: boolean) => void;
 }
 
 // Конфигурация раскладок
@@ -64,6 +70,20 @@ const layoutConfigs: Record<string, LayoutConfig> = {
             { x: 2, y: 2, width: 1, height: 1 }, // Камера 6
         ],
     },
+    '1х7': {
+        cols: 4,
+        rows: 4,
+        cameras: [
+            { x: 0, y: 0, width: 3, height: 3 }, // Большая камера
+            { x: 3, y: 0, width: 1, height: 1 }, // Камера 2
+            { x: 3, y: 1, width: 1, height: 1 }, // Камера 3
+            { x: 3, y: 2, width: 1, height: 1 }, // Камера 4
+            { x: 0, y: 3, width: 1, height: 1 }, // Камера 5
+            { x: 1, y: 3, width: 1, height: 1 }, // Камера 6
+            { x: 2, y: 3, width: 1, height: 1 }, // Камера 7
+            { x: 3, y: 3, width: 1, height: 1 }, // Камера 8
+        ],
+    },
     '3х3': {
         cols: 3,
         rows: 3,
@@ -80,17 +100,32 @@ const layoutConfigs: Record<string, LayoutConfig> = {
         ],
     },
     '3х4': {
-        cols: 3,
+        cols: 4,
         rows: 4,
         cameras: [
-            // ... аналогично, 12 камер
+            { x: 0, y: 0, width: 2, height: 2 },
+            { x: 2, y: 0, width: 2, height: 2 },
+            { x: 0, y: 2, width: 2, height: 2 },
+            { x: 2, y: 2, width: 1, height: 1 },
+            { x: 3, y: 2, width: 1, height: 1 },
+            { x: 2, y: 3, width: 1, height: 1 },
+            { x: 3, y: 3, width: 1, height: 1 },
         ],
     },
     '2х8': {
-        cols: 2,
-        rows: 8,
+        cols: 4,
+        rows: 4,
         cameras: [
-            // ... 16 камер
+            { x: 0, y: 0, width: 2, height: 2 },
+            { x: 2, y: 0, width: 2, height: 2 },
+            { x: 0, y: 2, width: 1, height: 1 },
+            { x: 1, y: 2, width: 1, height: 1 },
+            { x: 2, y: 2, width: 1, height: 1 },
+            { x: 3, y: 2, width: 1, height: 1 },
+            { x: 0, y: 3, width: 1, height: 1 },
+            { x: 1, y: 3, width: 1, height: 1 },
+            { x: 2, y: 3, width: 1, height: 1 },
+            { x: 3, y: 3, width: 1, height: 1 },
         ],
     },
     '1х12': {
@@ -116,7 +151,22 @@ const layoutConfigs: Record<string, LayoutConfig> = {
         cols: 4,
         rows: 4,
         cameras: [
-            // ... 16 камер
+            { x: 0, y: 0, width: 1, height: 1 }, // Большая камера
+            { x: 1, y: 0, width: 1, height: 1 },
+            { x: 2, y: 0, width: 1, height: 1 },
+            { x: 3, y: 0, width: 1, height: 1 },
+            { x: 0, y: 1, width: 1, height: 1 },
+            { x: 1, y: 1, width: 1, height: 1 },
+            { x: 2, y: 1, width: 1, height: 1 },
+            { x: 3, y: 1, width: 1, height: 1 },
+            { x: 0, y: 2, width: 1, height: 1 },
+            { x: 1, y: 2, width: 1, height: 1 },
+            { x: 2, y: 2, width: 1, height: 1 },
+            { x: 3, y: 2, width: 1, height: 1 },
+            { x: 0, y: 3, width: 1, height: 1 },
+            { x: 1, y: 3, width: 1, height: 1 },
+            { x: 2, y: 3, width: 1, height: 1 },
+            { x: 3, y: 3, width: 1, height: 1 },
         ],
     },
 };
@@ -138,43 +188,55 @@ const CameraTile: React.FC<CameraTileProps> = ({
     device,
     index,
     onMenuClick,
-    isShowNameDevice,
     onAddDevice,
     menuType,
     style,
+    setIsModalVisible,
 }) => {
     const { SmartDVRToken } = useAuthStore();
+    const [audio, setAudio] = useState(true);
+    const [isHovered, setIsHovered] = useState(false);
+    const { isShowNameDevice, setIsShowNameDevice } = useStateNameDevice();
 
     return (
-        <TileContainer style={style}>
-            <CameraHeader>
-                <HeaderLeft>
-                    <Circle>{index + 1}</Circle>
-                    {isShowNameDevice && (
-                        <DeviceName>{device?.name || 'Нет устройства'}</DeviceName>
-                    )}
-                </HeaderLeft>
+        <TileContainer
+            style={style}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+        >
+            {(isShowNameDevice || isHovered) && device && (
+                <CameraHeader className={!isShowNameDevice && !isHovered ? 'hidden' : ''}>
+                    <HeaderLeft>
+                        <>
+                            <Circle>{index + 1}</Circle>
+                            <DeviceName>{device?.name || 'Нет устройства'}</DeviceName>
+                        </>
+                    </HeaderLeft>
 
-                {device ? (
-                    <Dropdown
-                        placement={'bottomRight'}
-                        overlay={menu(device, index, menuType)}
-                        trigger={['click']}
-                        getPopupContainer={(triggerNode) => triggerNode.parentElement!}
-                        overlayClassName="dropdown-camera"
-                    >
-                        <Button
-                            className={'button-base button-type-secondary button-size-small_icon'}
-                            style={{ border: '2px solid var(--button-secondary-text)' }}
+                    {device ? (
+                        <Dropdown
+                            placement={'bottomRight'}
+                            overlay={menu(device, index, menuType, setIsModalVisible)}
+                            trigger={['click']}
+                            getPopupContainer={(triggerNode) =>
+                                triggerNode.parentElement || document.body
+                            }
+                            overlayClassName="dropdown-camera"
                         >
-                            <SvgPoints />
-                        </Button>
-                        {/*<ActionButton icon={<MoreOutlined />} />*/}
-                    </Dropdown>
-                ) : (
-                    <Button onClick={onAddDevice}>+</Button>
-                )}
-            </CameraHeader>
+                            <Button
+                                className={
+                                    'button-base button-type-secondary button-size-small_icon'
+                                }
+                                style={{ border: '2px solid var(--button-secondary-text)' }}
+                            >
+                                <SvgPoints />
+                            </Button>
+                        </Dropdown>
+                    ) : (
+                        ''
+                    )}
+                </CameraHeader>
+            )}
 
             {device ? (
                 device.online ? (
@@ -183,16 +245,47 @@ const CameraTile: React.FC<CameraTileProps> = ({
                     <OfflineMessage>Устройство оффлайн</OfflineMessage>
                 )
             ) : (
-                <EmptyTile onClick={onAddDevice} />
+                <EmptyTile onClick={onAddDevice}>+</EmptyTile>
+            )}
+
+            {/* Условие для отображения футера */}
+            {device && (
+                <CameraFooter className={!isShowNameDevice && !isHovered ? 'hidden' : ''}>
+                    <FooterIcon onClick={() => console.log('Left icon clicked')}>
+                        {audio ? (
+                            <SvgSoundOn
+                                style={{ paddingLeft: 8 }}
+                                onClick={() => setAudio(false)}
+                            />
+                        ) : (
+                            <SvgSoundOff
+                                style={{ paddingLeft: 8, fill: '#FFF' }}
+                                onClick={() => setAudio(true)}
+                            />
+                        )}
+                    </FooterIcon>
+                    <FooterIcon onClick={() => console.log('Right icon clicked')}>
+                        <SvgSetting style={{ paddingRight: 8 }} />
+                    </FooterIcon>
+                </CameraFooter>
             )}
         </TileContainer>
     );
 };
 
 // Компонент CameraGrid
-const CameraGrid: React.FC<CameraGridProps> = ({ viewType, devices, menuType, isMapVisible }) => {
+const CameraGrid: React.FC<CameraGridProps> = ({
+    viewType,
+    devices,
+    menuType,
+    isMapVisible,
+    setIsModalVisible,
+}) => {
     // Получаем конфигурацию или используем fallback
     const config = layoutConfigs[`${viewType}`] || defaultConfig;
+    // const config = layoutConfigs[`1х5`] || defaultConfig;
+    const { isShowNameDevice, setIsShowNameDevice } = useStateNameDevice();
+
     console.log(viewType);
 
     return (
@@ -210,8 +303,10 @@ const CameraGrid: React.FC<CameraGridProps> = ({ viewType, devices, menuType, is
                         // Обработка действий
                         console.log(action, device, idx);
                     }}
-                    isShowNameDevice={true}
+                    isShowNameDevice={isShowNameDevice}
+                    // isShowNameDevice={true}
                     menuType={menuType}
+                    setIsModalVisible={setIsModalVisible}
                     onAddDevice={() => {
                         // Логика добавления устройства
                         console.log('Add device');
@@ -236,21 +331,24 @@ const GridWrapper = styled.div`
 
 const TileContainer = styled.div`
     position: relative;
-    background: #1a1c24;
+    background: var(--gray-01);
     border-radius: 8px;
-    overflow: hidden;
+    // overflow: hidden;
+    cursor: pointer;
 `;
 
 const CameraHeader = styled.div`
     position: absolute;
+    height: 20px;
+    border-radius: 8px 8px 0 0;
     top: 0;
     left: 0;
     right: 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 8px;
-    background: rgba(0, 0, 0, 0.6);
+    padding: 6px;
+    background: var(--primary-shadow-1);
     z-index: 1;
 `;
 
@@ -260,9 +358,38 @@ const HeaderLeft = styled.div`
     gap: 8px;
 `;
 
-const Circle = styled.div`
+const CameraFooter = styled.div`
+    height: 20px;
+    position: absolute;
+    border-radius: 0 0 8px 8px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px;
+    background: var(--primary);
+    // z-index: 1;
+`;
+
+const FooterIcon = styled.div`
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 24px;
     height: 24px;
+    color: #fff;
+
+    &:hover {
+        opacity: 0.8;
+    }
+`;
+
+const Circle = styled.div`
+    width: 20px;
+    height: 20px;
     background: #fff;
     border-radius: 50%;
     display: flex;
@@ -316,8 +443,8 @@ const EmptyTile = styled.div`
 const GridContainer = styled.div<{ cols: number; rows: number; isMapVisible: boolean }>`
     display: grid;
     grid-template-columns: ${({ cols, isMapVisible }) => `repeat(${cols}, 1fr) `};
-    grid-template-rows: repeat(${({ rows }) => rows}, minmax(200px, 1fr));
-    gap: 10px;
+    grid-template-rows: repeat(${({ rows }) => rows}, minmax(auto, 1fr));
+    gap: 8px;
     height: 100%;
     // padding: 10px;
 `;
@@ -331,11 +458,18 @@ const MapContainer = styled.div<{ cols: number }>`
 `;
 
 // Вспомогательная функция для меню
-const menu = (device: Device, index: number, menuType: 'edit' | 'layout') => (
+const menu = (
+    device: Device,
+    index: number,
+    menuType: 'edit' | 'layout',
+    setIsModalVisible: (open: boolean) => void,
+) => (
     <Menu>
         {menuType === 'edit' ? (
             <>
-                <Menu.Item key="edit">Изменить положение</Menu.Item>
+                <Menu.Item key="edit" onClick={() => setIsModalVisible(true)}>
+                    Изменить положение
+                </Menu.Item>
                 <Menu.Item key="delete" danger>
                     Удалить
                 </Menu.Item>
