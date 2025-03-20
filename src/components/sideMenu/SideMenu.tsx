@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useMemo, useState} from "react";
 import {useGroupsStore} from "../../store/groups/Groups";
 import {useSelectedGroup} from "../../store/groups/SelectedGroup";
 import IconLeftMenuUnsorded from "../icons/iconLeftMenu/IconLeftMenuUnsorded";
@@ -30,11 +30,16 @@ const SideMenu: React.FC= () => {
         const groupUID='00000000-0000-0000-0000-000000000003';
         setSelectedGroup(groupUID)
     }
-    useEffect(() => {
+    const fetchGroupsMemoized = useCallback(() => {
         if (groups.length === 0) {
             fetchGroups();
         }
     }, [fetchGroups, groups.length]);
+
+    useEffect(() => {
+        fetchGroupsMemoized();
+    }, [fetchGroupsMemoized]);
+
     const getGroupIcon = (uid:any) => {
         switch (uid) {
             case '00000000-0000-0000-0000-000000000002':
@@ -64,29 +69,33 @@ const SideMenu: React.FC= () => {
         setIsModalSettingGroupOpen(false);
     };
 
-    const sortedGroups = groups.sort((a, b) => {
-        if (a.uid === '00000000-0000-0000-0000-000000000002') return -1;
-        if (b.uid === '00000000-0000-0000-0000-000000000002') return 1;
-        return 0;
-    });
-    const filteredGroups = sortedGroups.filter(group => {
-        if (searchText.trim() === '') return true;
-        const groupMatches = group.name.toLowerCase().includes(searchText.toLowerCase());
-        const subGroupMatches = group.sub_groups.some(subGroup =>
-            subGroup.name.toLowerCase().includes(searchText.toLowerCase())
-        );
-        return groupMatches || subGroupMatches;
-    });
-    const getAllSubGroups = (group: Group): Group[] => {
-        const subGroups: Group[] = [];
+    const sortedGroups = useMemo(() => {
+        return [...groups].sort((a, b) => {
+            if (a.uid === '00000000-0000-0000-0000-000000000002') return -1;
+            if (b.uid === '00000000-0000-0000-0000-000000000002') return 1;
+            return 0;
+        });
+    }, [groups]);
+
+    const filteredGroups = useMemo(() => {
+        return sortedGroups.filter(group => {
+            if (searchText.trim() === '') return true;
+            return group.name.toLowerCase().includes(searchText.toLowerCase()) ||
+                group.sub_groups.some(subGroup => subGroup.name.toLowerCase().includes(searchText.toLowerCase()));
+        });
+    }, [sortedGroups, searchText]);
+
+    const getAllSubGroups = useCallback((group: Group): Group[] => {
+        let subGroups: Group[] = [];
         group.sub_groups.forEach(subGroup => {
             subGroups.push(subGroup);
-            if (subGroup.sub_groups) {
-                subGroups.push(...getAllSubGroups(subGroup));
+            if (subGroup.sub_groups.length > 0) {
+                subGroups = [...subGroups, ...getAllSubGroups(subGroup)];
             }
         });
         return subGroups;
-    };
+    }, []);
+
     // Объединяем группы и подгруппы в один массив
     const allGroups: Group[] = [];
     groups.forEach(group => {
@@ -97,30 +106,26 @@ const SideMenu: React.FC= () => {
 
     });
     //Рекурсивная функция для генерации подменю, чтобы обрабатывать любые уровни вложенности подгрупп.
-    const generateSubMenu = (group: Group): React.ReactNode => {
+    const generateSubMenu = useCallback((group: Group): React.ReactNode => {
         const isSelected = selectedGroup === group.uid;
-
-
         return (
             <SubMenu
                 key={group.uid}
-
                 title={
-                    <div style={{display:"flex",flexDirection:"row", justifyContent:"space-between"}}>
+                    <div style={{display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
                         <>{group.name}</>
-                         <>{group.sub_groups.length > 0 && (openKeys.includes(group.uid) ? <UpOutlined/> :
-                        <DownOutlined/>)}</>
+                        <>{group.sub_groups.length > 0 && (openKeys.includes(group.uid) ? <UpOutlined/> : <DownOutlined/>)}</>
                     </div>
                 }
-
-
                 icon={getGroupIcon(group.uid)}
                 onTitleClick={() => handleGroupClick(group.uid)}
                 style={{backgroundColor: isSelected ? '#D3DADF' : '#F1F1F1'}}>
-                {group.sub_groups.map((subgroup) => generateSubMenu(subgroup))}
+                {group.sub_groups.map(subgroup => generateSubMenu(subgroup))}
             </SubMenu>
         );
-    }
+    }, [selectedGroup, openKeys]);
+
+
     const handleOpenChange = (keys: string[]) => {
         setOpenKeys(keys);
     };

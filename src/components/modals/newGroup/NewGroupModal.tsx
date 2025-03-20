@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {Button, Form, Input, Modal, Select} from 'antd';
 import {CloseOutlined} from "@ant-design/icons";
 import './styleModalGroup.css'
@@ -6,6 +6,7 @@ import {useGroupsStore} from "../../../store/groups/Groups";
 import {Group} from "../../../types/Group";
 import {CreateGroup} from "../../../api/groups/CreateGroup";
 import {useAuthStore} from "../../../store/auth/auth";
+import { message } from 'antd';
 
 const { Option } = Select;
 interface NewGroupModalProps {
@@ -23,31 +24,33 @@ const NewGroupModal: React.FC<NewGroupModalProps> = ({ visible, onOk, onCancel }
 
 
     useEffect(() => {
-        if (groups.length === 0) {
+        if (visible && groups.length === 0) {
             fetchGroups();
         }
-    }, [fetchGroups, groups.length]);
+    }, [visible, fetchGroups, groups.length]);
 
-    const getAllSubGroups = (group: Group): Group[] => {
-        const subGroups: Group[] = [];
+    const getAllSubGroups = useCallback((group: Group): Group[] => {
+        let subGroups: Group[] = [];
         group.sub_groups.forEach(subGroup => {
             subGroups.push(subGroup);
-            if (subGroup.sub_groups) {
-                subGroups.push(...getAllSubGroups(subGroup));
+            if (subGroup.sub_groups.length > 0) {
+                subGroups = [...subGroups, ...getAllSubGroups(subGroup)];
             }
         });
         return subGroups;
-    };
+    }, []);
 
     // Объединяем группы и подгруппы в один массив
-    const allGroups: Group[] = [];
-    groups.forEach(group => {
-        allGroups.push(group);
-        if (group.sub_groups) {
-            allGroups.push(...getAllSubGroups(group));
-        }
-
-    });
+    const allGroups = useMemo(() => {
+        let result: Group[] = [];
+        groups.forEach(group => {
+            result.push(group);
+            if (group.sub_groups) {
+                result = [...result, ...getAllSubGroups(group)];
+            }
+        });
+        return result;
+    }, [groups, getAllSubGroups]);
 
 
     const handleParentUidChange = (value: string) => {
@@ -60,25 +63,35 @@ const NewGroupModal: React.FC<NewGroupModalProps> = ({ visible, onOk, onCancel }
 
 
     const handleOk = () => {
-        if (groupName && parentUid && user) {
-            const groupData = { name: groupName, parent_uid: parentUid };
-            CreateGroup(SmartDVRToken, user.login, groupData)
-                .then((response) => {
-                    console.log('Group created:', response);
-                    if (response.success) {
-                        onOk(); // Close modal on success
-                    } else {
-                        console.error('Error creating group:', response.error);
-                        console.log('Error creating group:', response.error)
-                    }
-                })
-                .catch((error) => {
-                    console.error('Error creating group:', error);
-                });
-        } else {
-            console.warn('Group name, parent UID, or user is missing');
+        if (!groupName.trim()) {
+            message.error("Введите название группы!");
+            return;
         }
+        if (!parentUid) {
+            message.error("Выберите родительскую группу!");
+            return;
+        }
+        if (!user) {
+            message.error("Ошибка авторизации!");
+            return;
+        }
+
+        const groupData = { name: groupName, parent_uid: parentUid };
+        CreateGroup(SmartDVRToken, user.login, groupData)
+            .then((response) => {
+                if (response.success) {
+                    message.success("Группа успешно создана!");
+                    onOk();
+                } else {
+                    message.error(`Ошибка: ${response.error}`);
+                }
+            })
+            .catch((error) => {
+                message.error("Ошибка при создании группы!");
+                console.error('Error creating group:', error);
+            });
     };
+
     return (
             <Modal
                 title={

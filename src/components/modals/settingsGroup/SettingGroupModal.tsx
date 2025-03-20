@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {Button, ConfigProvider, Drawer, Input, Menu, Modal} from 'antd';
 import './styleSettingModalGroup.css'
 import {useGroupsStore} from "../../../store/groups/Groups";
@@ -14,6 +14,7 @@ import IconPlus from "../../icons/iconPus/IconPlus";
 import IconDelete from "../../icons/iconDelete/IconDelete";
 import IconEdit from "../../icons/iconEdit/IconEdit";
 import NewGroupModal2 from "../newGroup2/NewGroupModal2";
+import { message } from 'antd';
 
 interface SettingGroupModalProps {
     visible: boolean;
@@ -27,16 +28,18 @@ const SettingGroupModal: React.FC<SettingGroupModalProps> = ({ visible, onOk, on
     const [editingGroup, setEditingGroup] = useState<String | null>(null);
     const [newGroupName, setNewGroupName] = useState<string>('');
     const [newAddGroupName, setAddNewGroupName] = useState<Group>();
+
     const [isModalDeleteModalGroup, setIsModalDeleteModalGroup] = useState(false);
     const [isModalNewGroupOpen, setIsModalNewGroupOpen] = useState(false);
+
     const [selectedGroup, setSelectedGroup] = useState<Group>();
     const { user, SmartDVRToken } = useAuthStore();
 
     useEffect(() => {
-        if (groups.length === 0) {
+        if (visible) {
             fetchGroups();
         }
-    }, [fetchGroups, groups.length]);
+    }, [visible, fetchGroups]);
 
     const getGroupIcon = (uid:any) => {
         switch (uid) {
@@ -47,7 +50,7 @@ const SettingGroupModal: React.FC<SettingGroupModalProps> = ({ visible, onOk, on
         }
     };
 
-    const generateSubMenu = (group: Group): React.ReactNode => {
+    const generateSubMenu =  useCallback((group: Group): React.ReactNode => {
         const isEditing = editingGroup === group.uid;
 
         return (
@@ -70,29 +73,32 @@ const SettingGroupModal: React.FC<SettingGroupModalProps> = ({ visible, onOk, on
             </SubMenu>
         );
     }
+        ,[editingGroup]);
 
     const handleEditGroup = (group: Group) => {
         setEditingGroup(group.uid);
         setNewGroupName(group.name);
     };
 
-    const handleSaveGroup = (group: Group) => {
-        if (group.name && group.uid && SmartDVRToken && user) {
-            const groupData = { uid: group.uid, name: newGroupName };
-            UpdateGroup(SmartDVRToken, user.login, groupData)
-                .then(response => {
-                    if (response.success) {
-                        fetchGroups();
-                        setEditingGroup(null);
-                    } else {
-                        console.error('Error updating group:', response.error);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error updating group:', error);
-                });
-        } else {
-            console.warn('Group UID, Name, or user is missing');
+    const handleSaveGroup = async (group: Group) => {
+        if (!group.name || !group.uid || !SmartDVRToken || !user) {
+            message.error('Ошибка: Не хватает данных для обновления группы');
+            return;
+        }
+
+        try {
+            const response = await UpdateGroup(SmartDVRToken, user.login, { uid: group.uid, name: newGroupName });
+
+            if (response.success) {
+                message.success("Группа успешно обновлена");
+                setEditingGroup(null);
+                fetchGroups();
+            } else {
+                message.error(`Ошибка обновления: ${response.error}`);
+            }
+        } catch (error) {
+            message.error("Ошибка при обновлении группы");
+            console.error('Error updating group:', error);
         }
     };
 

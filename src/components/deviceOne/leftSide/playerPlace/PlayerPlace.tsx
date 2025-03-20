@@ -1,6 +1,5 @@
 import React from "react";
 import "./style.css"
-import VideoPlayer from "../../../videos/VideoPlayer";
 import {Device} from "../../../../types/Device";
 import {useAuthStore} from "../../../../store/auth/auth";
 import {ONLINE_PLAY_URL} from "../../../../const/const";

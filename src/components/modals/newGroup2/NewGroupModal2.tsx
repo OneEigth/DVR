@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {Button, Form, Input, Modal, Select} from 'antd';
 import {CloseOutlined} from "@ant-design/icons";
 import './styleModalGroup2.css'
@@ -6,6 +6,7 @@ import {useGroupsStore} from "../../../store/groups/Groups";
 import {Group} from "../../../types/Group";
 import {CreateGroup} from "../../../api/groups/CreateGroup";
 import {useAuthStore} from "../../../store/auth/auth";
+import { message } from 'antd';
 
 interface NewGroupModalProps {
     visible: boolean;
@@ -24,10 +25,12 @@ const NewGroupModal2: React.FC<NewGroupModalProps> = ({ visible, onOk, onCancel,
     console.log('Group.name '+ group?.name)
 
     useEffect(() => {
-        if (groups.length === 0) {
+        if (visible && groups.length === 0) {
             fetchGroups();
         }
-    }, [fetchGroups, groups.length]);
+    }, [visible, fetchGroups, groups.length]);
+
+
     const getAllSubGroups = (group: Group): Group[] => {
         const subGroups: Group[] = [];
         group.sub_groups.forEach(subGroup => {
@@ -40,37 +43,49 @@ const NewGroupModal2: React.FC<NewGroupModalProps> = ({ visible, onOk, onCancel,
     };
 
     // Объединяем группы и подгруппы в один массив
-    const allGroups: Group[] = [];
-    groups.forEach(group => {
-        allGroups.push(group);
-        if (group.sub_groups) {
-            allGroups.push(...getAllSubGroups(group));
-        }
-
-    });
+    const allGroups = useMemo(() => {
+        let result: Group[] = [];
+        groups.forEach(group => {
+            result.push(group);
+            if (group.sub_groups) {
+                result = [...result, ...getAllSubGroups(group)];
+            }
+        });
+        return result;
+    }, [groups, getAllSubGroups]);
 
     const handleGroupNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setGroupName(e.target.value);
     };
 
-    const handleOk = () => {
-        if (groupName  && user && group) {
-            const groupData = { name: groupName, parent_uid: group.uid };
-            CreateGroup(SmartDVRToken, user.login, groupData)
-                .then((response) => {
-                    console.log('Group created:', response);
-                    if (response.success) {
-                        onOk(); // Close modal on success
-                    } else {
-                        console.error('Error creating group:', response.error);
-                        console.log('Error creating group:', response.error)
-                    }
-                })
-                .catch((error) => {
-                    console.error('Error creating group:', error);
-                });
-        } else {
-            console.warn('Group name, parent UID, or user is missing');
+    const handleOk = async () => {
+        if (!groupName.trim()) {
+            message.error("Введите название группы!");
+            return;
+        }
+        if (!group) {
+            message.error("Ошибка: Родительская группа не выбрана!");
+            return;
+        }
+        if (!user) {
+            message.error("Ошибка авторизации!");
+            return;
+        }
+
+        const groupData = { name: groupName, parent_uid: group.uid };
+
+        try {
+            const response = await CreateGroup(SmartDVRToken, user.login, groupData);
+
+            if (response.success) {
+                message.success("Группа успешно создана!");
+                onOk();
+            } else {
+                message.error(`Ошибка: ${response.error}`);
+            }
+        } catch (error) {
+            message.error("Ошибка при создании группы!");
+            console.error('Error creating group:', error);
         }
     };
 
