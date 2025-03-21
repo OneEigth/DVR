@@ -30,9 +30,9 @@ import { useSelectedLayout } from '../../../../../store/useSelectedLayout';
 import ButtonLayoutViewStyle from './components/buttons/buttonLayout/buttonLayoutViewStyle';
 import styled from 'styled-components';
 import { UpdateLayouts } from '../../../../../api/layout/UpdateLayout';
-import DevicePositionModal from '../../../../../components/devicePosition/2x2/DevicePosition';
 import { Device } from '../../../../../types/Device';
 import SelectChecker from '../../../../../utils/shared/components/Select/SelectChecker/SelectChecker';
+import DevicePositionModal from './components/DevicePosition/DevicePosition';
 
 interface LayoutV2Props {}
 const StyledRadioGroup = styled(Radio.Group)`
@@ -132,6 +132,28 @@ const LayoutV2: FC<LayoutV2Props> = (props) => {
         layoutViewType,
         setLayoutViewType,
     } = useIsLayoutFormChanged();
+
+    const [swapPosition, setSwapPosition] = useState<{
+        device: Device;
+        index: number;
+    } | null>(null);
+
+    const handlePositionChange = (oldIndex: number, newIndex: number) => {
+        if (!selectedLayout) return;
+
+        const newDevices = [...selectedLayout.devices];
+        // Меняем местами устройства
+        [newDevices[oldIndex], newDevices[newIndex]] = [newDevices[newIndex], newDevices[oldIndex]];
+
+        // Обновляем состояние раскладки
+        setSelectedLayout({
+            ...selectedLayout,
+            devices: newDevices,
+        });
+
+        // Обновляем локальное состояние devices
+        setDevices(newDevices);
+    };
 
     // const [layoutViewType, setLayoutViewType] = useState<
     //     '2x2' | '1х5' | '3х4' | '3х3' | '2х8' | '1х12' | '4х4'
@@ -333,50 +355,6 @@ const LayoutV2: FC<LayoutV2Props> = (props) => {
         }
     }, [selectedLayout]);
 
-    const handleOk = async () => {
-        if (newPosition !== null && selectedDevice) {
-            const currentDeviceIndex = devices.findIndex((d) => d.UID === selectedDevice.UID);
-
-            if (currentDeviceIndex !== -1 && currentDeviceIndex !== newPosition - 1) {
-                const newDeviceIndex = newPosition - 1;
-                const updatedDevices = [...devices];
-
-                // Меняем местами устройства
-                const temp = updatedDevices[newDeviceIndex];
-                updatedDevices[newDeviceIndex] = updatedDevices[currentDeviceIndex];
-                updatedDevices[currentDeviceIndex] = temp;
-
-                // Обновляем локальное состояние
-                setDevices(updatedDevices);
-
-                // Создаем данные для обновления раскладки
-                const updatedLayoutData = {
-                    ...selectedLayout,
-                    devices: updatedDevices,
-                };
-
-                try {
-                    const response = await UpdateLayouts(
-                        SmartDVRToken,
-                        user?.login || '',
-                        updatedLayoutData,
-                    );
-
-                    if (response?.success) {
-                        message.success('Положение устройства успешно изменено!');
-                        setSelectedLayout(updatedLayoutData); // Обновляем состояние раскладки
-                    } else {
-                        message.error('Не удалось сохранить изменения.');
-                    }
-                } catch (error) {
-                    console.error('Ошибка при обновлении раскладки:', error);
-                    message.error('Произошла ошибка при сохранении.');
-                }
-            }
-            setIsModalVisible(false); // Закрываем модальное окно
-        }
-    };
-
     return (
         <>
             <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -409,19 +387,12 @@ const LayoutV2: FC<LayoutV2Props> = (props) => {
                         <div
                             className="header_layout"
                             style={{
-                                // flex: 1,
                                 display: 'flex',
-                                // flexDirection: 'column',
-                                // marginRight: isMapVisible ? 400 : 0, // Отступ для карты
                                 transition: 'margin-right 0.3s ease', // Плавное появление карты
-
-                                // display: 'flex',
                                 justifyContent: 'space-between',
                                 paddingBottom: 8,
                                 borderBottom: '1px solid var(--divider-2)',
                                 marginBottom: 16,
-                                // flex: isMapVisible ? 2 : 3, // Левый блок занимает больше пространства при скрытой карте
-                                // transition: 'flex 0.3s ease', // Плавное изменение ширины
                             }}
                         >
                             <div className="left_HT">
@@ -456,10 +427,6 @@ const LayoutV2: FC<LayoutV2Props> = (props) => {
                                     </Button>
                                 )}
                             </div>
-
-                            {/*<div className="center_LO">
-                                    <ButtonLayoutViewStyle onFilterButtonClick={handleSelectLayoutView}/>
-                                </div>*/}
 
                             <div className="right_HT">
                                 {isEdit ? (
@@ -503,10 +470,16 @@ const LayoutV2: FC<LayoutV2Props> = (props) => {
                                 >
                                     <CameraGrid
                                         viewType={layoutViewType}
-                                        devices={selectedLayout.devices}
+                                        devices={devices}
                                         menuType={isEdit ? 'edit' : 'layout'}
                                         isMapVisible={isMapVisible}
                                         setIsModalVisible={setIsModalVisible}
+                                        onTileClick={(index) => {
+                                            if (isEdit) {
+                                                setSelectedDevice(selectedLayout?.devices[index]);
+                                                // setIsModalVisible(true);
+                                            }
+                                        }}
                                     />
                                     {/*{selectedLayout.viewType === '2x2' && (*/}
                                     {/*    <CameraGrid2x2*/}
@@ -761,17 +734,30 @@ const LayoutV2: FC<LayoutV2Props> = (props) => {
 
                 <DevicePositionModal
                     visible={isModalVisible}
-                    onOk={() => {
-                        if (newPosition) {
-                            handleOk(); // Подтвердить выбор позиции
-                        }
-                        setIsModalVisible(false);
-                    }}
+                    onOk={() => setIsModalVisible(false)}
                     onCancel={() => setIsModalVisible(false)}
-                    currentPosition={newPosition}
-                    onPositionChange={(value) => setNewPosition(value)} // Обновляем состояние позиции
-                    selectedDevices={selectedLayout.devices.map((device: Device) => device.UID)} // Передаем список UID устройств
+                    devices={selectedLayout?.devices || []}
+                    currentDevice={selectedDevice}
+                    setIsModalVisible={setIsModalVisible}
+                    onPositionChange={handlePositionChange}
+                    currentPosition={devices.findIndex((d) => d.UID === selectedDevice?.UID) + 1}
+                    selectedDevices={selectedLayout?.devices.map((d: any) => d.UID) || []}
+                    layoutViewType={layoutViewType}
                 />
+
+                {/*<DevicePositionModal*/}
+                {/*    visible={isModalVisible}*/}
+                {/*    onOk={() => {*/}
+                {/*        if (newPosition) {*/}
+                {/*            handleOk(); // Подтвердить выбор позиции*/}
+                {/*        }*/}
+                {/*        setIsModalVisible(false);*/}
+                {/*    }}*/}
+                {/*    onCancel={() => setIsModalVisible(false)}*/}
+                {/*    currentPosition={newPosition}*/}
+                {/*    onPositionChange={(value) => setNewPosition(value)} // Обновляем состояние позиции*/}
+                {/*    selectedDevices={selectedLayout.devices.map((device: Device) => device.UID)} // Передаем список UID устройств*/}
+                {/*/>*/}
                 <ModalSelectDevice
                     onOk={handleOkModalSelectDevice}
                     onCancel={handleCancelModalSelectDevice}
