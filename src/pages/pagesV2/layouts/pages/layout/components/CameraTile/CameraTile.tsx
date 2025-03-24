@@ -12,6 +12,7 @@ import { ReactComponent as SvgSetting } from 'utils/app/assets/icons/Setting.svg
 import { ReactComponent as SvgSoundOn } from 'utils/app/assets/icons/Sound-on.svg';
 import { ReactComponent as SvgSoundOff } from 'utils/app/assets/icons/Sound-off.svg';
 import { useStateNameDevice } from '../../api/layout/useStateNameDevice';
+import useRecordingStore from '../../api/recording/recordingStore';
 
 // Интерфейсы для типизации
 interface CameraConfig {
@@ -36,6 +37,11 @@ interface CameraTileProps {
     menuType: 'edit' | 'layout';
     style?: React.CSSProperties;
     setIsModalVisible: (open: boolean) => void;
+    isPreview?: boolean;
+    isSelected?: boolean; // Для одиночного выделения (режим редактирования)
+    isSelectedItems?: boolean; // Для множественного выделения (режим записи)
+    isCurrentDevice?: boolean;
+    onClick?: () => void;
 }
 
 interface CameraGridProps {
@@ -44,6 +50,11 @@ interface CameraGridProps {
     menuType: 'edit' | 'layout';
     isMapVisible: boolean;
     setIsModalVisible: (open: boolean) => void;
+    onTileClick?: (position: number) => void;
+    selectedPosition?: number | null;
+    currentDeviceId?: string | null;
+    isPreview?: boolean;
+    selectedDevices?: Device[];
 }
 
 // Конфигурация раскладок
@@ -192,17 +203,41 @@ const CameraTile: React.FC<CameraTileProps> = ({
     menuType,
     style,
     setIsModalVisible,
+    isSelectedItems = false,
+    isPreview = false,
+    isSelected = false,
+    isCurrentDevice = false,
+    onClick,
 }) => {
     const { SmartDVRToken } = useAuthStore();
     const [audio, setAudio] = useState(true);
     const [isHovered, setIsHovered] = useState(false);
     const { isShowNameDevice, setIsShowNameDevice } = useStateNameDevice();
 
+    const recordings = useRecordingStore((state) => state.recordings);
+    const isRecording = recordings.some((recording) =>
+        recording.devices.some((d) => d.UID === device?.UID),
+    );
+
+    const recordingType = recordings.find((recording) =>
+        recording.devices.some((d) => d.UID === device?.UID),
+    )?.type;
+
+    console.log('isSelectedItems', isSelectedItems);
+
     return (
         <TileContainer
-            style={style}
+            style={{
+                ...style,
+                // cursor: isPreview ? 'pointer' : 'default',
+                border: isSelected || isSelectedItems ? '4px solid var(--tertiary-dark)' : 'none',
+                // border: isSelected ? '4px solid var(--tertiary-dark)' : 'none',
+                // opacity: isCurrentDevice ? 0.5 : 1,
+            }}
+            onClick={onClick}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
+            isSelected={isSelectedItems}
         >
             {(isShowNameDevice || isHovered) && device && (
                 <CameraHeader className={!isShowNameDevice && !isHovered ? 'hidden' : ''}>
@@ -249,7 +284,7 @@ const CameraTile: React.FC<CameraTileProps> = ({
             )}
 
             {/* Условие для отображения футера */}
-            {device && (
+            {!isPreview && device && (
                 <CameraFooter className={!isShowNameDevice && !isHovered ? 'hidden' : ''}>
                     <FooterIcon onClick={() => console.log('Left icon clicked')}>
                         {audio ? (
@@ -264,11 +299,26 @@ const CameraTile: React.FC<CameraTileProps> = ({
                             />
                         )}
                     </FooterIcon>
+
+                    {isRecording && (
+                        <div className="recording-status">
+                            {recordingType === 'audio'
+                                ? 'Записывается аудио'
+                                : 'Записывается видео'}
+                        </div>
+                    )}
+
                     <FooterIcon onClick={() => console.log('Right icon clicked')}>
                         <SvgSetting style={{ paddingRight: 8 }} />
                     </FooterIcon>
                 </CameraFooter>
             )}
+
+            {/*{isPreview && device && (*/}
+            {/*    <PreviewOverlay>*/}
+            {/*        <PositionNumber>{index + 1}</PositionNumber>*/}
+            {/*    </PreviewOverlay>*/}
+            {/*)}*/}
         </TileContainer>
     );
 };
@@ -280,6 +330,11 @@ const CameraGrid: React.FC<CameraGridProps> = ({
     menuType,
     isMapVisible,
     setIsModalVisible,
+    onTileClick,
+    selectedPosition,
+    currentDeviceId,
+    isPreview = false,
+    selectedDevices = [],
 }) => {
     // Получаем конфигурацию или используем fallback
     const config = layoutConfigs[`${viewType}`] || defaultConfig;
@@ -289,30 +344,43 @@ const CameraGrid: React.FC<CameraGridProps> = ({
     console.log(viewType);
 
     return (
-        <GridContainer cols={config.cols} rows={config.rows} isMapVisible={isMapVisible}>
-            {config.cameras.map((camera, index) => (
-                <CameraTile
-                    key={index}
-                    style={{
-                        gridColumn: `${camera.x + 1} / span ${camera.width}`,
-                        gridRow: `${camera.y + 1} / span ${camera.height}`,
-                    }}
-                    device={devices[index]}
-                    index={index}
-                    onMenuClick={(action, device, idx) => {
-                        // Обработка действий
-                        console.log(action, device, idx);
-                    }}
-                    isShowNameDevice={isShowNameDevice}
-                    // isShowNameDevice={true}
-                    menuType={menuType}
-                    setIsModalVisible={setIsModalVisible}
-                    onAddDevice={() => {
-                        // Логика добавления устройства
-                        console.log('Add device');
-                    }}
-                />
-            ))}
+        <GridContainer
+            cols={config.cols}
+            rows={config.rows}
+            isMapVisible={isMapVisible}
+            className={isPreview ? 'preview-mode' : ''}
+        >
+            {config.cameras.map((camera, index) => {
+                const device = devices[index];
+                return (
+                    <CameraTile
+                        key={index}
+                        style={{
+                            gridColumn: `${camera.x + 1} / span ${camera.width}`,
+                            gridRow: `${camera.y + 1} / span ${camera.height}`,
+                        }}
+                        device={devices[index]}
+                        index={index}
+                        onMenuClick={(action, device, idx) => {
+                            // Обработка действий
+                            console.log(action, device, idx);
+                        }}
+                        isShowNameDevice={isShowNameDevice}
+                        // isShowNameDevice={true}
+                        menuType={menuType}
+                        setIsModalVisible={setIsModalVisible}
+                        onAddDevice={() => {
+                            // Логика добавления устройства
+                            console.log('Add device');
+                        }}
+                        isPreview={isPreview}
+                        isSelected={selectedPosition === index}
+                        isSelectedItems={selectedDevices.some((d) => d.UID === device?.UID)}
+                        isCurrentDevice={device?.UID === currentDeviceId}
+                        onClick={() => onTileClick?.(index)}
+                    />
+                );
+            })}
 
             {/*{isMapVisible && (*/}
             {/*    <MapContainer cols={config.cols}>*/}
@@ -329,11 +397,12 @@ const GridWrapper = styled.div`
     overflow: hidden;
 `;
 
-const TileContainer = styled.div`
+const TileContainer = styled.div<{ isSelected: boolean }>`
     position: relative;
     background: var(--gray-01);
     border-radius: 8px;
     // overflow: hidden;
+    border: ${({ isSelected }) => (isSelected ? '4px solid var(--tertiary-dark)' : 'none')};
     cursor: pointer;
 `;
 
@@ -455,6 +524,23 @@ const MapContainer = styled.div<{ cols: number }>`
     background: #1a1c24;
     border-radius: 8px;
     overflow: hidden;
+`;
+
+const PreviewOverlay = styled.div`
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 2px 5px;
+    border-radius: 3px;
+    font-size: 12px;
+    z-index: 1;
+`;
+
+const PositionNumber = styled.span`
+    font-weight: bold;
+    color: #fff;
 `;
 
 // Вспомогательная функция для меню

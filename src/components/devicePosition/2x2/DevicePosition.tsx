@@ -1,7 +1,9 @@
-import React, {useState} from 'react';
-import { Modal, InputNumber } from "antd";
-import "../style.css"
-import CameraGrid2x2SmallPosition from "../Layouts/cameraGridSmallForPossition/cameraGrid2x2SmallPosition";
+import React, { useState } from 'react';
+import { Modal, InputNumber } from 'antd';
+import '../style.css';
+import CameraGrid2x2SmallPosition from '../Layouts/cameraGridSmallForPossition/cameraGrid2x2SmallPosition';
+import CameraGrid from '../../../pages/pagesV2/layouts/pages/layout/components/CameraTile/CameraTile';
+import { Device } from '../../../types/Device';
 
 interface DevicePositionModalProps {
     visible: boolean;
@@ -12,15 +14,14 @@ interface DevicePositionModalProps {
     selectedDevices: string[]; // Список UID выбранных устройств
 }
 
-
 const DevicePositionModal: React.FC<DevicePositionModalProps> = ({
-                                                                     visible,
-                                                                     onOk,
-                                                                     onCancel,
-                                                                     currentPosition,
-                                                                     onPositionChange,
-                                                                     selectedDevices,
-                                                                 }) => {
+    visible,
+    onOk,
+    onCancel,
+    currentPosition,
+    onPositionChange,
+    selectedDevices,
+}) => {
     const [selectedPosition, setSelectedPosition] = useState<number | null>(currentPosition);
 
     const handleDeviceClick = (UID: string | null) => {
