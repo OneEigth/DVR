@@ -30,9 +30,14 @@ import { useSelectedLayout } from '../../../../../store/useSelectedLayout';
 import ButtonLayoutViewStyle from './components/buttons/buttonLayout/buttonLayoutViewStyle';
 import styled from 'styled-components';
 import { UpdateLayouts } from '../../../../../api/layout/UpdateLayout';
-import DevicePositionModal from '../../../../../components/devicePosition/2x2/DevicePosition';
 import { Device } from '../../../../../types/Device';
 import SelectChecker from '../../../../../utils/shared/components/Select/SelectChecker/SelectChecker';
+import DevicePositionModal from './components/DevicePosition/DevicePosition';
+import useRecordingStore from './api/recording/recordingStore';
+import { formatTime } from '../../../../../utils/format';
+import { RecordModal } from './components/modals/RecordModal/RecordModal';
+import { RecordingTimers } from './components/RecordingTimers/RecordingTimers';
+import { StopRecordingModal } from './components/modals/StopRecordingModal/StopRecordingModal';
 
 interface LayoutV2Props {}
 const StyledRadioGroup = styled(Radio.Group)`
@@ -114,13 +119,6 @@ const LayoutV2: FC<LayoutV2Props> = (props) => {
 
     const [newPosition, setNewPosition] = useState<number | null>(null);
 
-    // const {
-    //     setIsLayoutFormChanged,
-    //     setIsNotSavedModalVisible,
-    //     isNotSavedModalVisible,
-    //     layoutViewType,
-    //     setLayoutViewType,
-    // } = useIsLayoutFormChanged();
     const handleFilterButtonClick = (size: 'small' | 'medium' | 'big') => {
         setActiveDeviceSize(size);
     };
@@ -133,13 +131,27 @@ const LayoutV2: FC<LayoutV2Props> = (props) => {
         setLayoutViewType,
     } = useIsLayoutFormChanged();
 
-    // const [layoutViewType, setLayoutViewType] = useState<
-    //     '2x2' | '1х5' | '3х4' | '3х3' | '2х8' | '1х12' | '4х4'
-    // >('2x2');
+    const [swapPosition, setSwapPosition] = useState<{
+        device: Device;
+        index: number;
+    } | null>(null);
 
-    // const handleSelectLayoutView = (size: '2x2' | '1х5' | '3х4' | '3х3' | '2х8' | '1х12' | '4х4') => {
-    //     setLayoutViewType(size);
-    // };
+    const handlePositionChange = (oldIndex: number, newIndex: number) => {
+        if (!selectedLayout) return;
+
+        const newDevices = [...selectedLayout.devices];
+        // Меняем местами устройства
+        [newDevices[oldIndex], newDevices[newIndex]] = [newDevices[newIndex], newDevices[oldIndex]];
+
+        // Обновляем состояние раскладки
+        setSelectedLayout({
+            ...selectedLayout,
+            devices: newDevices,
+        });
+
+        // Обновляем локальное состояние devices
+        setDevices(newDevices);
+    };
 
     const handleRadioChange = (e: RadioChangeEvent) => {
         const value = e.target.value;
@@ -333,48 +345,20 @@ const LayoutV2: FC<LayoutV2Props> = (props) => {
         }
     }, [selectedLayout]);
 
-    const handleOk = async () => {
-        if (newPosition !== null && selectedDevice) {
-            const currentDeviceIndex = devices.findIndex((d) => d.UID === selectedDevice.UID);
+    const setIsAudioModalVisible = useRecordingStore((state) => state.setIsAudioModalVisible);
+    const isAudioModalVisible = useRecordingStore((state) => state.isAudioModalVisible);
+    const setIsVideoModalVisible = useRecordingStore((state) => state.setIsVideoModalVisible);
+    const isVideoModalVisible = useRecordingStore((state) => state.isVideoModalVisible);
+    const setIsStopModalVisible = useRecordingStore((state) => state.setIsStopModalVisible);
+    const isStopModalVisible = useRecordingStore((state) => state.isStopModalVisible);
+    const setStopType = useRecordingStore((state) => state.setStopType);
+    const stopType = useRecordingStore((state) => state.stopType);
+    const startRecording = useRecordingStore((state) => state.startRecording);
+    const stopRecording = useRecordingStore((state) => state.stopRecording);
 
-            if (currentDeviceIndex !== -1 && currentDeviceIndex !== newPosition - 1) {
-                const newDeviceIndex = newPosition - 1;
-                const updatedDevices = [...devices];
-
-                // Меняем местами устройства
-                const temp = updatedDevices[newDeviceIndex];
-                updatedDevices[newDeviceIndex] = updatedDevices[currentDeviceIndex];
-                updatedDevices[currentDeviceIndex] = temp;
-
-                // Обновляем локальное состояние
-                setDevices(updatedDevices);
-
-                // Создаем данные для обновления раскладки
-                const updatedLayoutData = {
-                    ...selectedLayout,
-                    devices: updatedDevices,
-                };
-
-                try {
-                    const response = await UpdateLayouts(
-                        SmartDVRToken,
-                        user?.login || '',
-                        updatedLayoutData,
-                    );
-
-                    if (response?.success) {
-                        message.success('Положение устройства успешно изменено!');
-                        setSelectedLayout(updatedLayoutData); // Обновляем состояние раскладки
-                    } else {
-                        message.error('Не удалось сохранить изменения.');
-                    }
-                } catch (error) {
-                    console.error('Ошибка при обновлении раскладки:', error);
-                    message.error('Произошла ошибка при сохранении.');
-                }
-            }
-            setIsModalVisible(false); // Закрываем модальное окно
-        }
+    const handleStopRecording = (type: 'audio' | 'video') => {
+        setStopType(type);
+        setIsStopModalVisible(true);
     };
 
     return (
@@ -409,19 +393,12 @@ const LayoutV2: FC<LayoutV2Props> = (props) => {
                         <div
                             className="header_layout"
                             style={{
-                                // flex: 1,
                                 display: 'flex',
-                                // flexDirection: 'column',
-                                // marginRight: isMapVisible ? 400 : 0, // Отступ для карты
                                 transition: 'margin-right 0.3s ease', // Плавное появление карты
-
-                                // display: 'flex',
                                 justifyContent: 'space-between',
                                 paddingBottom: 8,
                                 borderBottom: '1px solid var(--divider-2)',
                                 marginBottom: 16,
-                                // flex: isMapVisible ? 2 : 3, // Левый блок занимает больше пространства при скрытой карте
-                                // transition: 'flex 0.3s ease', // Плавное изменение ширины
                             }}
                         >
                             <div className="left_HT">
@@ -457,10 +434,6 @@ const LayoutV2: FC<LayoutV2Props> = (props) => {
                                 )}
                             </div>
 
-                            {/*<div className="center_LO">
-                                    <ButtonLayoutViewStyle onFilterButtonClick={handleSelectLayoutView}/>
-                                </div>*/}
-
                             <div className="right_HT">
                                 {isEdit ? (
                                     <ButtonLayoutViewStyle
@@ -469,9 +442,13 @@ const LayoutV2: FC<LayoutV2Props> = (props) => {
                                     />
                                 ) : (
                                     <div className="rightSideToolBar">
-                                        <ButtonRecordVideo onClick={handleRecordVideo} />
+                                        <ButtonRecordVideo
+                                            onClick={() => setIsVideoModalVisible(true)}
+                                        />
                                         <ButtonTakeAPhoto onClick={handleTakeAPhoto} />
-                                        <ButtonRecordAudio onClick={handleRecordAudio} />
+                                        <ButtonRecordAudio
+                                            onClick={() => setIsAudioModalVisible(true)}
+                                        />
                                         <ButtonShowMap
                                             onClick={handleShowMap}
                                             isMapVisible={isMapVisible}
@@ -503,10 +480,16 @@ const LayoutV2: FC<LayoutV2Props> = (props) => {
                                 >
                                     <CameraGrid
                                         viewType={layoutViewType}
-                                        devices={selectedLayout.devices}
+                                        devices={devices}
                                         menuType={isEdit ? 'edit' : 'layout'}
                                         isMapVisible={isMapVisible}
                                         setIsModalVisible={setIsModalVisible}
+                                        onTileClick={(index) => {
+                                            if (isEdit) {
+                                                setSelectedDevice(selectedLayout?.devices[index]);
+                                                // setIsModalVisible(true);
+                                            }
+                                        }}
                                     />
                                     {/*{selectedLayout.viewType === '2x2' && (*/}
                                     {/*    <CameraGrid2x2*/}
@@ -761,16 +744,69 @@ const LayoutV2: FC<LayoutV2Props> = (props) => {
 
                 <DevicePositionModal
                     visible={isModalVisible}
-                    onOk={() => {
-                        if (newPosition) {
-                            handleOk(); // Подтвердить выбор позиции
-                        }
-                        setIsModalVisible(false);
-                    }}
+                    onOk={() => setIsModalVisible(false)}
                     onCancel={() => setIsModalVisible(false)}
-                    currentPosition={newPosition}
-                    onPositionChange={(value) => setNewPosition(value)} // Обновляем состояние позиции
-                    selectedDevices={selectedLayout.devices.map((device: Device) => device.UID)} // Передаем список UID устройств
+                    devices={selectedLayout?.devices || []}
+                    currentDevice={selectedDevice}
+                    setIsModalVisible={setIsModalVisible}
+                    onPositionChange={handlePositionChange}
+                    currentPosition={devices.findIndex((d) => d.UID === selectedDevice?.UID) + 1}
+                    selectedDevices={selectedLayout?.devices.map((d: any) => d.UID) || []}
+                    layoutViewType={layoutViewType}
+                />
+
+                {/*<DevicePositionModal*/}
+                {/*    visible={isModalVisible}*/}
+                {/*    onOk={() => {*/}
+                {/*        if (newPosition) {*/}
+                {/*            handleOk(); // Подтвердить выбор позиции*/}
+                {/*        }*/}
+                {/*        setIsModalVisible(false);*/}
+                {/*    }}*/}
+                {/*    onCancel={() => setIsModalVisible(false)}*/}
+                {/*    currentPosition={newPosition}*/}
+                {/*    onPositionChange={(value) => setNewPosition(value)} // Обновляем состояние позиции*/}
+                {/*    selectedDevices={selectedLayout.devices.map((device: Device) => device.UID)} // Передаем список UID устройств*/}
+                {/*/>*/}
+                <RecordModal
+                    visible={isAudioModalVisible}
+                    onCancel={() => setIsAudioModalVisible(false)}
+                    devices={devices}
+                    onOk={(selectedDevices) => {
+                        startRecording('audio', selectedDevices);
+                        setIsAudioModalVisible(false);
+                    }}
+                    layoutViewType={layoutViewType}
+                    title="Запись аудио"
+                    type="audio"
+                    setIsModalVisible={setIsVideoModalVisible}
+                />
+                <RecordModal
+                    visible={isVideoModalVisible}
+                    onCancel={() => setIsVideoModalVisible(false)}
+                    devices={devices}
+                    onOk={(selectedDevices) => {
+                        startRecording('video', selectedDevices);
+                        setIsVideoModalVisible(false);
+                    }}
+                    layoutViewType={layoutViewType}
+                    title="Запись видео"
+                    type="video"
+                    setIsModalVisible={setIsVideoModalVisible}
+                />
+                <RecordingTimers setIsStopModalVisible={setIsStopModalVisible} />
+                <StopRecordingModal
+                    visible={isStopModalVisible}
+                    onCancel={() => setIsStopModalVisible(false)}
+                    devices={devices}
+                    layoutViewType={layoutViewType}
+                    onOk={(selectedDevices) => {
+                        stopRecording(stopType, selectedDevices);
+                        setIsStopModalVisible(false);
+                    }}
+                    setIsModalVisible={setIsStopModalVisible}
+                    title={`Остановить запись ${stopType === 'audio' ? 'аудио' : 'видео'}`}
+                    type={stopType}
                 />
                 <ModalSelectDevice
                     onOk={handleOkModalSelectDevice}
