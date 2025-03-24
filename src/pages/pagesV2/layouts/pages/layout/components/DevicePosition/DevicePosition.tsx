@@ -70,24 +70,25 @@ const DevicePositionModal: React.FC<DevicePositionModalProps> = ({
             cancelText="Отмена"
         >
             {/* Компонент CameraGrid2x2SmallPosition */}
-            <CameraGrid2x2SmallPosition
-                menuType="layout"
-                onDeviceClick={handleDeviceClick}
-                selectedDevices={selectedDevices}
-            />
-            {/*<div className="preview-grid">*/}
-            {/*    <CameraGrid*/}
-            {/*        viewType={layoutViewType}*/}
-            {/*        devices={devices}*/}
-            {/*        menuType="edit"*/}
-            {/*        isMapVisible={false}*/}
-            {/*        onTileClick={handleTileClick}*/}
-            {/*        selectedPosition={selectedPosition}*/}
-            {/*        setIsModalVisible={setIsModalVisible}*/}
-            {/*        currentDeviceId={currentDevice?.UID}*/}
-            {/*        isPreview*/}
-            {/*    />*/}
-            {/*</div>*/}
+            {/*<CameraGrid2x2SmallPosition*/}
+            {/*    menuType="layout"*/}
+            {/*    onDeviceClick={handleDeviceClick}*/}
+            {/*    selectedDevices={selectedDevices}*/}
+            {/*/>*/}
+            <div className="preview-grid">
+                <CameraGrid
+                    viewType={layoutViewType}
+                    devices={devices}
+                    menuType="edit"
+                    isMapVisible={false}
+                    onTileClick={handleTileClick}
+                    selectedPosition={selectedPosition}
+                    selectedDevices={[]}
+                    setIsModalVisible={setIsModalVisible}
+                    currentDeviceId={currentDevice?.UID}
+                    isPreview
+                />
+            </div>
         </Modal>
     );
 };

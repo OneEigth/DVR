@@ -12,6 +12,7 @@ import { ReactComponent as SvgSetting } from 'utils/app/assets/icons/Setting.svg
 import { ReactComponent as SvgSoundOn } from 'utils/app/assets/icons/Sound-on.svg';
 import { ReactComponent as SvgSoundOff } from 'utils/app/assets/icons/Sound-off.svg';
 import { useStateNameDevice } from '../../api/layout/useStateNameDevice';
+import useRecordingStore from '../../api/recording/recordingStore';
 
 // Интерфейсы для типизации
 interface CameraConfig {
@@ -37,16 +38,10 @@ interface CameraTileProps {
     style?: React.CSSProperties;
     setIsModalVisible: (open: boolean) => void;
     isPreview?: boolean;
-    isSelected?: boolean;
+    isSelected?: boolean; // Для одиночного выделения (режим редактирования)
+    isSelectedItems?: boolean; // Для множественного выделения (режим записи)
     isCurrentDevice?: boolean;
     onClick?: () => void;
-    // device?: Device;
-    // index: number;
-    // menuType: 'edit' | 'layout';
-    // isPreview?: boolean;
-    // isSelected?: boolean;
-    // isCurrentDevice?: boolean;
-    // onClick?: () => void;
 }
 
 interface CameraGridProps {
@@ -57,8 +52,9 @@ interface CameraGridProps {
     setIsModalVisible: (open: boolean) => void;
     onTileClick?: (position: number) => void;
     selectedPosition?: number | null;
-    currentDeviceId?: string;
+    currentDeviceId?: string | null;
     isPreview?: boolean;
+    selectedDevices?: Device[];
 }
 
 // Конфигурация раскладок
@@ -207,6 +203,7 @@ const CameraTile: React.FC<CameraTileProps> = ({
     menuType,
     style,
     setIsModalVisible,
+    isSelectedItems = false,
     isPreview = false,
     isSelected = false,
     isCurrentDevice = false,
@@ -217,17 +214,30 @@ const CameraTile: React.FC<CameraTileProps> = ({
     const [isHovered, setIsHovered] = useState(false);
     const { isShowNameDevice, setIsShowNameDevice } = useStateNameDevice();
 
+    const recordings = useRecordingStore((state) => state.recordings);
+    const isRecording = recordings.some((recording) =>
+        recording.devices.some((d) => d.UID === device?.UID),
+    );
+
+    const recordingType = recordings.find((recording) =>
+        recording.devices.some((d) => d.UID === device?.UID),
+    )?.type;
+
+    console.log('isSelectedItems', isSelectedItems);
+
     return (
         <TileContainer
             style={{
                 ...style,
-                cursor: isPreview ? 'pointer' : 'default',
-                border: isSelected ? '2px solid #1890ff' : 'none',
+                // cursor: isPreview ? 'pointer' : 'default',
+                border: isSelected || isSelectedItems ? '4px solid var(--tertiary-dark)' : 'none',
+                // border: isSelected ? '4px solid var(--tertiary-dark)' : 'none',
                 // opacity: isCurrentDevice ? 0.5 : 1,
             }}
             onClick={onClick}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
+            isSelected={isSelectedItems}
         >
             {(isShowNameDevice || isHovered) && device && (
                 <CameraHeader className={!isShowNameDevice && !isHovered ? 'hidden' : ''}>
@@ -289,6 +299,15 @@ const CameraTile: React.FC<CameraTileProps> = ({
                             />
                         )}
                     </FooterIcon>
+
+                    {isRecording && (
+                        <div className="recording-status">
+                            {recordingType === 'audio'
+                                ? 'Записывается аудио'
+                                : 'Записывается видео'}
+                        </div>
+                    )}
+
                     <FooterIcon onClick={() => console.log('Right icon clicked')}>
                         <SvgSetting style={{ paddingRight: 8 }} />
                     </FooterIcon>
@@ -315,6 +334,7 @@ const CameraGrid: React.FC<CameraGridProps> = ({
     selectedPosition,
     currentDeviceId,
     isPreview = false,
+    selectedDevices = [],
 }) => {
     // Получаем конфигурацию или используем fallback
     const config = layoutConfigs[`${viewType}`] || defaultConfig;
@@ -355,6 +375,7 @@ const CameraGrid: React.FC<CameraGridProps> = ({
                         }}
                         isPreview={isPreview}
                         isSelected={selectedPosition === index}
+                        isSelectedItems={selectedDevices.some((d) => d.UID === device?.UID)}
                         isCurrentDevice={device?.UID === currentDeviceId}
                         onClick={() => onTileClick?.(index)}
                     />
@@ -376,11 +397,12 @@ const GridWrapper = styled.div`
     overflow: hidden;
 `;
 
-const TileContainer = styled.div`
+const TileContainer = styled.div<{ isSelected: boolean }>`
     position: relative;
     background: var(--gray-01);
     border-radius: 8px;
     // overflow: hidden;
+    border: ${({ isSelected }) => (isSelected ? '4px solid var(--tertiary-dark)' : 'none')};
     cursor: pointer;
 `;
 
