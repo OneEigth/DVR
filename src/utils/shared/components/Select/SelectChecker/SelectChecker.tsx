@@ -12,6 +12,8 @@ interface SelectCheckerProps {
     size?: SizeType;
     className?: string;
     label?: string;
+    labelClassName?: string;
+    overlayClassName?: string;
 }
 
 const SelectChecker: FC<SelectCheckerProps> = ({
@@ -19,8 +21,10 @@ const SelectChecker: FC<SelectCheckerProps> = ({
     value,
     onChange,
     size = 'middle',
-    className,
+    className = '',
     label,
+    labelClassName = '',
+    overlayClassName = '',
 }) => {
     // const onChangeHandler = (event: RadioChangeEvent) => {
     //     const { target } = event;
@@ -33,8 +37,14 @@ const SelectChecker: FC<SelectCheckerProps> = ({
     const themeClass = theme === 'dark' ? 'select-checker-dark' : 'select-checker-light';
 
     return (
-        <>
-            {label && <label className="select-checker-label title small">{label}</label>}
+        <div className={overlayClassName}>
+            {label && (
+                <label
+                    className={`select-checker-label ${labelClassName ? labelClassName : 'title small'}`}
+                >
+                    {label}
+                </label>
+            )}
             <Radio.Group
                 value={value}
                 onChange={onChange}
@@ -44,7 +54,7 @@ const SelectChecker: FC<SelectCheckerProps> = ({
                 buttonStyle="solid"
                 size={size}
             />
-        </>
+        </div>
     );
 };
 

@@ -1,9 +1,12 @@
 import { useState } from 'react';
 import { Device } from '../../../../../../../../types/Device';
 import SelectChecker from '../../../../../../../../utils/shared/components/Select/SelectChecker/SelectChecker';
-import { message, Modal } from 'antd';
+import { Button, message, Modal } from 'antd';
 import CameraGrid from '../../CameraTile/CameraTile';
 import useRecordingStore from '../../../api/recording/recordingStore';
+import { ReactComponent as SvgClose } from 'utils/app/assets/icons/Close.svg';
+
+import './styles.css';
 
 export interface RecordModalProps {
     visible: boolean;
@@ -70,19 +73,35 @@ export const RecordModal: React.FC<RecordModalProps> = ({
 
     return (
         <Modal
-            title={title}
+            title={
+                <div className="modal_header headline small">
+                    <span className="modal-title">{title}</span>
+                    {<SvgClose className="custom-close-icon" onClick={onCancel} />}
+                </div>
+            }
             visible={visible}
             onOk={handleOk}
+            destroyOnClose
             onCancel={onCancel}
-            okText="Начать запись"
-            cancelText="Отмена"
+            footer={[
+                <Button
+                    key="ok"
+                    className="button-base button-type-primary button-size-medium "
+                    onClick={handleOk}
+                >
+                    Начать запись
+                </Button>,
+            ]}
         >
             <SelectChecker
+                label={'Выберите уст-ва:'}
                 value={selectionMode}
+                overlayClassName={'record-modal-select-checker-overlay'}
+                labelClassName={'record-modal-select-checker-label title medium'}
                 onChange={(e) => handleSelectionModeChange(e.target.value)}
                 options={[
-                    { label: 'Со всех', value: 'all' },
-                    { label: 'Выбрать с каких', value: 'select' },
+                    { label: 'со всех', value: 'all' },
+                    { label: 'выбрать с каких', value: 'select' },
                 ]}
             />
             <CameraGrid
@@ -96,6 +115,7 @@ export const RecordModal: React.FC<RecordModalProps> = ({
                 currentDeviceId={null}
                 isPreview
                 selectedDevices={selectedDevices}
+                disableEmptySlots
             />
         </Modal>
     );

@@ -17,9 +17,6 @@ import ButtonRecordAudio from './components/buttons/buttonForToolBarDeviceOne/Bu
 import ButtonShowMap from './components/buttons/buttonForToolBarDeviceOne/ButtonShowMap';
 import ButtonLayoutEdit from './components/buttons/buttonLayout/LayoutEdit/ButtonLayoutEdit';
 import ButtonLayoutDelete from './components/buttons/buttonLayout/LayoutEdit/ButtonLayoutDelete';
-import ModalSelectDevice from './components/modals/ModalSelectDevice/ModalSelectDevice';
-import ModalSelectDeviceAudio from './components/modals/ModalSelectDeviceAudio/ModalSelectDeviceAudio';
-import ModalSelectDevicePhoto from './components/modals/ModalSelectDevicePhoto/ModalSelectDevicePhoto';
 import { useLayoutsStore } from './api/layout/useLayoutsStore';
 import { useStateNameDevice } from './api/layout/useStateNameDevice';
 import { useIsLayoutFormChanged } from './api/layout/useIsLayoutFormChanged';
@@ -755,19 +752,6 @@ const LayoutV2: FC<LayoutV2Props> = (props) => {
                     layoutViewType={layoutViewType}
                 />
 
-                {/*<DevicePositionModal*/}
-                {/*    visible={isModalVisible}*/}
-                {/*    onOk={() => {*/}
-                {/*        if (newPosition) {*/}
-                {/*            handleOk(); // Подтвердить выбор позиции*/}
-                {/*        }*/}
-                {/*        setIsModalVisible(false);*/}
-                {/*    }}*/}
-                {/*    onCancel={() => setIsModalVisible(false)}*/}
-                {/*    currentPosition={newPosition}*/}
-                {/*    onPositionChange={(value) => setNewPosition(value)} // Обновляем состояние позиции*/}
-                {/*    selectedDevices={selectedLayout.devices.map((device: Device) => device.UID)} // Передаем список UID устройств*/}
-                {/*/>*/}
                 <RecordModal
                     visible={isAudioModalVisible}
                     onCancel={() => setIsAudioModalVisible(false)}
@@ -808,24 +792,24 @@ const LayoutV2: FC<LayoutV2Props> = (props) => {
                     title={`Остановить запись ${stopType === 'audio' ? 'аудио' : 'видео'}`}
                     type={stopType}
                 />
-                <ModalSelectDevice
-                    onOk={handleOkModalSelectDevice}
-                    onCancel={handleCancelModalSelectDevice}
-                    visible={showModalSelectDevice}
-                    layoutViewType={layoutViewType}
-                />
-                <ModalSelectDeviceAudio
-                    onOk={handleOkModalSelectDeviceAudio}
-                    onCancel={handleCancelModalSelectDeviceAudio}
-                    visible={showModalSelectDeviceAudio}
-                    layoutViewType={layoutViewType}
-                />
-                <ModalSelectDevicePhoto
-                    onOk={handleOkModalSelectDevicePhoto}
-                    onCancel={handleCancelModalSelectDevicePhoto}
-                    visible={showModalSelectDevicePhoto}
-                    layoutViewType={layoutViewType}
-                />
+                {/*<ModalSelectDevice*/}
+                {/*    onOk={handleOkModalSelectDevice}*/}
+                {/*    onCancel={handleCancelModalSelectDevice}*/}
+                {/*    visible={showModalSelectDevice}*/}
+                {/*    layoutViewType={layoutViewType}*/}
+                {/*/>*/}
+                {/*<ModalSelectDeviceAudio*/}
+                {/*    onOk={handleOkModalSelectDeviceAudio}*/}
+                {/*    onCancel={handleCancelModalSelectDeviceAudio}*/}
+                {/*    visible={showModalSelectDeviceAudio}*/}
+                {/*    layoutViewType={layoutViewType}*/}
+                {/*/>*/}
+                {/*<ModalSelectDevicePhoto*/}
+                {/*    onOk={handleOkModalSelectDevicePhoto}*/}
+                {/*    onCancel={handleCancelModalSelectDevicePhoto}*/}
+                {/*    visible={showModalSelectDevicePhoto}*/}
+                {/*    layoutViewType={layoutViewType}*/}
+                {/*/>*/}
             </div>
         </>
     );

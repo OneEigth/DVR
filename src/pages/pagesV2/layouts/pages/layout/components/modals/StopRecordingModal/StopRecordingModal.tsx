@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { RecordModalProps } from '../RecordModal/RecordModal';
 import { Device } from '../../../../../../../../types/Device';
-import { Modal } from 'antd';
+import { Button, Modal } from 'antd';
 import CameraGrid from '../../CameraTile/CameraTile';
 import useRecordingStore from '../../../api/recording/recordingStore';
+import { ReactComponent as SvgClose } from 'utils/app/assets/icons/Close.svg';
 
 export const StopRecordingModal: React.FC<RecordModalProps> = ({
     visible,
@@ -36,12 +37,26 @@ export const StopRecordingModal: React.FC<RecordModalProps> = ({
 
     return (
         <Modal
-            title={title}
+            title={
+                <div className="modal_header headline small">
+                    <span className="modal-title">{title}</span>
+                    {<SvgClose className="custom-close-icon" onClick={onCancel} />}
+                </div>
+            }
             visible={visible}
             onOk={handleOk}
             onCancel={onCancel}
-            okText="Остановить запись"
-            cancelText="Отмена"
+            // okText="Остановить запись"
+            // cancelText="Отмена"
+            footer={[
+                <Button
+                    key="ok"
+                    className="button-base button-type-primary button-size-medium "
+                    onClick={handleOk}
+                >
+                    Остановить запись
+                </Button>,
+            ]}
         >
             <CameraGrid
                 viewType={layoutViewType}
@@ -52,8 +67,9 @@ export const StopRecordingModal: React.FC<RecordModalProps> = ({
                 selectedPosition={null}
                 setIsModalVisible={setIsModalVisible}
                 currentDeviceId={null}
-                isPreview
+                isPreview={false}
                 selectedDevices={selectedDevices}
+                disableEmptySlots
             />
         </Modal>
     );

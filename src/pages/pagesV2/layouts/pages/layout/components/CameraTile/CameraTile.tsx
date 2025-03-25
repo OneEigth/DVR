@@ -55,6 +55,7 @@ interface CameraGridProps {
     currentDeviceId?: string | null;
     isPreview?: boolean;
     selectedDevices?: Device[];
+    disableEmptySlots?: boolean;
 }
 
 // Конфигурация раскладок
@@ -302,9 +303,16 @@ const CameraTile: React.FC<CameraTileProps> = ({
 
                     {isRecording && (
                         <div className="recording-status">
-                            {recordingType === 'audio'
-                                ? 'Записывается аудио'
-                                : 'Записывается видео'}
+                            {recordingType === 'audio' ? (
+                                <>
+                                    <span className={'dot'}></span> <span>Записывается аудио</span>
+                                </>
+                            ) : (
+                                <div style={{ display: 'flex', alignItems: 'center' }}>
+                                    <span className={'dot'}></span>
+                                    <span className={'body medium-bold'}>Записывается видео</span>
+                                </div>
+                            )}
                         </div>
                     )}
 
@@ -335,6 +343,7 @@ const CameraGrid: React.FC<CameraGridProps> = ({
     currentDeviceId,
     isPreview = false,
     selectedDevices = [],
+    disableEmptySlots = false,
 }) => {
     // Получаем конфигурацию или используем fallback
     const config = layoutConfigs[`${viewType}`] || defaultConfig;
@@ -352,6 +361,9 @@ const CameraGrid: React.FC<CameraGridProps> = ({
         >
             {config.cameras.map((camera, index) => {
                 const device = devices[index];
+
+                if (disableEmptySlots && !device) return null;
+
                 return (
                     <CameraTile
                         key={index}

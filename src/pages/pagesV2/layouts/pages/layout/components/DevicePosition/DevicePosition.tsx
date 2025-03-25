@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Modal, InputNumber } from 'antd';
+import { Modal, InputNumber, Button } from 'antd';
 import './styles.css';
 import { Device } from '../../../../../../../types/Device';
 import CameraGrid from '../CameraTile/CameraTile';
 import CameraGrid2x2SmallPosition from '../../../../../../../components/devicePosition/Layouts/cameraGridSmallForPossition/cameraGrid2x2SmallPosition';
+import { ReactComponent as SvgClose } from 'utils/app/assets/icons/Close.svg';
 
 interface DevicePositionModalProps {
     visible: boolean;
@@ -62,12 +63,26 @@ const DevicePositionModal: React.FC<DevicePositionModalProps> = ({
     return (
         <Modal
             className="devicePosition"
-            title="Выберите новую позицию устройства"
+            title={
+                <div className="modal_header headline small">
+                    <span className="modal-title">{'Выберите новую позицию устройства'}</span>
+                    {<SvgClose className="custom-close-icon" onClick={onCancel} />}
+                </div>
+            }
             visible={visible}
             onOk={handleOk}
             onCancel={onCancel}
             okText="Подтвердить"
             cancelText="Отмена"
+            footer={[
+                <Button
+                    key="ok"
+                    className="button-base button-type-primary button-size-medium "
+                    onClick={handleOk}
+                >
+                    Подтвердить
+                </Button>,
+            ]}
         >
             {/* Компонент CameraGrid2x2SmallPosition */}
             {/*<CameraGrid2x2SmallPosition*/}
@@ -87,6 +102,7 @@ const DevicePositionModal: React.FC<DevicePositionModalProps> = ({
                     setIsModalVisible={setIsModalVisible}
                     currentDeviceId={currentDevice?.UID}
                     isPreview
+                    disableEmptySlots
                 />
             </div>
         </Modal>
