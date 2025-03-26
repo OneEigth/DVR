@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { Layout, Button, Dropdown, Menu } from 'antd';
-import { MoreOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 import { useAuthStore } from '../../../../../../../store/auth/auth';
-import LocationMap2 from '../../../../../../../components/locationMap2/LocationMap2';
 import { Device } from '../../../../../../../types/Device';
 import { ONLINE_PLAY_LAYOUT_URL } from '../../../../../../../const/const';
 import './styles.css';
@@ -13,21 +11,9 @@ import { ReactComponent as SvgSoundOn } from 'utils/app/assets/icons/Sound-on.sv
 import { ReactComponent as SvgSoundOff } from 'utils/app/assets/icons/Sound-off.svg';
 import { useStateNameDevice } from '../../api/layout/useStateNameDevice';
 import useRecordingStore from '../../api/recording/recordingStore';
+import { defaultConfig, layoutConfigs } from './consts/configs';
 
 // Интерфейсы для типизации
-interface CameraConfig {
-    x: number;
-    y: number;
-    width: number;
-    height: number;
-}
-
-interface LayoutConfig {
-    cols: number;
-    rows: number;
-    cameras: CameraConfig[];
-}
-
 interface CameraTileProps {
     device?: Device;
     index: number;
@@ -42,6 +28,8 @@ interface CameraTileProps {
     isSelectedItems?: boolean; // Для множественного выделения (режим записи)
     isCurrentDevice?: boolean;
     onClick?: () => void;
+    isDisabled?: boolean;
+    tooltip?: string;
 }
 
 interface CameraGridProps {
@@ -56,144 +44,12 @@ interface CameraGridProps {
     isPreview?: boolean;
     selectedDevices?: Device[];
     disableEmptySlots?: boolean;
+    getTileStatus?: (device: Device | undefined) => {
+        isDisabled?: boolean;
+        tooltip?: string;
+        highlight?: 'audio' | 'video';
+    };
 }
-
-// Конфигурация раскладок
-const layoutConfigs: Record<string, LayoutConfig> = {
-    '2х2': {
-        cols: 2,
-        rows: 2,
-        cameras: [
-            { x: 0, y: 0, width: 1, height: 1 }, // Камера 1
-            { x: 1, y: 0, width: 1, height: 1 }, // Камера 2
-            { x: 0, y: 1, width: 1, height: 1 }, // Камера 3
-            { x: 1, y: 1, width: 1, height: 1 }, // Камера 4
-        ],
-    },
-    '1х5': {
-        cols: 3,
-        rows: 3,
-        cameras: [
-            { x: 0, y: 0, width: 2, height: 2 }, // Большая камера
-            { x: 2, y: 0, width: 1, height: 1 }, // Камера 2
-            { x: 2, y: 1, width: 1, height: 1 }, // Камера 3
-            { x: 0, y: 2, width: 1, height: 1 }, // Камера 4
-            { x: 1, y: 2, width: 1, height: 1 }, // Камера 5
-            { x: 2, y: 2, width: 1, height: 1 }, // Камера 6
-        ],
-    },
-    '1х7': {
-        cols: 4,
-        rows: 4,
-        cameras: [
-            { x: 0, y: 0, width: 3, height: 3 }, // Большая камера
-            { x: 3, y: 0, width: 1, height: 1 }, // Камера 2
-            { x: 3, y: 1, width: 1, height: 1 }, // Камера 3
-            { x: 3, y: 2, width: 1, height: 1 }, // Камера 4
-            { x: 0, y: 3, width: 1, height: 1 }, // Камера 5
-            { x: 1, y: 3, width: 1, height: 1 }, // Камера 6
-            { x: 2, y: 3, width: 1, height: 1 }, // Камера 7
-            { x: 3, y: 3, width: 1, height: 1 }, // Камера 8
-        ],
-    },
-    '3х3': {
-        cols: 3,
-        rows: 3,
-        cameras: [
-            { x: 0, y: 0, width: 1, height: 1 },
-            { x: 1, y: 0, width: 1, height: 1 },
-            { x: 2, y: 0, width: 1, height: 1 },
-            { x: 0, y: 1, width: 1, height: 1 },
-            { x: 1, y: 1, width: 1, height: 1 },
-            { x: 2, y: 1, width: 1, height: 1 },
-            { x: 0, y: 2, width: 1, height: 1 },
-            { x: 1, y: 2, width: 1, height: 1 },
-            { x: 2, y: 2, width: 1, height: 1 },
-        ],
-    },
-    '3х4': {
-        cols: 4,
-        rows: 4,
-        cameras: [
-            { x: 0, y: 0, width: 2, height: 2 },
-            { x: 2, y: 0, width: 2, height: 2 },
-            { x: 0, y: 2, width: 2, height: 2 },
-            { x: 2, y: 2, width: 1, height: 1 },
-            { x: 3, y: 2, width: 1, height: 1 },
-            { x: 2, y: 3, width: 1, height: 1 },
-            { x: 3, y: 3, width: 1, height: 1 },
-        ],
-    },
-    '2х8': {
-        cols: 4,
-        rows: 4,
-        cameras: [
-            { x: 0, y: 0, width: 2, height: 2 },
-            { x: 2, y: 0, width: 2, height: 2 },
-            { x: 0, y: 2, width: 1, height: 1 },
-            { x: 1, y: 2, width: 1, height: 1 },
-            { x: 2, y: 2, width: 1, height: 1 },
-            { x: 3, y: 2, width: 1, height: 1 },
-            { x: 0, y: 3, width: 1, height: 1 },
-            { x: 1, y: 3, width: 1, height: 1 },
-            { x: 2, y: 3, width: 1, height: 1 },
-            { x: 3, y: 3, width: 1, height: 1 },
-        ],
-    },
-    '1х12': {
-        cols: 4,
-        rows: 4,
-        cameras: [
-            { x: 0, y: 0, width: 2, height: 2 }, // Большая камера
-            { x: 2, y: 0, width: 1, height: 1 },
-            { x: 3, y: 0, width: 1, height: 1 },
-            { x: 2, y: 1, width: 1, height: 1 },
-            { x: 3, y: 1, width: 1, height: 1 },
-            { x: 0, y: 2, width: 1, height: 1 },
-            { x: 1, y: 2, width: 1, height: 1 },
-            { x: 2, y: 2, width: 1, height: 1 },
-            { x: 3, y: 2, width: 1, height: 1 },
-            { x: 0, y: 3, width: 1, height: 1 },
-            { x: 1, y: 3, width: 1, height: 1 },
-            { x: 2, y: 3, width: 1, height: 1 },
-            { x: 3, y: 3, width: 1, height: 1 },
-        ],
-    },
-    '4х4': {
-        cols: 4,
-        rows: 4,
-        cameras: [
-            { x: 0, y: 0, width: 1, height: 1 }, // Большая камера
-            { x: 1, y: 0, width: 1, height: 1 },
-            { x: 2, y: 0, width: 1, height: 1 },
-            { x: 3, y: 0, width: 1, height: 1 },
-            { x: 0, y: 1, width: 1, height: 1 },
-            { x: 1, y: 1, width: 1, height: 1 },
-            { x: 2, y: 1, width: 1, height: 1 },
-            { x: 3, y: 1, width: 1, height: 1 },
-            { x: 0, y: 2, width: 1, height: 1 },
-            { x: 1, y: 2, width: 1, height: 1 },
-            { x: 2, y: 2, width: 1, height: 1 },
-            { x: 3, y: 2, width: 1, height: 1 },
-            { x: 0, y: 3, width: 1, height: 1 },
-            { x: 1, y: 3, width: 1, height: 1 },
-            { x: 2, y: 3, width: 1, height: 1 },
-            { x: 3, y: 3, width: 1, height: 1 },
-        ],
-    },
-};
-
-// Fallback-конфигурация по умолчанию
-const defaultConfig: LayoutConfig = {
-    cols: 2,
-    rows: 2,
-    cameras: [
-        { x: 0, y: 0, width: 1, height: 1 },
-        { x: 1, y: 0, width: 1, height: 1 },
-        { x: 0, y: 1, width: 1, height: 1 },
-        { x: 1, y: 1, width: 1, height: 1 },
-    ],
-};
 
 // Компонент CameraTile
 const CameraTile: React.FC<CameraTileProps> = ({
@@ -209,6 +65,8 @@ const CameraTile: React.FC<CameraTileProps> = ({
     isSelected = false,
     isCurrentDevice = false,
     onClick,
+    isDisabled,
+    tooltip,
 }) => {
     const { SmartDVRToken } = useAuthStore();
     const [audio, setAudio] = useState(true);
@@ -234,12 +92,16 @@ const CameraTile: React.FC<CameraTileProps> = ({
                 border: isSelected || isSelectedItems ? '4px solid var(--tertiary-dark)' : 'none',
                 // border: isSelected ? '4px solid var(--tertiary-dark)' : 'none',
                 // opacity: isCurrentDevice ? 0.5 : 1,
+                position: 'relative',
+                opacity: isDisabled ? 0.5 : 1,
+                pointerEvents: isDisabled ? 'none' : 'auto',
             }}
-            onClick={onClick}
+            onClick={isDisabled ? undefined : onClick}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
             isSelected={isSelectedItems}
         >
+            {tooltip && <div className="recording-status-tooltip">{tooltip}</div>}
             {(isShowNameDevice || isHovered) && device && (
                 <CameraHeader className={!isShowNameDevice && !isHovered ? 'hidden' : ''}>
                     <HeaderLeft>
@@ -305,7 +167,8 @@ const CameraTile: React.FC<CameraTileProps> = ({
                         <div className="recording-status">
                             {recordingType === 'audio' ? (
                                 <>
-                                    <span className={'dot'}></span> <span>Записывается аудио</span>
+                                    <span className={'dot'}></span>{' '}
+                                    <span className={'body medium-bold'}>Записывается аудио</span>
                                 </>
                             ) : (
                                 <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -344,6 +207,7 @@ const CameraGrid: React.FC<CameraGridProps> = ({
     isPreview = false,
     selectedDevices = [],
     disableEmptySlots = false,
+    getTileStatus,
 }) => {
     // Получаем конфигурацию или используем fallback
     const config = layoutConfigs[`${viewType}`] || defaultConfig;
@@ -364,12 +228,22 @@ const CameraGrid: React.FC<CameraGridProps> = ({
 
                 if (disableEmptySlots && !device) return null;
 
+                const tileStatus = getTileStatus?.(device) || {};
+
                 return (
                     <CameraTile
                         key={index}
                         style={{
                             gridColumn: `${camera.x + 1} / span ${camera.width}`,
                             gridRow: `${camera.y + 1} / span ${camera.height}`,
+                            border:
+                                tileStatus.highlight === 'video'
+                                    ? '2px solid var(--error)'
+                                    : tileStatus.highlight === 'audio'
+                                      ? '2px solid var(--warning)'
+                                      : selectedPosition === index || selectedDevices
+                                        ? '4px solid var(--tertiary-dark)'
+                                        : 'none',
                         }}
                         device={devices[index]}
                         index={index}

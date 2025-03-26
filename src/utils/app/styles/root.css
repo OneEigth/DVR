@@ -2,6 +2,8 @@
     font-family: 'Roboto';
 }
 
+
+
 html, body, #root {
     overflow-x: hidden;
     margin: 0;
@@ -221,4 +223,6 @@ a {
     --input-medium-size: 32px;
     --input-large-size: 40px;
 
+    --error: #ff4d4f; /* Красный для видео */
+    --warning: #faad14; /* Желтый для аудио */
 }

@@ -3,26 +3,23 @@ import React, { FC, useEffect, useState } from 'react';
 import './styles.css';
 import { useAuthStore } from '../../../../../store/auth/auth';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Button, Form, Input, Layout, message, Radio, RadioChangeEvent } from 'antd';
+import { Button, Form, Input, message, Radio } from 'antd';
 
 import { DeleteLayouts } from '../../../../../api/layout/DeleteLayout';
 import MainMenu from '../../../../../components/menu/Menu';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 
-import { Footer, Header } from 'antd/lib/layout/layout';
+import { Header } from 'antd/lib/layout/layout';
 
 import ButtonRecordVideo from './components/buttons/buttonForToolBarDeviceOne/ButtonRecordVideo';
 import ButtonTakeAPhoto from './components/buttons/buttonForToolBarDeviceOne/ButtonTakeAPhoto';
 import ButtonRecordAudio from './components/buttons/buttonForToolBarDeviceOne/ButtonRecordAudio';
 import ButtonShowMap from './components/buttons/buttonForToolBarDeviceOne/ButtonShowMap';
-import ButtonLayoutEdit from './components/buttons/buttonLayout/LayoutEdit/ButtonLayoutEdit';
-import ButtonLayoutDelete from './components/buttons/buttonLayout/LayoutEdit/ButtonLayoutDelete';
 import { useLayoutsStore } from './api/layout/useLayoutsStore';
 import { useStateNameDevice } from './api/layout/useStateNameDevice';
 import { useIsLayoutFormChanged } from './api/layout/useIsLayoutFormChanged';
 import CameraGrid from './components/CameraTile/CameraTile';
 import LocationMap2 from '../../../../../components/locationMap2/LocationMap2';
-import { LayoutType } from '../../../../../types/LayoutType';
 import { useSelectedLayout } from '../../../../../store/useSelectedLayout';
 import ButtonLayoutViewStyle from './components/buttons/buttonLayout/buttonLayoutViewStyle';
 import styled from 'styled-components';
@@ -31,56 +28,11 @@ import { Device } from '../../../../../types/Device';
 import SelectChecker from '../../../../../utils/shared/components/Select/SelectChecker/SelectChecker';
 import DevicePositionModal from './components/DevicePosition/DevicePosition';
 import useRecordingStore from './api/recording/recordingStore';
-import { formatTime } from '../../../../../utils/format';
 import { RecordModal } from './components/modals/RecordModal/RecordModal';
 import { RecordingTimers } from './components/RecordingTimers/RecordingTimers';
 import { StopRecordingModal } from './components/modals/StopRecordingModal/StopRecordingModal';
 
 interface LayoutV2Props {}
-const StyledRadioGroup = styled(Radio.Group)`
-    display: flex;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    overflow: hidden;
-    width: 100%;
-`;
-
-// Стилизация Radio.Button
-const StyledRadioButton = styled(Radio.Button)`
-    flex: 1;
-    text-align: center;
-    border: none;
-    padding: 8px 16px;
-    font-size: 14px;
-    line-height: 1.5;
-    cursor: pointer;
-
-    &.ant-radio-button-wrapper {
-        border-radius: 0;
-        border: none;
-        box-shadow: none;
-    }
-
-    &.ant-radio-button-wrapper-checked {
-        background-color: #4d4e65; /* Цвет для выделенной кнопки */
-        color: white;
-
-        &:hover {
-            background-color: #4d4e65; /* Цвет при наведении на выделенную кнопку */
-            color: white; /* Текст остается белым */
-        }
-    }
-
-    &:not(.ant-radio-button-wrapper-checked) {
-        background-color: #cdd0d2; /* Цвет для невыделенных кнопок */
-        color: #333;
-
-        &:hover {
-            background-color: #4d4e65; /* Цвет при наведении на невыделенную кнопку */
-            color: white; /* Текст становится белым */
-        }
-    }
-`;
 
 export const showHideOptions = [
     { label: 'Показать', value: '1' },
@@ -90,43 +42,24 @@ export const showHideOptions = [
 const LayoutV2: FC<LayoutV2Props> = (props) => {
     const { SmartDVRToken, user } = useAuthStore();
     const location = useLocation();
-    const { state } = location;
     const navigate = useNavigate();
     const [formLeft] = Form.useForm();
     const [formRight] = Form.useForm();
     const [currentMenuItem, setCurrentMenuItem] = useState('layouts');
     const [isEdit, setIsEdit] = useState(false);
-    const [searchText, setSearchText] = useState('');
     const { allLayouts, fetchLayouts } = useLayoutsStore();
-    const [showAddLayoutModal, setShowAddLayoutModal] = useState(false);
-    const [activeDeviceSize, setActiveDeviceSize] = useState<'small' | 'medium' | 'big'>('big');
     const { selectedLayout, setSelectedLayout } = useSelectedLayout();
     const [isMapVisible, setIsMapVisible] = useState(false);
     const { isShowNameDevice, setIsShowNameDevice } = useStateNameDevice();
-    const [showModalSelectDevice, setShowModalSelectDevice] = useState(false);
-    const [showModalSelectDeviceAudio, setShowModalSelectDeviceAudio] = useState(false);
     const [showModalSelectDevicePhoto, setShowModalSelectDevicePhoto] = useState(false);
     const [messageApi, contextHolder] = message.useMessage();
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [selectedDevice, setSelectedDevice] = useState<Device | null>(null);
     const [showHide, setShowHide] = useState<'1' | '2'>('1');
-    // const [isShowNameDevice, setIsShowNameDevice] = useState(true); // Состояние для управления видимостью заголовков
 
     const [devices, setDevices] = useState<Device[]>(selectedLayout?.devices || []);
 
-    const [newPosition, setNewPosition] = useState<number | null>(null);
-
-    const handleFilterButtonClick = (size: 'small' | 'medium' | 'big') => {
-        setActiveDeviceSize(size);
-    };
-    const [selectedType, setSelectedType] = useState(isShowNameDevice ? 'Show' : 'Hide');
-    const {
-        setIsLayoutFormChanged,
-        setIsNotSavedModalVisible,
-        isNotSavedModalVisible,
-        layoutViewType,
-        setLayoutViewType,
-    } = useIsLayoutFormChanged();
+    const { layoutViewType, setLayoutViewType } = useIsLayoutFormChanged();
 
     const [swapPosition, setSwapPosition] = useState<{
         device: Device;
@@ -148,12 +81,6 @@ const LayoutV2: FC<LayoutV2Props> = (props) => {
 
         // Обновляем локальное состояние devices
         setDevices(newDevices);
-    };
-
-    const handleRadioChange = (e: RadioChangeEvent) => {
-        const value = e.target.value;
-        setSelectedType(value);
-        setIsShowNameDevice(value === 'Show');
     };
 
     useEffect(() => {
@@ -182,11 +109,6 @@ const LayoutV2: FC<LayoutV2Props> = (props) => {
 
     const handleShowMap = async () => {
         setIsMapVisible(!isMapVisible);
-    };
-
-    const handleEditLayout = () => {
-        navigate(`/editLayout/${selectedLayout.uid}`);
-        console.log(selectedLayout.devices);
     };
 
     const handleDeleteLayout = async () => {
@@ -221,42 +143,12 @@ const LayoutV2: FC<LayoutV2Props> = (props) => {
         }
     };
 
-    const handleRecordVideo = async () => {
-        setShowModalSelectDevice(true);
-    };
-
-    const handleRecordAudio = async () => {
-        setShowModalSelectDeviceAudio(true);
-    };
-
     const handleTakeAPhoto = async () => {
         setShowModalSelectDevicePhoto(true);
     };
 
     const handleBackToAllDevice = () => {
         navigate('/layouts');
-    };
-
-    const handleOkModalSelectDevice = () => {
-        setShowModalSelectDevice(false);
-    };
-
-    const handleCancelModalSelectDevice = () => {
-        setShowModalSelectDevice(false);
-    };
-    const handleOkModalSelectDevicePhoto = () => {
-        setShowModalSelectDevicePhoto(false);
-    };
-    const handleCancelModalSelectDevicePhoto = () => {
-        setShowModalSelectDevicePhoto(false);
-    };
-
-    const handleOkModalSelectDeviceAudio = () => {
-        setShowModalSelectDeviceAudio(false);
-    };
-
-    const handleCancelModalSelectDeviceAudio = () => {
-        setShowModalSelectDeviceAudio(false);
     };
 
     const handleSelectLayoutView = (
@@ -358,6 +250,42 @@ const LayoutV2: FC<LayoutV2Props> = (props) => {
         setIsStopModalVisible(true);
     };
 
+    const { canStartRecording, recordings, getDeviceRecordingType } = useRecordingStore();
+
+    // // Проверяем, все ли устройства заняты видео-записью
+    // const allDevicesRecordingVideo = devices.every((device) =>
+    //     recordings.some((r) => r.type === 'video' && r.devices.some((d) => d.UID === device.UID)),
+    // );
+    //
+    // // Проверяем, все ли устройства заняты аудио-записью
+    // const allDevicesRecordingAudio = devices.every((device) =>
+    //     recordings.some((r) => r.type === 'audio' && r.devices.some((d) => d.UID === device.UID)),
+    // );
+
+    const canStartVideo = devices.some((device) => {
+        const recordingType = getDeviceRecordingType(device.UID);
+        return !recordingType || recordingType === 'audio';
+    });
+
+    const canStartAudio = devices.some((device) => {
+        const recordingType = getDeviceRecordingType(device.UID);
+        return !recordingType;
+    });
+
+    //     const canStartVideo = canStartRecording('video', devices);
+    //     const canStartAudio = canStartRecording('audio', devices);
+    //
+    // // Проверяем, есть ли хотя бы одно устройство, доступное для записи
+    //     const hasDevicesForVideo = devices.some(device => {
+    //         const recordingType = getDeviceRecordingType(device.UID);
+    //         return !recordingType || recordingType === 'audio';
+    //     });
+    //
+    //     const hasDevicesForAudio = devices.some(device => {
+    //         const recordingType = getDeviceRecordingType(device.UID);
+    //         return !recordingType;
+    //     });
+
     return (
         <>
             <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -441,11 +369,20 @@ const LayoutV2: FC<LayoutV2Props> = (props) => {
                                     <div className="rightSideToolBar">
                                         <ButtonRecordVideo
                                             onClick={() => setIsVideoModalVisible(true)}
+                                            disabled={!canStartVideo}
                                         />
                                         <ButtonTakeAPhoto onClick={handleTakeAPhoto} />
                                         <ButtonRecordAudio
                                             onClick={() => setIsAudioModalVisible(true)}
+                                            disabled={!canStartAudio}
                                         />
+                                        {/*<ButtonRecordVideo*/}
+                                        {/*    onClick={() => setIsVideoModalVisible(true)}*/}
+                                        {/*/>*/}
+                                        {/*<ButtonTakeAPhoto onClick={handleTakeAPhoto} />*/}
+                                        {/*<ButtonRecordAudio*/}
+                                        {/*    onClick={() => setIsAudioModalVisible(true)}*/}
+                                        {/*/>*/}
                                         <ButtonShowMap
                                             onClick={handleShowMap}
                                             isMapVisible={isMapVisible}
@@ -488,48 +425,6 @@ const LayoutV2: FC<LayoutV2Props> = (props) => {
                                             }
                                         }}
                                     />
-                                    {/*{selectedLayout.viewType === '2x2' && (*/}
-                                    {/*    <CameraGrid2x2*/}
-                                    {/*        menuType={'layout'}*/}
-                                    {/*        isMapVisible={isMapVisible}*/}
-                                    {/*    />*/}
-                                    {/*)}*/}
-                                    {/*{selectedLayout.viewType === '1х5' && (*/}
-                                    {/*    <CameraGrid1x5*/}
-                                    {/*        menuType={'layout'}*/}
-                                    {/*        isMapVisible={isMapVisible}*/}
-                                    {/*    />*/}
-                                    {/*)}*/}
-                                    {/*{selectedLayout.viewType === '3х4' && (*/}
-                                    {/*    <CameraGrid3x4*/}
-                                    {/*        menuType={'layout'}*/}
-                                    {/*        isMapVisible={isMapVisible}*/}
-                                    {/*    />*/}
-                                    {/*)}*/}
-                                    {/*{selectedLayout.viewType === '3х3' && (*/}
-                                    {/*    <CameraGrid3x3*/}
-                                    {/*        menuType={'layout'}*/}
-                                    {/*        isMapVisible={isMapVisible}*/}
-                                    {/*    />*/}
-                                    {/*)}*/}
-                                    {/*{selectedLayout.viewType === '2х8' && (*/}
-                                    {/*    <CameraGrid2x8*/}
-                                    {/*        menuType={'layout'}*/}
-                                    {/*        isMapVisible={isMapVisible}*/}
-                                    {/*    />*/}
-                                    {/*)}*/}
-                                    {/*{selectedLayout.viewType === '1х12' && (*/}
-                                    {/*    <CameraGrid1x12*/}
-                                    {/*        menuType={'layout'}*/}
-                                    {/*        isMapVisible={isMapVisible}*/}
-                                    {/*    />*/}
-                                    {/*)}*/}
-                                    {/*{selectedLayout.viewType === '4х4' && (*/}
-                                    {/*    <CameraGrid4x4*/}
-                                    {/*        menuType={'layout'}*/}
-                                    {/*        isMapVisible={isMapVisible}*/}
-                                    {/*    />*/}
-                                    {/*)}*/}
                                 </div>
                             ) : (
                                 <p>Раскладка не выбрана</p>
@@ -619,63 +514,16 @@ const LayoutV2: FC<LayoutV2Props> = (props) => {
                                         ]}
                                     >
                                         <SelectChecker
-                                            // className={props.className}
                                             value={showHide}
                                             onChange={(event) =>
                                                 setIsShowNameDevice(event.target.value === '1')
                                             }
-                                            //     setShowHide(event.target.value);
-                                            //     console.log(event.target.value, showHide);
-                                            // }}
                                             options={showHideOptions}
-                                            // size={'middle'}
                                         />
-                                        {/*<div style={{ width: '100%' }}>*/}
-                                        {/*    <StyledRadioGroup*/}
-                                        {/*        value={selectedType}*/}
-                                        {/*        onChange={handleRadioChange}*/}
-                                        {/*    >*/}
-                                        {/*        <StyledRadioButton value="Show">*/}
-                                        {/*            Показать*/}
-                                        {/*        </StyledRadioButton>*/}
-                                        {/*        <StyledRadioButton value="Hide">*/}
-                                        {/*            Скрыть*/}
-                                        {/*        </StyledRadioButton>*/}
-                                        {/*    </StyledRadioGroup>*/}
-                                        {/*</div>*/}
                                     </Form.Item>
                                 )}
                             </Form>
                         </div>
-                        {/*    <div className="formGroupRight">*/}
-                        {/*        /!* Группа справа *!/*/}
-
-                        {/*        <Form*/}
-                        {/*            form={formRight}*/}
-                        {/*            className="form"*/}
-                        {/*            name="basicRight"*/}
-                        {/*            labelCol={{ span: 5 }}*/}
-                        {/*            wrapperCol={{ span: 19 }}*/}
-                        {/*            style={{ maxWidth: '100%' }}*/}
-                        {/*            initialValues={{*/}
-                        {/*                description: selectedLayout?.description || '',*/}
-                        {/*            }}*/}
-                        {/*        >*/}
-                        {/*            <Form.Item*/}
-                        {/*                label={<span className="inputLabel">Описание</span>}*/}
-                        {/*                name="description"*/}
-                        {/*                rules={[*/}
-                        {/*                    {*/}
-                        {/*                        required: true,*/}
-                        {/*                        message: 'Пожалуйста, введите описание',*/}
-                        {/*                    },*/}
-                        {/*                ]}*/}
-                        {/*            >*/}
-                        {/*                <Input className="input" disabled />*/}
-                        {/*            </Form.Item>*/}
-                        {/*        </Form>*/}
-                        {/*    </div>*/}
-                        {/*</div>*/}
 
                         <div className="DescButtons_layout">
                             {isEdit ? (
@@ -722,23 +570,6 @@ const LayoutV2: FC<LayoutV2Props> = (props) => {
                         </div>
                     )}
                 </div>
-                {/*<Footer*/}
-                {/*    style={{*/}
-                {/*        width: '100%',*/}
-                {/*        display: 'flex',*/}
-                {/*        alignItems: 'center',*/}
-                {/*        paddingLeft: 0,*/}
-                {/*        paddingRight: 0,*/}
-                {/*        background: 'blue',*/}
-                {/*        position: 'relative',*/}
-                {/*        bottom: 0,*/}
-                {/*        backgroundColor: '#ffffff',*/}
-                {/*    }}*/}
-                {/*>*/}
-                {/*    /!* Ваш футер здесь *!/*/}
-                {/*</Footer>*/}
-                {/* Модальные окна */}
-
                 <DevicePositionModal
                     visible={isModalVisible}
                     onOk={() => setIsModalVisible(false)}
@@ -778,7 +609,10 @@ const LayoutV2: FC<LayoutV2Props> = (props) => {
                     type="video"
                     setIsModalVisible={setIsVideoModalVisible}
                 />
-                <RecordingTimers setIsStopModalVisible={setIsStopModalVisible} />
+                <RecordingTimers
+                    setIsStopModalVisible={setIsStopModalVisible}
+                    setStopType={setStopType}
+                />
                 <StopRecordingModal
                     visible={isStopModalVisible}
                     onCancel={() => setIsStopModalVisible(false)}
@@ -792,24 +626,6 @@ const LayoutV2: FC<LayoutV2Props> = (props) => {
                     title={`Остановить запись ${stopType === 'audio' ? 'аудио' : 'видео'}`}
                     type={stopType}
                 />
-                {/*<ModalSelectDevice*/}
-                {/*    onOk={handleOkModalSelectDevice}*/}
-                {/*    onCancel={handleCancelModalSelectDevice}*/}
-                {/*    visible={showModalSelectDevice}*/}
-                {/*    layoutViewType={layoutViewType}*/}
-                {/*/>*/}
-                {/*<ModalSelectDeviceAudio*/}
-                {/*    onOk={handleOkModalSelectDeviceAudio}*/}
-                {/*    onCancel={handleCancelModalSelectDeviceAudio}*/}
-                {/*    visible={showModalSelectDeviceAudio}*/}
-                {/*    layoutViewType={layoutViewType}*/}
-                {/*/>*/}
-                {/*<ModalSelectDevicePhoto*/}
-                {/*    onOk={handleOkModalSelectDevicePhoto}*/}
-                {/*    onCancel={handleCancelModalSelectDevicePhoto}*/}
-                {/*    visible={showModalSelectDevicePhoto}*/}
-                {/*    layoutViewType={layoutViewType}*/}
-                {/*/>*/}
             </div>
         </>
     );

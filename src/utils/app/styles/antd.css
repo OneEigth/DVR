@@ -221,7 +221,7 @@
     /*min-height: 192px;*/
     /*max-height: 1000px;*/
     /*height: auto;*/
-    height: 60vh !important;
+    /*height: 60vh !important;*/
     display: flex;
     flex-direction: column;
 }

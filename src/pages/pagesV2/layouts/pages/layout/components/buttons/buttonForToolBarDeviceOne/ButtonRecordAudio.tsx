@@ -6,11 +6,13 @@ import { ReactComponent as AudioImg } from 'utils/app/assets/icons/Audio.svg';
 
 interface ButtonRecordAudioProps {
     onClick: () => void;
+    disabled?: boolean;
 }
 
-const ButtonRecordAudio: React.FC<ButtonRecordAudioProps> = ({ onClick }) => (
+const ButtonRecordAudio: React.FC<ButtonRecordAudioProps> = ({ onClick, disabled }) => (
     <Button
-        className={'body medium-bold button-base button-type-secondary button-size-medium'}
+        className={`body medium-bold button-base button-type-secondary button-size-medium`}
+        disabled={disabled}
         onClick={onClick}
     >
         <AudioImg style={{ position: 'relative', top: -1 }} />

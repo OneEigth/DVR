@@ -34,6 +34,18 @@
     /*font-size: 12px;*/
 }
 
+.recording-status-tooltip {
+    position: absolute;
+    top: 1px;
+    left: 60px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 2px 5px;
+    border-radius: 3px;
+    font-size: 12px;
+    z-index: 2;
+}
+
 .dot{
     width: 9px;
     height: 9px;

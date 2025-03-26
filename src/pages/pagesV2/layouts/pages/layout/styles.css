@@ -13,6 +13,7 @@
 .DescButtons_layout{
     display: flex;
     gap: 12px;
+    width: 300px;
     margin-top: 16px;
     z-index: 10000;
 }

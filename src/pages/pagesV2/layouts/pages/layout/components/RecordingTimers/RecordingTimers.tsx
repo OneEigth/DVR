@@ -8,10 +8,12 @@ import './styles.css';
 
 interface RecordingTimersProps {
     setIsStopModalVisible: (open: boolean) => void;
+    setStopType: (type: 'audio' | 'video') => void;
 }
 
-export const RecordingTimers = ({ setIsStopModalVisible }: RecordingTimersProps) => {
+export const RecordingTimers = ({ setIsStopModalVisible, setStopType }: RecordingTimersProps) => {
     const recordings = useRecordingStore((state) => state.recordings);
+    // const setStopType = useRecordingStore((state) => state.setStopType);
 
     return (
         <div className="recording-timers">
@@ -30,7 +32,7 @@ export const RecordingTimers = ({ setIsStopModalVisible }: RecordingTimersProps)
                         className={
                             'button-base button-type-primary button-size-large button-state-danger'
                         }
-                        onClick={() => setIsStopModalVisible(true)}
+                        onClick={() => (setIsStopModalVisible(true), setStopType(recording.type))}
                     >
                         <SvgClose
                             style={{ fill: 'var(--gray-white)', position: 'relative', top: -1 }}
