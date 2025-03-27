@@ -213,15 +213,39 @@
 /*}*/
 
 
+.ant-modal{
+    width: 52vw !important;
+}
+
 .ant-modal-content {
-    min-height: 192px;
+    /*min-height: 192px;*/
+    /*max-height: 1000px;*/
+    /*height: auto;*/
+    /*height: 60vh !important;*/
     display: flex;
     flex-direction: column;
 }
 
+.ant-modal-title{
+    padding-bottom: 22px !important;
+    font-weight: 400 !important;
+    font-size: 24px !important;
+    line-height: 34px !important;
+    margin-bottom: 16px !important;
+}
+
+.ant-modal-footer{
+    padding: 0 !important;
+    margin-top: 32px !important;
+}
+
+.left_HT .ant-btn-default:hover{
+    color: inherit !important;
+}
+
 .ant-modal-body {
     flex: 1; /* Занимает всё доступное пространство */
-    overflow-y: auto; /* Внутренний скролл для контента */
+    overflow-y: hidden; /* Внутренний скролл для контента */
     padding-right: 8px !important; /* Чтобы скролл не перекрывал контент */
     min-height: 96px;
     max-height: 840px;
@@ -298,7 +322,7 @@
 }
 
 .ant-modal-footer {
-    margin-top: 0 !important;
+    /*margin-top: 0 !important;*/
 }
 
 .ant-modal-close {
