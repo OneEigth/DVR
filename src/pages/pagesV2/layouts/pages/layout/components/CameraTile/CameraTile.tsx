@@ -398,7 +398,7 @@ const EmptyTile = styled.div`
 const GridContainer = styled.div<{ cols: number; rows: number; isMapVisible: boolean }>`
     display: grid;
     grid-template-columns: ${({ cols, isMapVisible }) => `repeat(${cols}, 1fr) `};
-    grid-template-rows: repeat(${({ rows }) => rows}, minmax(auto, 1fr));
+    // grid-template-rows: repeat(${({ rows }) => rows}, minmax(auto, 1fr));
     gap: 8px;
     height: 100%;
     // padding: 10px;

@@ -55,12 +55,22 @@ export const RecordModal: React.FC<RecordModalProps> = ({
     };
 
     const handleOk = () => {
-        const targetDevices = selectionMode === 'all' ? devices : selectedDevices;
+        const targetDevices = selectionMode === 'all' ? availableDevices : selectedDevices;
 
         // if (!canStartRecording(type, targetDevices)) {
         //     message.error('Невозможно начать запись для выбранных устройств');
         //     return;
         // }
+
+        console.log(targetDevices, selectedDevices);
+
+        if (
+            (selectionMode === 'select' && targetDevices.length === 0) ||
+            (selectionMode === 'select' && selectedDevices.length === 0)
+        ) {
+            message.error('Выберите хотя бы одну камеру');
+            return;
+        }
 
         if (selectionMode === 'select' && selectedDevices.length === 0) {
             message.error('Выберите хотя бы одну камеру');
@@ -68,13 +78,18 @@ export const RecordModal: React.FC<RecordModalProps> = ({
         }
 
         startRecording(type, targetDevices);
+        setSelectedDevices([]);
         onCancel();
     };
 
     const handleSelectionModeChange = (value: 'all' | 'select') => {
         setSelectionMode(value);
         if (value === 'all') {
-            setSelectedDevices([]); // Сбрасываем выбранные устройства, если выбрано "со всех"
+            // При выборе "со всех" автоматически выбираем все доступные
+            setSelectedDevices([...availableDevices]);
+        } else {
+            // При ручном выборе сбрасываем выбор
+            setSelectedDevices([]);
         }
     };
 
@@ -105,7 +120,7 @@ export const RecordModal: React.FC<RecordModalProps> = ({
                 value={selectionMode}
                 overlayClassName={'record-modal-select-checker-overlay'}
                 labelClassName={'record-modal-select-checker-label title medium'}
-                onChange={(e) => setSelectionMode(e.target.value)}
+                onChange={(e) => handleSelectionModeChange(e.target.value)}
                 options={[
                     { label: 'со всех', value: 'all' },
                     { label: 'выбрать с каких', value: 'select' },

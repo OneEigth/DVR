@@ -245,7 +245,7 @@
 
 .ant-modal-body {
     flex: 1; /* Занимает всё доступное пространство */
-    overflow-y: auto; /* Внутренний скролл для контента */
+    overflow-y: hidden; /* Внутренний скролл для контента */
     padding-right: 8px !important; /* Чтобы скролл не перекрывал контент */
     min-height: 96px;
     max-height: 840px;

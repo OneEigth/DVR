@@ -27,7 +27,7 @@ import { UpdateLayouts } from '../../../../../api/layout/UpdateLayout';
 import { Device } from '../../../../../types/Device';
 import SelectChecker from '../../../../../utils/shared/components/Select/SelectChecker/SelectChecker';
 import DevicePositionModal from './components/DevicePosition/DevicePosition';
-import useRecordingStore from './api/recording/recordingStore';
+import useRecordingStore, { Recording } from './api/recording/recordingStore';
 import { RecordModal } from './components/modals/RecordModal/RecordModal';
 import { RecordingTimers } from './components/RecordingTimers/RecordingTimers';
 import { StopRecordingModal } from './components/modals/StopRecordingModal/StopRecordingModal';
@@ -58,7 +58,7 @@ const LayoutV2: FC<LayoutV2Props> = (props) => {
     const [showHide, setShowHide] = useState<'1' | '2'>('1');
 
     const [devices, setDevices] = useState<Device[]>(selectedLayout?.devices || []);
-
+    const [currentRecording, setCurrentRecording] = useState<Recording | null>(null);
     const { layoutViewType, setLayoutViewType } = useIsLayoutFormChanged();
 
     const [swapPosition, setSwapPosition] = useState<{
@@ -324,6 +324,7 @@ const LayoutV2: FC<LayoutV2Props> = (props) => {
                                 paddingBottom: 8,
                                 borderBottom: '1px solid var(--divider-2)',
                                 marginBottom: 16,
+                                alignItems: 'center',
                             }}
                         >
                             <div className="left_HT">
@@ -344,18 +345,28 @@ const LayoutV2: FC<LayoutV2Props> = (props) => {
                                         Раскладка: режим редактирования
                                     </Button>
                                 ) : (
-                                    <Button
-                                        className="buttonLeft headline small"
-                                        icon={<ArrowLeftOutlined />}
+                                    <div
                                         style={{
-                                            border: 'none',
-                                            backgroundColor: 'none',
-                                            boxShadow: 'none',
+                                            display: 'flex',
+                                            flexDirection: 'column',
                                         }}
-                                        onClick={handleBackToAllDevice}
                                     >
-                                        Раскладка
-                                    </Button>
+                                        <Button
+                                            className="buttonLeft headline small"
+                                            icon={<ArrowLeftOutlined />}
+                                            style={{
+                                                border: 'none',
+                                                backgroundColor: 'none',
+                                                boxShadow: 'none',
+                                            }}
+                                            onClick={handleBackToAllDevice}
+                                        >
+                                            {selectedLayout?.name}
+                                        </Button>
+                                        <span style={{ marginLeft: 49 }}>
+                                            {selectedLayout?.description}
+                                        </span>
+                                    </div>
                                 )}
                             </div>
 
@@ -431,67 +442,75 @@ const LayoutV2: FC<LayoutV2Props> = (props) => {
                             )}
                         </div>
 
-                        <div
-                            className="description_layout"
-                            style={{
-                                display: 'flex',
-                                gap: '16px', // Отступ между элементами
-                                width: '100%', // Занимает всю ширину
-                                marginTop: 24,
-                            }}
-                        >
-                            {/* Группа слева */}
-                            <Form
-                                form={formLeft}
-                                className="form"
-                                name="description-layout-form"
-                                // labelCol={{ span: 24 }}
-                                wrapperCol={{ span: 24 }}
+                        {isEdit && (
+                            <div
+                                className="description_layout"
                                 style={{
                                     display: 'flex',
-                                    gap: '16px', // Отступ между Form.Item
+                                    gap: '16px', // Отступ между элементами
                                     width: '100%', // Занимает всю ширину
-                                    flexDirection: 'row',
+                                    marginTop: 24,
                                 }}
-                                initialValues={{ name: selectedLayout?.name || '' }}
                             >
-                                <Form.Item
-                                    label={
-                                        <span className="inputLabel title medium">Название</span>
-                                    }
-                                    name="name"
+                                {/* Группа слева */}
+
+                                <Form
+                                    form={formLeft}
+                                    className="form"
+                                    name="description-layout-form"
+                                    // labelCol={{ span: 24 }}
+                                    wrapperCol={{ span: 24 }}
                                     style={{
-                                        flex: 1, // Занимает равное пространство
-                                        margin: 0, // Убираем margin от antd
+                                        display: 'flex',
+                                        gap: '16px', // Отступ между Form.Item
+                                        width: '100%', // Занимает всю ширину
+                                        flexDirection: 'row',
                                     }}
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: 'Пожалуйста, введите Название',
-                                        },
-                                    ]}
-                                >
-                                    <Input className="input" disabled />
-                                </Form.Item>
-                                <Form.Item
-                                    label={
-                                        <span className="inputLabel title medium">Описание</span>
-                                    }
-                                    name="description"
-                                    style={{
-                                        flex: 1, // Занимает равное пространство
-                                        margin: 0, // Убираем margin от antd
+                                    initialValues={{
+                                        name: selectedLayout?.name || '',
+                                        description: selectedLayout?.description || '',
                                     }}
-                                    rules={[
-                                        {
-                                            required: false,
-                                            message: 'Пожалуйста, введите описание',
-                                        },
-                                    ]}
                                 >
-                                    <Input className="input" disabled />
-                                </Form.Item>
-                                {isEdit && (
+                                    <Form.Item
+                                        label={
+                                            <span className="inputLabel title medium">
+                                                Название
+                                            </span>
+                                        }
+                                        name="name"
+                                        style={{
+                                            flex: 1, // Занимает равное пространство
+                                            margin: 0, // Убираем margin от antd
+                                        }}
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: 'Пожалуйста, введите Название',
+                                            },
+                                        ]}
+                                    >
+                                        <Input className="input" />
+                                    </Form.Item>
+                                    <Form.Item
+                                        label={
+                                            <span className="inputLabel title medium">
+                                                Описание
+                                            </span>
+                                        }
+                                        name="description"
+                                        style={{
+                                            flex: 1, // Занимает равное пространство
+                                            margin: 0, // Убираем margin от antd
+                                        }}
+                                        rules={[
+                                            {
+                                                required: false,
+                                                message: 'Пожалуйста, введите описание',
+                                            },
+                                        ]}
+                                    >
+                                        <Input className="input" />
+                                    </Form.Item>
                                     <Form.Item
                                         label={
                                             <span
@@ -521,19 +540,30 @@ const LayoutV2: FC<LayoutV2Props> = (props) => {
                                             options={showHideOptions}
                                         />
                                     </Form.Item>
-                                )}
-                            </Form>
-                        </div>
-
+                                </Form>
+                            </div>
+                        )}
                         <div className="DescButtons_layout">
                             {isEdit ? (
-                                <Button
-                                    className={'button-base button-size-medium button-type-primary'}
-                                    // onClick={handleEditLayout}
-                                    onClick={() => handleLayoutSave()}
-                                >
-                                    Сохранить
-                                </Button>
+                                <>
+                                    <Button
+                                        className={
+                                            'button-base button-size-medium button-type-primary'
+                                        }
+                                        // onClick={handleEditLayout}
+                                        onClick={() => handleLayoutSave()}
+                                    >
+                                        Сохранить
+                                    </Button>
+                                    <Button
+                                        className={
+                                            'button-base button-size-medium button-type-primary button-state-danger'
+                                        }
+                                        onClick={handleDeleteLayout}
+                                    >
+                                        Удалить
+                                    </Button>
+                                </>
                             ) : (
                                 <>
                                     <Button
@@ -544,14 +574,6 @@ const LayoutV2: FC<LayoutV2Props> = (props) => {
                                         onClick={() => setIsEdit(true)}
                                     >
                                         Редактировать
-                                    </Button>
-                                    <Button
-                                        className={
-                                            'button-base button-size-medium button-type-primary button-state-danger'
-                                        }
-                                        onClick={handleDeleteLayout}
-                                    >
-                                        Удалить
                                     </Button>
                                 </>
                             )}
@@ -612,6 +634,7 @@ const LayoutV2: FC<LayoutV2Props> = (props) => {
                 <RecordingTimers
                     setIsStopModalVisible={setIsStopModalVisible}
                     setStopType={setStopType}
+                    setCurrentRecording={setCurrentRecording}
                 />
                 <StopRecordingModal
                     visible={isStopModalVisible}
@@ -625,6 +648,7 @@ const LayoutV2: FC<LayoutV2Props> = (props) => {
                     setIsModalVisible={setIsStopModalVisible}
                     title={`Остановить запись ${stopType === 'audio' ? 'аудио' : 'видео'}`}
                     type={stopType}
+                    recording={currentRecording!}
                 />
             </div>
         </>
