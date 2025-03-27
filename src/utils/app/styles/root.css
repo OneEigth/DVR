@@ -2,6 +2,8 @@
     font-family: 'Roboto';
 }
 
+
+
 html, body, #root {
     overflow-x: hidden;
     margin: 0;
@@ -42,6 +44,27 @@ html::-webkit-scrollbar-thumb {
     /*border: 3px solid var(--gray-05); !* Обводка ползунка *!*/
 }
 
+.custom-close-icon {
+    fill: var(--gray-black);
+    cursor: pointer;
+    margin-left: auto;
+    width: 24px;
+    height: 24px;
+}
+
+.modal_header{
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.modal-title {
+    flex: 1;
+    text-align: center;
+    /*font-size: 16px;*/
+    /*font-weight: 500;*/
+    /*margin-right: 24px; !* Компенсируем padding-right у modal-header *!*/
+}
 
 a {
     all: unset;
@@ -173,7 +196,7 @@ a {
     --tertiary-shadow: #FCE49C80;
     --shadow-base: 0 1 20px #21201F1A;
     /*--blur-during-scroll: blur(32px);*/
-    /*--shadow-frame: 0 8 20px var(--base-shadow);*/
+    --shadow-frame: 0 8 20px #211F1F1A;
     /*--shadow-button: 0 2 4px var(--buttons-shadow);*/
     /*--shadow-select: 0 0 0 2px var(--buttons-shadow);*/
     /*--shadow-alarm: 0 0 0 2px var(--alarm-shadow-1);*/
@@ -200,4 +223,6 @@ a {
     --input-medium-size: 32px;
     --input-large-size: 40px;
 
+    --error: #ff4d4f; /* Красный для видео */
+    --warning: #faad14; /* Желтый для аудио */
 }

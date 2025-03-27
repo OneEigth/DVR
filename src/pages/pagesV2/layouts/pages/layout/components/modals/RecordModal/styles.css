@@ -1,0 +1,13 @@
+.record-modal-select-checker-overlay{
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 0;
+}
+
+.record-modal-select-checker-label{
+    min-width: 144px;
+    color: var(--gray-black);
+    margin-bottom: 0;
+}
