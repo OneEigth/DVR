@@ -1,7 +1,7 @@
 import useRecordingStore, { Recording } from '../../api/recording/recordingStore';
 import { formatTime } from '../../../../../../../utils/format';
 import { Button } from 'antd';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ReactComponent as SvgClose } from 'utils/app/assets/icons/Close.svg';
 
 import './styles.css';
@@ -19,6 +19,16 @@ export const RecordingTimers = ({
 }: RecordingTimersProps) => {
     const recordings = useRecordingStore((state) => state.recordings);
 
+    const [currentTime, setCurrentTime] = useState(Date.now());
+
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setCurrentTime(Date.now());
+        }, 1000);
+
+        return () => clearInterval(timer);
+    }, []);
+
     const handlerStopClick = (recording: Recording) => {
         setStopType(recording.type);
         setCurrentRecording(recording);
@@ -34,7 +44,10 @@ export const RecordingTimers = ({
             {recordings.map((recording, index) => {
                 const date = new Date(recording.startTime);
                 const timezoneOffset = +5;
-
+                const duration = currentTime - recording.startTime;
+                const hours = Math.floor(duration / (1000 * 60 * 60));
+                const minutes = Math.floor((duration % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((duration % (1000 * 60)) / 1000);
                 date.setUTCHours(date.getUTCHours() + timezoneOffset);
                 const formattedTime = date.toISOString().split('T')[1].slice(0, 8);
                 return (
@@ -45,7 +58,9 @@ export const RecordingTimers = ({
                                 style={{ color: 'var(--gray-white)' }}
                             >
                                 {/*{new Date(recording.startTime) }*/}
-                                {formattedTime}
+                                {formattedTime} : {String(hours).padStart(2, '0')}:
+                                {String(minutes).padStart(2, '0')}:
+                                {String(seconds).padStart(2, '0')}
                             </span>
                             <span className={'body medium'} style={{ color: 'var(--gray-white)' }}>
                                 {recording.type === 'audio' ? 'Запись аудио' : 'Запись видео'} (

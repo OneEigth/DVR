@@ -8,6 +8,7 @@ export interface Recording {
     devices: Device[];
     startTime: number;
     // groupId?: string;
+    // globalStartTime: number;
     label?: string;
 }
 
